@@ -84,7 +84,18 @@ export const getSong = asyncHandler(async (req, res) => {
 })
 
 export const getSongs = asyncHandler(async (req, res) => {
-  const songs = await Song.find()
+  const { search } = req.query
 
+  function diacriticSensitiveRegex(string = '') {
+    return string.replace(/a/g, '[a,á,à,ä,ă,â]')
+      .replace(/e/g, '[e,é,ë]')
+      .replace(/i/g, '[i,í,ï,î]')
+      .replace(/o/g, '[o,ó,ö,ò]')
+      .replace(/u/g, '[u,ü,ú,ù]')
+      .replace(/t/g, '[t,ț]')
+      .replace(/s/g, '[s,ș]')
+  }
+
+  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
   res.json(songs)
 })
