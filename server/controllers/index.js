@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import fetch from 'node-fetch'
 import Song from '../models/Song.js'
+import Playlist from '../models/Playlist.js'
 
 const config = {
   fetch,
@@ -62,6 +63,7 @@ export const syncSongs = asyncHandler(async (req, res) => {
     const content = await dropbox.filesDownload({ path: file.path_display })
     const title = content.result.name.split('.pro')[0]
     const existingSong = await Song.findOne({ title })
+
     if (existingSong) {
       existingSong.body = Buffer.from(content.result.fileBinary).toString()
       await existingSong.save()
@@ -98,4 +100,56 @@ export const getSongs = asyncHandler(async (req, res) => {
 
   const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
   res.json(songs)
+})
+
+export const syncPlaylists = asyncHandler(async (req, res) => {
+  const accessToken = req.headers.authorization.split(' ')[1]
+  const dropbox = new Dropbox({ accessToken })
+
+  const files = await dropbox.filesListFolder({ path: '/SongBook' })
+
+  for (let i = 0; i < files.result.entries.length; i++) {
+    const file = files.result.entries[i]
+
+    if (file['.tag'] === 'file' && file.name.split('.')[1] === 'lst') {
+      const content = await dropbox.filesDownload({ path: file.path_display })
+      const existingPlaylist = await Playlist.findOne({ title: content.result.name.split('.')[0] })
+
+      if (existingPlaylist) {
+        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
+      } else {
+        const playlist = new Playlist({
+          title: content.result.name.split('.')[0],
+          songs: Buffer.from(content.result.fileBinary).toString()
+        })
+        await playlist.save()
+      }
+    }
+  }
+
+  res.send('success')
+})
+
+export const getPlaylist = asyncHandler(async (req, res) => {
+  const playlist = await Playlist.findById(req.params.id.toString())
+
+  res.json(playlist)
+})
+
+export const getPlaylists = asyncHandler(async (req, res) => {
+  const { search } = req.query
+
+  function diacriticSensitiveRegex(string = '') {
+    return string.replace(/a/g, '[a,á,à,ä,ă,â]')
+      .replace(/e/g, '[e,é,ë]')
+      .replace(/i/g, '[i,í,ï,î]')
+      .replace(/o/g, '[o,ó,ö,ò]')
+      .replace(/u/g, '[u,ü,ú,ù]')
+      .replace(/t/g, '[t,ț]')
+      .replace(/s/g, '[s,ș]')
+  }
+
+  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
+
+  res.json(playlists)
 })
