@@ -40,7 +40,7 @@ export const authUser = asyncHandler(async (req, res) => {
 export const refreshToken = asyncHandler(async (req, res) => {
   const { refresh_token } = req.body
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
-    body: `grant_type=refresh_token&refresh_token${refresh_token}=&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
+    body: `grant_type=refresh_token&refresh_token=PLJG5JIjZE0AAAAAAAAAAW3nwPMYAZV6HpIYrlYbmXSl3i0SH2Pa5ek54Rl1ll90&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
@@ -152,4 +152,11 @@ export const getPlaylists = asyncHandler(async (req, res) => {
   const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
 
   res.json(playlists)
+})
+
+export const dummy = asyncHandler(async (req, res) => {
+  const dropbox = new Dropbox({ accessToken: req.headers.authorization.split(' ')[1] })
+
+  const files = await dropbox.filesListFolderContinue({ cursor: 'AAHaE5F2YJmdy0nGInVh07Ys8MkJXbWuqLHWJ9PMh--wFx6wxxSnq7fHrbApT8YAqkZ4bK2hdPu2cMyaEDMwnap_uiFdsgh9qei_YDVSkZ4FAUviKbrInxdyzr8Jcc8PmlxG2rbs7lHV4c1JaAh2DzR0iG1rO4axgUnnF1S50ETtfKCWIfHe2k69iaoSvp_Adyjq5l4D1ytFWXeUH00g8zP120M-FO0mLYLtozWJWrTU57MipHX0DVYAbTNFinAqcXoQ3k_ozqf-rfaXUj4vrvjnCihLESPNHqBdeFz9Fq4Eyg' })
+  res.json(files)
 })
