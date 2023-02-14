@@ -38,7 +38,6 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const refreshToken = asyncHandler(async (req, res) => {
-  const { refresh_token } = req.body
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
     body: `grant_type=refresh_token&refresh_token=PLJG5JIjZE0AAAAAAAAAAW3nwPMYAZV6HpIYrlYbmXSl3i0SH2Pa5ek54Rl1ll90&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
@@ -60,22 +59,27 @@ export const syncSongs = asyncHandler(async (req, res) => {
 
   for (let i = 0; i < files.result.entries.length; i++) {
     const file = files.result.entries[i]
-    const content = await dropbox.filesDownload({ path: file.path_display })
-    const title = content.result.name.split('.pro')[0]
-    const existingSong = await Song.findOne({ title })
 
-    if (existingSong) {
-      existingSong.body = Buffer.from(content.result.fileBinary).toString()
-      await existingSong.save()
-    } else {
-      const song = new Song({
-        title,
-        body: Buffer.from(content.result.fileBinary).toString()
+    const existingSong = await Song.findOne({ title: file.name.split('.')[0] })
+    if (!existingSong) {
+      const song = await dropbox.filesDownload({ path: file.path_display })
+      const newSong = new Song({
+        title: file.name.split('.')[0],
+        body: Buffer.from(song.result.fileBinary).toString(),
+        lastModified: file.server_modified
       })
 
-      await song.save()
+      await newSong.save()
+    } else if (existingSong.lastModified !== file.server_modified) {
+      const content = await dropbox.filesDownload({ path: file.path_display })
+
+      existingSong.body = Buffer.from(content.result.fileBinary).toString()
+      existingSong.lastModified = file.server_modified
+
+      await existingSong.save()
     }
   }
+
   res.send('success')
 })
 
@@ -112,17 +116,22 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     const file = files.result.entries[i]
 
     if (file['.tag'] === 'file' && file.name.split('.')[1] === 'lst') {
-      const content = await dropbox.filesDownload({ path: file.path_display })
-      const existingPlaylist = await Playlist.findOne({ title: content.result.name.split('.')[0] })
+      const existingPlaylist = await Playlist.findOne({ title: file.name.split('.')[0] })
 
-      if (existingPlaylist) {
-        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
-      } else {
+      if (!existingPlaylist) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
         const playlist = new Playlist({
           title: content.result.name.split('.')[0],
-          songs: Buffer.from(content.result.fileBinary).toString()
+          songs: Buffer.from(content.result.fileBinary).toString(),
+          lastModified: file.server_modified
         })
         await playlist.save()
+      } else if (existingPlaylist.lastModified !== file.server_modified) {
+        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
+        existingPlaylist.lastModified = file.server_modified
+
+        await existingPlaylist.save()
       }
     }
   }
@@ -152,11 +161,4 @@ export const getPlaylists = asyncHandler(async (req, res) => {
   const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
 
   res.json(playlists)
-})
-
-export const dummy = asyncHandler(async (req, res) => {
-  const dropbox = new Dropbox({ accessToken: req.headers.authorization.split(' ')[1] })
-
-  const files = await dropbox.filesListFolderContinue({ cursor: 'AAHaE5F2YJmdy0nGInVh07Ys8MkJXbWuqLHWJ9PMh--wFx6wxxSnq7fHrbApT8YAqkZ4bK2hdPu2cMyaEDMwnap_uiFdsgh9qei_YDVSkZ4FAUviKbrInxdyzr8Jcc8PmlxG2rbs7lHV4c1JaAh2DzR0iG1rO4axgUnnF1S50ETtfKCWIfHe2k69iaoSvp_Adyjq5l4D1ytFWXeUH00g8zP120M-FO0mLYLtozWJWrTU57MipHX0DVYAbTNFinAqcXoQ3k_ozqf-rfaXUj4vrvjnCihLESPNHqBdeFz9Fq4Eyg' })
-  res.json(files)
 })

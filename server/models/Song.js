@@ -8,6 +8,10 @@ const songSchema = mongoose.Schema({
   body: {
     type: String,
     required: true
+  },
+  lastModified: {
+    type: String,
+    required: true
   }
 })
 
