@@ -80,7 +80,16 @@ export const syncSongs = asyncHandler(async (req, res) => {
     }
   }
 
-  res.send('success')
+  const songs = await Song.find()
+  for (let i = 0; i < songs.length; i++) {
+    const existingSong = files.result.entries.find(file => file.name === songs[i].title + '.pro')
+    if (!existingSong) {
+      await Song.deleteOne({ title: songs[i].title })
+    }
+  }
+
+  const finalSongs = await Song.find()
+  res.send(finalSongs)
 })
 
 export const getSong = asyncHandler(async (req, res) => {
@@ -136,7 +145,16 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     }
   }
 
-  res.send('success')
+  const playlists = await Playlist.find()
+  for (let i = 0; i < playlists.length; i++) {
+    const existingPlaylist = files.result.entries.find(file => file.name === playlists[i].title + '.lst')
+    if (!existingPlaylist) {
+      await Playlist.deleteOne({ title: playlists[i].title })
+    }
+  }
+
+  const finalPlaylists = await Playlist.find()
+  res.send(finalPlaylists)
 })
 
 export const getPlaylist = asyncHandler(async (req, res) => {
