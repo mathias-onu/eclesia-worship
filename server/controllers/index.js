@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import fetch from 'node-fetch'
 import Song from '../models/Song.js'
 import Playlist from '../models/Playlist.js'
+import DeletedSong from '../models/DeletedSong.js'
 
 const config = {
   fetch,
@@ -85,6 +86,9 @@ export const syncSongs = asyncHandler(async (req, res) => {
     const existingSong = files.result.entries.find(file => file.name === songs[i].title + '.pro')
     if (!existingSong) {
       await Song.deleteOne({ title: songs[i].title })
+
+      const deletedSong = new DeletedSong({ title: songs[i].title, body: songs[i].body, lastModified: songs[i].lastModified })
+      await deletedSong.save()
     }
   }
 
