@@ -8,6 +8,10 @@ const playlistSchema = mongoose.Schema({
   songs: {
     type: String,
     required: true
+  },
+  lastModified: {
+    type: String,
+    required: true
   }
 })
 

@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import fetch from 'node-fetch'
 import Song from '../models/Song.js'
 import Playlist from '../models/Playlist.js'
+import DeletedSong from '../models/DeletedSong.js'
 
 const config = {
   fetch,
@@ -38,9 +39,8 @@ export const authUser = asyncHandler(async (req, res) => {
 })
 
 export const refreshToken = asyncHandler(async (req, res) => {
-  const { refresh_token } = req.body
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
-    body: `grant_type=refresh_token&refresh_token${refresh_token}=&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
+    body: `grant_type=refresh_token&refresh_token=PLJG5JIjZE0AAAAAAAAAAW3nwPMYAZV6HpIYrlYbmXSl3i0SH2Pa5ek54Rl1ll90&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
@@ -60,23 +60,40 @@ export const syncSongs = asyncHandler(async (req, res) => {
 
   for (let i = 0; i < files.result.entries.length; i++) {
     const file = files.result.entries[i]
-    const content = await dropbox.filesDownload({ path: file.path_display })
-    const title = content.result.name.split('.pro')[0]
-    const existingSong = await Song.findOne({ title })
 
-    if (existingSong) {
-      existingSong.body = Buffer.from(content.result.fileBinary).toString()
-      await existingSong.save()
-    } else {
-      const song = new Song({
-        title,
-        body: Buffer.from(content.result.fileBinary).toString()
+    const existingSong = await Song.findOne({ title: file.name.split('.')[0] })
+    if (!existingSong) {
+      const song = await dropbox.filesDownload({ path: file.path_display })
+      const newSong = new Song({
+        title: file.name.split('.')[0],
+        body: Buffer.from(song.result.fileBinary).toString(),
+        lastModified: file.server_modified
       })
 
-      await song.save()
+      await newSong.save()
+    } else if (existingSong.lastModified !== file.server_modified) {
+      const content = await dropbox.filesDownload({ path: file.path_display })
+
+      existingSong.body = Buffer.from(content.result.fileBinary).toString()
+      existingSong.lastModified = file.server_modified
+
+      await existingSong.save()
     }
   }
-  res.send('success')
+
+  const songs = await Song.find()
+  for (let i = 0; i < songs.length; i++) {
+    const existingSong = files.result.entries.find(file => file.name === songs[i].title + '.pro')
+    if (!existingSong) {
+      await Song.deleteOne({ title: songs[i].title })
+
+      const deletedSong = new DeletedSong({ title: songs[i].title, body: songs[i].body, lastModified: songs[i].lastModified })
+      await deletedSong.save()
+    }
+  }
+
+  const finalSongs = await Song.find()
+  res.send(finalSongs)
 })
 
 export const getSong = asyncHandler(async (req, res) => {
@@ -112,22 +129,36 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     const file = files.result.entries[i]
 
     if (file['.tag'] === 'file' && file.name.split('.')[1] === 'lst') {
-      const content = await dropbox.filesDownload({ path: file.path_display })
-      const existingPlaylist = await Playlist.findOne({ title: content.result.name.split('.')[0] })
+      const existingPlaylist = await Playlist.findOne({ title: file.name.split('.')[0] })
 
-      if (existingPlaylist) {
-        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
-      } else {
+      if (!existingPlaylist) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
         const playlist = new Playlist({
           title: content.result.name.split('.')[0],
-          songs: Buffer.from(content.result.fileBinary).toString()
+          songs: Buffer.from(content.result.fileBinary).toString(),
+          lastModified: file.server_modified
         })
         await playlist.save()
+      } else if (existingPlaylist.lastModified !== file.server_modified) {
+        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
+        existingPlaylist.lastModified = file.server_modified
+
+        await existingPlaylist.save()
       }
     }
   }
 
-  res.send('success')
+  const playlists = await Playlist.find()
+  for (let i = 0; i < playlists.length; i++) {
+    const existingPlaylist = files.result.entries.find(file => file.name === playlists[i].title + '.lst')
+    if (!existingPlaylist) {
+      await Playlist.deleteOne({ title: playlists[i].title })
+    }
+  }
+
+  const finalPlaylists = await Playlist.find()
+  res.send(finalPlaylists)
 })
 
 export const getPlaylist = asyncHandler(async (req, res) => {
