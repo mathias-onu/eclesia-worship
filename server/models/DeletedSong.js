@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const songSchema = mongoose.Schema({
+const deletedSongSchema = mongoose.Schema({
   title: {
     type: String,
     required: true
@@ -15,6 +15,6 @@ const songSchema = mongoose.Schema({
   }
 })
 
-const Song = mongoose.model('song', songSchema)
+const DeletedSong = mongoose.model('deleted-song', deletedSongSchema)
 
-export default Song
+export default DeletedSong
