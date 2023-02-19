@@ -9,7 +9,7 @@ const config = {
   clientId: process.env.DROPBOX_CLIENT_ID,
 };
 
-import { Dropbox } from 'dropbox'; // eslint-disable-line import/no-unresolved
+import { Dropbox } from 'dropbox';
 
 const dbx = new Dropbox(config);
 
