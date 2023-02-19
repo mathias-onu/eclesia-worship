@@ -9,7 +9,7 @@ const config = {
   clientId: process.env.DROPBOX_CLIENT_ID,
 };
 
-import { Dropbox } from 'dropbox';
+import { Dropbox } from 'dropbox'; // eslint-disable-line import/no-unresolved
 
 const dbx = new Dropbox(config);
 
@@ -40,7 +40,7 @@ export const authUser = asyncHandler(async (req, res) => {
 
 export const refreshToken = asyncHandler(async (req, res) => {
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
-    body: `grant_type=refresh_token&refresh_token=${process.env.DROPBOX_REFRESH_TOKEN}&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
+    body: `grant_type=refresh_token&refresh_token=PLJG5JIjZE0AAAAAAAAAAW3nwPMYAZV6HpIYrlYbmXSl3i0SH2Pa5ek54Rl1ll90&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
@@ -103,7 +103,7 @@ export const getSong = asyncHandler(async (req, res) => {
 })
 
 export const getSongs = asyncHandler(async (req, res) => {
-  const { search, limit } = req.query
+  const { search } = req.query
 
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ä,ă,â]')
@@ -115,7 +115,7 @@ export const getSongs = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 }).limit(limit)
+  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
   res.json(songs)
 })
 
@@ -141,8 +141,6 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
         })
         await playlist.save()
       } else if (existingPlaylist.lastModified !== file.server_modified) {
-        const content = await dropbox.filesDownload({ path: file.path_display })
-
         existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
         existingPlaylist.lastModified = file.server_modified
 
