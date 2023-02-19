@@ -40,7 +40,7 @@ export const authUser = asyncHandler(async (req, res) => {
 
 export const refreshToken = asyncHandler(async (req, res) => {
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
-    body: `grant_type=refresh_token&refresh_token=PLJG5JIjZE0AAAAAAAAAAW3nwPMYAZV6HpIYrlYbmXSl3i0SH2Pa5ek54Rl1ll90&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
+    body: `grant_type=refresh_token&refresh_token=${process.env.DROPBOX_REFRESH_TOKEN}&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     },
