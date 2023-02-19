@@ -1,0 +1,9 @@
+<div *ngIf="formattedSong" class="container-padding">
+    <h3>{{ formattedSong.title }}</h3>
+    <p *ngFor="let verse of formattedSong.verses" class="song-margin-top">{{ verse }}</p>
+</div>
+
+<div *ngIf="formattedPlaylist" class="container-padding">
+    <h4>{{ formattedPlaylist.date }}</h4>
+    <p *ngFor="let song of formattedPlaylist.songs" class="song-margin-top">{{ song }}</p>
+</div>

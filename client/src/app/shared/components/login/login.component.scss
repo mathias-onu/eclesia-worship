@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container h3 {
+    color: rgb(40, 40, 40);
+}
+
+.login-btn {
+    margin-top: 20px;
+    font-size: 1.3rem;
+}
