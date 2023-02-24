@@ -17,11 +17,6 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
   const data = await response.json()
   res.json(data)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const syncSongs = asyncHandler(async (req, res) => {
@@ -67,22 +62,12 @@ export const syncSongs = asyncHandler(async (req, res) => {
 
   const finalSongs = await Song.find()
   res.send(finalSongs)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getSong = asyncHandler(async (req, res) => {
   const song = await Song.findById(req.params.id.toString())
 
   res.json(song)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getSongs = asyncHandler(async (req, res) => {
@@ -100,11 +85,6 @@ export const getSongs = asyncHandler(async (req, res) => {
 
   const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
   res.json(songs)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const syncPlaylists = asyncHandler(async (req, res) => {
@@ -147,22 +127,12 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
 
   const finalPlaylists = await Playlist.find()
   res.send(finalPlaylists)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getPlaylist = asyncHandler(async (req, res) => {
   const playlist = await Playlist.findById(req.params.id.toString())
 
   res.json(playlist)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getPlaylists = asyncHandler(async (req, res) => {
@@ -181,9 +151,4 @@ export const getPlaylists = asyncHandler(async (req, res) => {
   const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
 
   res.json(playlists)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })

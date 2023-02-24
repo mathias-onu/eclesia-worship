@@ -5,12 +5,13 @@ import cors from 'cors'
 import connectDB from "./config/db.js"
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"
 import router from "./routes/index.js"
+import logMiddleware from "./middleware/logMiddleware.js"
 
 const app = express()
 dotenv.config()
 const corsOptions = {
     origin: 'http://localhost:4200',
-    optionsSuccessStatus: 200 
+    optionsSuccessStatus: 200
 }
 
 connectDB()
@@ -19,7 +20,7 @@ app.use(express.json())
 
 app.use(cors(corsOptions))
 
-app.use('/', router)
+app.use('/', logMiddleware, router)
 
 app.use(notFound)
 app.use(errorHandler)
