@@ -71,7 +71,7 @@ export const getSong = asyncHandler(async (req, res) => {
 })
 
 export const getSongs = asyncHandler(async (req, res) => {
-  const { search } = req.query
+  const { search, limit } = req.query
 
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ä,ă,â]')
@@ -83,7 +83,7 @@ export const getSongs = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
+  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
   res.json(songs)
 })
 
@@ -109,6 +109,8 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
         })
         await playlist.save()
       } else if (existingPlaylist.lastModified !== file.server_modified) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
         existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
         existingPlaylist.lastModified = file.server_modified
 
@@ -136,7 +138,7 @@ export const getPlaylist = asyncHandler(async (req, res) => {
 })
 
 export const getPlaylists = asyncHandler(async (req, res) => {
-  const { search } = req.query
+  const { search, limit } = req.query
 
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ä,ă,â]')
@@ -148,7 +150,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
+  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
 
   res.json(playlists)
 })

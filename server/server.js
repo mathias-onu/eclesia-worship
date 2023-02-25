@@ -5,7 +5,6 @@ import cors from 'cors'
 import connectDB from "./config/db.js"
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"
 import router from "./routes/index.js"
-import logMiddleware from "./middleware/logMiddleware.js"
 
 const app = express()
 dotenv.config()
@@ -20,7 +19,7 @@ app.use(express.json())
 
 app.use(cors(corsOptions))
 
-app.use('/', logMiddleware, router)
+app.use('/', router)
 
 app.use(notFound)
 app.use(errorHandler)
