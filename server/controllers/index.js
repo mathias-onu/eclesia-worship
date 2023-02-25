@@ -127,7 +127,7 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalPlaylists = await Playlist.find()
+  const finalPlaylists = await Playlist.find().sort({ lastModified: -1 })
   res.send(finalPlaylists)
 })
 
@@ -150,7 +150,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
+  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ lastModified: -1 })
 
   res.json(playlists)
 })
