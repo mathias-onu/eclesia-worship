@@ -17,11 +17,6 @@ export const refreshToken = asyncHandler(async (req, res) => {
 
   const data = await response.json()
   res.json(data)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const syncSongs = asyncHandler(async (req, res) => {
@@ -67,26 +62,16 @@ export const syncSongs = asyncHandler(async (req, res) => {
 
   const finalSongs = await Song.find()
   res.send(finalSongs)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getSong = asyncHandler(async (req, res) => {
   const song = await Song.findById(req.params.id.toString())
 
   res.json(song)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getSongs = asyncHandler(async (req, res) => {
-  const { search } = req.query
+  const { search, limit } = req.query
 
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ä,ă,â]')
@@ -98,13 +83,8 @@ export const getSongs = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
+  const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
   res.json(songs)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const syncPlaylists = asyncHandler(async (req, res) => {
@@ -129,6 +109,8 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
         })
         await playlist.save()
       } else if (existingPlaylist.lastModified !== file.server_modified) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
         existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
         existingPlaylist.lastModified = file.server_modified
 
@@ -147,26 +129,16 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
 
   const finalPlaylists = await Playlist.find()
   res.send(finalPlaylists)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getPlaylist = asyncHandler(async (req, res) => {
   const playlist = await Playlist.findById(req.params.id.toString())
 
   res.json(playlist)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
 
 export const getPlaylists = asyncHandler(async (req, res) => {
-  const { search } = req.query
+  const { search, limit } = req.query
 
   function diacriticSensitiveRegex(string = '') {
     return string.replace(/a/g, '[a,á,à,ä,ă,â]')
@@ -178,12 +150,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).sort({ title: 1 })
+  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
 
   res.json(playlists)
-
-  if (process.env.NODE_ENV === 'development') {
-    const currentTime = new Date()
-    console.log(req.originalUrl + ' responded with ' + res.statusCode + ' at ' + currentTime)
-  }
 })
