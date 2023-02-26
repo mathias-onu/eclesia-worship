@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="header-container">
+        <h2>Songs</h2>
+        <div class="sync-songs">
+            <button mat-icon-button class="search-btn" (click)="syncSongs()">
+                <mat-icon>sync</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="search-container">
+        <mat-form-field class="search-input">
+            <mat-label>Search songs...</mat-label>
+            <input matInput [formControl]="searchSong">
+        </mat-form-field>
+    </div>
+    <div class="songs-container" (scroll)="onScroll($event)">
+        <div *ngFor="let song of songs" class="song">
+            <span>{{ song.title.split(' (')[0].split(' - ')[0] }}</span>
+            <div>
+                <mat-icon fontIcon="add" class="add-icon" (click)="addSongToPlaylist(song)"></mat-icon>
+            </div>
+        </div>        
+    </div>
+</div>

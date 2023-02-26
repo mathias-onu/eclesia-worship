@@ -14,7 +14,7 @@ export class FormatSongPipe implements PipeTransform {
 
     const song = formattedSong.join(' ').split("  ")
     let songObj = {
-      title: value.title,
+      title: value.title.split(' (')[0].split(' - ')[0],
       verses: Array()
     }
 

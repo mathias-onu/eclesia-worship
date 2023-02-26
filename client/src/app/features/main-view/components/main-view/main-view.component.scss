@@ -1,7 +1,28 @@
-.container-padding {
-    padding: 50px;
+.main-container {
+    display: grid;
+    grid-template-columns: 25vw 75vw;
+    grid-template-rows: 60vh 40vh;
 }
 
-.song-margin-top {
-    margin-top: 20px;
+.songs,
+.preview-song,
+.playlist,
+.live-song {
+    padding: 20px 0 0 20px;
 }
+
+// .songs {
+//     background-color: blue;
+// }
+
+// .preview-song {
+//     background-color: red;
+// }
+
+// .playlist {
+//     background-color: orange;
+// }
+
+// .live-song {
+//     background-color: purple;
+// }

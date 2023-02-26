@@ -28,10 +28,10 @@ export class MainViewComponent implements OnInit {
     // Check if user is authenticated
     this.authService.checkAuthenticationState()
 
-    this.getSongs()
-    this.getSong('63f0e2d73330b8036294a306')
-    this.getPlaylists()
-    this.getPlaylist('63f0ef343330b8036294a5f1')
+    // this.getSongs()
+    // this.getSong('63f0e2d73330b8036294a306')
+    // this.getPlaylists()
+    // this.getPlaylist('63f0ef343330b8036294a5f1')
   }
 
   getSongs(limit?: number) {

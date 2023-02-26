@@ -1,0 +1,47 @@
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+.header-container h2 {
+    flex: 3;
+}
+
+.sync-songs {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.songs-container {
+    height: 38vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.song {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.song span {
+    flex: 4;
+}
+
+.song div {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.add-icon {
+    color: #888888;
+    transform: scale(0.8);
+    cursor: pointer;
+}
