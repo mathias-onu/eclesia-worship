@@ -70,6 +70,7 @@ export class PlaylistComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<IFormattedSong[]>) {
-    moveItemInArray(this.currentPlaylist.songs, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.currentPlaylist.songs, event.previousIndex, event.currentIndex)
+    this.songsService.setFormattedCompletePlaylist(this.currentPlaylist)
   }
 }
