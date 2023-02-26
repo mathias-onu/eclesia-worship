@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
@@ -66,5 +67,9 @@ export class PlaylistComponent implements OnInit {
 
   presentSong(song: any) {
     console.log(song)
+  }
+
+  drop(event: CdkDragDrop<IFormattedSong[]>) {
+    moveItemInArray(this.currentPlaylist.songs, event.previousIndex, event.currentIndex);
   }
 }
