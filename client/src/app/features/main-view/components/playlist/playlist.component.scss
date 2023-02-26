@@ -1,0 +1,47 @@
+.header-container {
+    display: flex;
+}
+
+.header-container h4 {
+    margin-top: 10px;
+    flex: 3
+}
+
+.playlist-search {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.playlist-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.playlist-song-container {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.playlist-song-container span {
+    flex: 4;
+}
+
+.playlist-song-container div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-icon,
+.live-icon {
+    color: #888888;
+    transform: scale(0.8);
+    cursor: pointer;
+}
+
+.live-icon {
+    transform: scale(1);
+    color: rgb(228, 75, 75);
+}
