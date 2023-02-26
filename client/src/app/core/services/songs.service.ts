@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
 import { IFormattedCompletePlaylist, IPlaylist } from 'src/app/shared/models/playlist.model';
-import { ISong } from 'src/app/shared/models/song.model';
+import { IFormattedSong, ISong } from 'src/app/shared/models/song.model';
 import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
 import { environment } from 'src/environments/environment.dev';
 
@@ -14,6 +14,8 @@ export class SongsService {
   resourceUrl: string = environment.apiUrl
   @LocalStorage('currentPlaylist')
   currentPlaylist!: IFormattedCompletePlaylist
+  @LocalStorage('currentDisplayedSong')
+  currentDisplayedSong!: IFormattedSong
 
   constructor(
     private http: HttpClient,
@@ -56,5 +58,14 @@ export class SongsService {
   addSongToPlaylist(song: ISong) {
     this.currentPlaylist.songs.push(this.formatSong.transform(song))
     this.localStorageService.store('currentPlaylist', this.currentPlaylist)
+  }
+
+  getCurrentDisplayedSong() {
+    return this.currentDisplayedSong
+  }
+
+  setCurrentDisplayedSong(song: IFormattedSong) {
+    this.currentDisplayedSong = song
+    this.localStorageService.store('currentDisplayedSong', song)
   }
 }

@@ -66,7 +66,8 @@ export class PlaylistComponent implements OnInit {
   }
 
   presentSong(song: any) {
-    console.log(song)
+    this.songsService.setCurrentDisplayedSong(song)
+    console.log(this.songsService.getCurrentDisplayedSong())
   }
 
   drop(event: CdkDragDrop<IFormattedSong[]>) {
