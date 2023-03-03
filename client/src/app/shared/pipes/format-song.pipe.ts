@@ -11,14 +11,13 @@ export class FormatSongPipe implements PipeTransform {
   transform(value: ISong): IFormattedSong {
     const formattedSong = chordProParser(value, textTypeAccessor.SONG)
 
-    console.log(formattedSong)
-
     const songContent: any = {
       title: value.title,
       verses: [
         { verse: 0, lines: [] }
       ]
     }
+
     let verseIndex = 0
     for (let i = 0; i < formattedSong.length; i++) {
       const line = formattedSong[i]
@@ -30,23 +29,8 @@ export class FormatSongPipe implements PipeTransform {
         songContent.verses[verseIndex].lines.push(line)
       }
     }
-
     songContent.verses.shift()
 
-    console.log(songContent)
-
-    const song = formattedSong.join(' ').split("  ")
-    let songObj = {
-      title: value.title.split(' (')[0].split(' - ')[0],
-      verses: Array()
-    }
-
-    for (let i = 0; i < song.length; i++) {
-      if (i !== 0 && !song[i].includes("#")) {
-        songObj.verses.push(song[i])
-      }
-    }
-
-    return songObj
+    return songContent
   }
 }
