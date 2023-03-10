@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainViewComponent } from './components/main-view/main-view.component';
-import { MainViewRoutingModule } from './main-view-routing.module';
+import { ControllerViewComponent } from './components/controller-view/controller-view.component';
+import { ControllerViewRoutingModule } from './controller-view-routing.module';
 import { SongsComponent } from './components/songs/songs.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import { PrePresentationComponent } from './components/pre-presentation/pre-pres
 
 @NgModule({
   declarations: [
-    MainViewComponent,
+    ControllerViewComponent,
     SongsComponent,
     PlaylistComponent,
     PlaylistSearchDialogComponent,
@@ -20,9 +20,9 @@ import { PrePresentationComponent } from './components/pre-presentation/pre-pres
   ],
   imports: [
     CommonModule,
-    MainViewRoutingModule,
+    ControllerViewRoutingModule,
     SharedModule,
     ReactiveFormsModule
   ]
 })
-export class MainViewModule { }
+export class ControllerViewModule { }

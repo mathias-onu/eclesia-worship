@@ -5,7 +5,7 @@ import { LoginComponent } from './shared/components/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./features/main-view/main-view.module').then(m => m.MainViewModule), canActivate: [AuthGuard] },
+  { path: 'home', loadChildren: () => import('./features/controller-view/controller-view.module').then(m => m.ControllerViewModule), canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent }
 ];
 
