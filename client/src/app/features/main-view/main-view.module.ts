@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PlaylistComponent } from './components/playlist/playlist.component';
 import { PlaylistSearchDialogComponent } from './components/playlist-search-dialog/playlist-search-dialog.component';
+import { PrePresentationComponent } from './components/pre-presentation/pre-presentation.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { PlaylistSearchDialogComponent } from './components/playlist-search-dial
     MainViewComponent,
     SongsComponent,
     PlaylistComponent,
-    PlaylistSearchDialogComponent
+    PlaylistSearchDialogComponent,
+    PrePresentationComponent
   ],
   imports: [
     CommonModule,
