@@ -63,7 +63,7 @@ export class PlaylistComponent implements OnInit {
       }
     }
     this.songsService.setFormattedCompletePlaylist(this.currentPlaylist)
-    if (song.title === this.songsService.currentDisplayedSong.title) {
+    if (this.songsService.currentDisplayedSong && song.title === this.songsService.currentDisplayedSong.title) {
       this.localStorageService.clear('currentDisplayedSong')
     }
   }
