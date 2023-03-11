@@ -5,13 +5,16 @@
 
 .presentation-container {
     display: flex;
-    align-items: center;
     justify-content: center;
     color: white;
 }
 
+.verse {
+    margin-top: 5vh;
+}
+
 .line {
-    font-size: 4rem;
+    font-size: 3rem;
     text-align: center;
     margin-bottom: 90px;
 }

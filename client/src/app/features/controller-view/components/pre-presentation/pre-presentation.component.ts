@@ -37,6 +37,7 @@ export class PrePresentationComponent implements OnInit {
   }
 
   async startPresentation() {
+    this.terminatePresentation()
     this.getPresentationAvailability()
 
     try {
@@ -58,7 +59,9 @@ export class PrePresentationComponent implements OnInit {
   }
 
   terminatePresentation() {
-    this.presentationConnection.terminate()
+    if (this.presentationConnection) {
+      this.presentationConnection.terminate()
+    }
     this.presentationConnection = null
     this.currentDisplayedVerse = null
   }
