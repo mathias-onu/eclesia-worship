@@ -17,10 +17,6 @@ export class PrePresentationComponent implements OnInit {
   presentationRequest = new PresentationRequest('http://localhost:4200/live')
   presentationConnection!: any
 
-  // @ts-ignore: Unreachable code error
-  presentationRequest = new PresentationRequest('http://localhost:4200/live')
-  presentationConnection!: any
-
   constructor(
     private songsService: SongsService
   ) { }
