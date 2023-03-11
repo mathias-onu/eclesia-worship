@@ -17,6 +17,10 @@ export class PrePresentationComponent implements OnInit {
   presentationRequest = new PresentationRequest('http://localhost:4200/live')
   presentationConnection!: any
 
+  // @ts-ignore: Unreachable code error
+  presentationRequest = new PresentationRequest('http://localhost:4200/live')
+  presentationConnection!: any
+
   constructor(
     private songsService: SongsService
   ) { }
@@ -49,6 +53,9 @@ export class PrePresentationComponent implements OnInit {
 
   displayVerse(verse: IVerse) {
     this.currentDisplayedVerse = verse
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify(verse))
+    }
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify(verse))
     }
