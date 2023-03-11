@@ -1,0 +1,5 @@
+<div class="presentation-container">
+    <div *ngIf="currentVerse" class="verse">
+        <div *ngFor="let line of currentVerse.lines" class="line">{{ line }}</div>
+    </div>
+</div>

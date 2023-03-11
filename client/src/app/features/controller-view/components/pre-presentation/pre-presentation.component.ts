@@ -13,6 +13,10 @@ export class PrePresentationComponent implements OnInit {
   currentDisplayedSong!: IFormattedSong
   currentDisplayedVerse!: IVerse | null
 
+  // @ts-ignore: Unreachable code error
+  presentationRequest = new PresentationRequest('http://localhost:4200/live')
+  presentationConnection!: any
+
   constructor(
     private songsService: SongsService
   ) { }
@@ -21,11 +25,38 @@ export class PrePresentationComponent implements OnInit {
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong()
   }
 
-  displayVerse(verse: IVerse) {
-    this.currentDisplayedVerse = verse
+  async getPresentationAvailability() {
+    try {
+      const availability = await this.presentationRequest.getAvailability()
+      availability.addEventListener('change', () => {
+        console.log(availability)
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  endPresentation() {
-    this.currentDisplayedVerse = null;
+  async startPresentation() {
+    this.getPresentationAvailability()
+
+    try {
+      const connection = await this.presentationRequest.start()
+      this.presentationConnection = connection
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  displayVerse(verse: IVerse) {
+    this.currentDisplayedVerse = verse
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify(verse))
+    }
+  }
+
+  terminatePresentation() {
+    this.presentationConnection.terminate()
+    this.presentationConnection = null
+    this.currentDisplayedVerse = null
   }
 }

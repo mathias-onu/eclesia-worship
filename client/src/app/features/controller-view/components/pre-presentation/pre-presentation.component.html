@@ -1,18 +1,21 @@
-<div *ngIf="currentDisplayedSong" class="container">
+<div class="container">
     <div class="presentation-buttons">
-        <button mat-flat-button (click)="endPresentation()" class="end-btn">stop</button>
-        <button mat-mini-fab (click)="displayVerse(currentDisplayedSong.verses[0])" class="live-btn">
+        <button mat-flat-button (click)="terminatePresentation()" class="end-btn">stop</button>
+        <button mat-mini-fab (click)="displayVerse(currentDisplayedSong.verses[0]); startPresentation()"
+            class="live-btn">
             <mat-icon fontIcon="videocam"></mat-icon>
         </button>
     </div>
     <div class="pre-presentation-container">
-        <div *ngFor="let verse of currentDisplayedSong!.verses; let i = index" (click)="displayVerse(verse)"
-            class="verse-container">
-            <p *ngFor="let line of verse!.lines">{{ line }}</p>
+        <div *ngIf="currentDisplayedSong">
+            <div *ngFor="let verse of currentDisplayedSong!.verses; let i = index" (click)="displayVerse(verse)"
+                class="verse-container">
+                <p *ngFor="let line of verse!.lines">{{ line }}</p>
+            </div>
         </div>
     </div>
     <div class="live-presentation-container">
-        <div *ngIf="currentDisplayedVerse">
+        <div *ngIf="currentDisplayedVerse && presentationConnection">
             <p *ngFor="let line of currentDisplayedVerse.lines">{{ line }}</p>
         </div>
     </div>
