@@ -13,19 +13,50 @@ export class PrePresentationComponent implements OnInit {
   currentDisplayedSong!: IFormattedSong
   currentDisplayedVerse!: IVerse | null
 
+  // @ts-ignore: Unreachable code error
+  presentationRequest = new PresentationRequest('http://localhost:4200/live')
+  presentationConnection!: any
+
   constructor(
     private songsService: SongsService
   ) { }
 
   ngOnInit(): void {
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong()
+
+    this.getPresentationAvailability()
+  }
+
+  async getPresentationAvailability() {
+    try {
+      const availability = await this.presentationRequest.getAvailability()
+      availability.addEventListener('change', () => {
+        console.log(availability)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async startPresentation() {
+    try {
+      const connection = await this.presentationRequest.start()
+      this.presentationConnection = connection
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   displayVerse(verse: IVerse) {
     this.currentDisplayedVerse = verse
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify(verse))
+    }
   }
 
-  endPresentation() {
-    this.currentDisplayedVerse = null;
+  terminatePresentation() {
+    this.presentationConnection.terminate()
+    this.presentationConnection = null
+    this.currentDisplayedVerse = null
   }
 }
