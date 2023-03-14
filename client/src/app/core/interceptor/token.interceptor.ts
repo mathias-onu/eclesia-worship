@@ -9,13 +9,15 @@ import {
 import { catchError, Observable, of, throwError } from 'rxjs';
 import { LocalStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
   constructor(
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -32,7 +34,10 @@ export class TokenInterceptor implements HttpInterceptor {
     console.error(err)
     if (err.status === 401) {
       this.localStorageService.clear('token')
-      this.router.navigateByUrl('/login')
+      this.authService.getToken().subscribe(res => {
+        this.localStorageService.store('token', res.body!.access_token)
+        this.router.navigateByUrl('/home')
+      })
 
       return of(err.message)
     }

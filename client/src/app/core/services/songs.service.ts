@@ -6,6 +6,7 @@ import { IFormattedCompletePlaylist, IPlaylist } from 'src/app/shared/models/pla
 import { IFormattedSong, ISong } from 'src/app/shared/models/song.model';
 import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
 import { environment } from 'src/environments/environment.dev';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +57,16 @@ export class SongsService {
   }
 
   addSongToPlaylist(song: ISong) {
-    this.currentPlaylist.songs.push(this.formatSong.transform(song))
+    const formattedSong = this.formatSong.transform(song)
+    if (this.currentPlaylist !== null) {
+      this.currentPlaylist.songs.push(this.formatSong.transform(song))
+    } else {
+      this.currentPlaylist = {
+        date: moment().format("YYYY-MM-DD"),
+        songs: Array()
+      }
+      this.currentPlaylist.songs.push(formattedSong)
+    }
     this.localStorageService.store('currentPlaylist', this.currentPlaylist)
   }
 

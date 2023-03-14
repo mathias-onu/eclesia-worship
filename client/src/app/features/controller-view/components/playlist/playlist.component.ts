@@ -63,11 +63,13 @@ export class PlaylistComponent implements OnInit {
       }
     }
     this.songsService.setFormattedCompletePlaylist(this.currentPlaylist)
+    if (this.songsService.currentDisplayedSong && song.title === this.songsService.currentDisplayedSong.title) {
+      this.localStorageService.clear('currentDisplayedSong')
+    }
   }
 
   presentSong(song: any) {
     this.songsService.setCurrentDisplayedSong(song)
-    console.log(this.songsService.getCurrentDisplayedSong())
   }
 
   drop(event: CdkDragDrop<IFormattedSong[]>) {
