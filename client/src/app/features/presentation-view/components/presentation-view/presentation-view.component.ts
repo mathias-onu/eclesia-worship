@@ -8,6 +8,7 @@ import { IVerse } from 'src/app/shared/models/song.model';
 })
 export class PresentationViewComponent implements OnInit {
   currentVerse!: IVerse
+  blackScreen: boolean = false;
 
   constructor() { }
 
@@ -19,17 +20,19 @@ export class PresentationViewComponent implements OnInit {
     try {
       // @ts-ignore: Unreachable code error
       const connectionList = await navigator.presentation.receiver.connectionList
-      this.addConnection(connectionList.connections[0])
+      this.receiveMessage(connectionList.connections[0])
     } catch (err) {
       console.error(err)
     }
   }
 
-  addConnection(connection: any) {
+  receiveMessage(connection: any) {
     connection.addEventListener('message', (event: any) => {
-      console.log(JSON.parse(event.data))
-      this.currentVerse = JSON.parse(event.data)
-      connection.send('Hey controller! I just received a message.')
+      if (event.data.blackScreen === true) {
+        this.blackScreen = true;
+      } else {
+        this.currentVerse = JSON.parse(event.data)
+      }
     })
   }
 }

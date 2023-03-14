@@ -42,16 +42,21 @@
     padding: 10px;
 }
 
-.end-btn {
+.black-screen-btn {
     background-color: #000000 !important;
     color: rgb(253, 250, 250) !important;
-    width: 45px;
-    height: 30px;
+    width: 30px;
+    height: 20px;
     min-width: unset !important;
     margin-right: 10px;
 }
 
+.ongoing-presentation-btn {
+    background-color: #56060e !important;
+    color: rgb(197, 190, 190);
+}
+
 .live-btn {
-    background-color: #fa0019 !important;
-    color: rgb(253, 250, 250) !important;
+    background-color: #fa0019;
+    color: rgb(253, 250, 250);
 }

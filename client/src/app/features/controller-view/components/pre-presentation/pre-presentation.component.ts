@@ -16,6 +16,7 @@ export class PrePresentationComponent implements OnInit {
   // @ts-ignore: Unreachable code error
   presentationRequest = new PresentationRequest('/live')
   presentationConnection!: any
+  isPresentationLive: boolean = false
 
   constructor(
     private songsService: SongsService
@@ -33,11 +34,13 @@ export class PrePresentationComponent implements OnInit {
       })
     } catch (error) {
       console.error(error)
+      this.isPresentationLive = false
     }
   }
 
   async startPresentation() {
     this.terminatePresentation()
+    this.isPresentationLive = true
     this.getPresentationAvailability()
 
     try {
@@ -45,6 +48,7 @@ export class PrePresentationComponent implements OnInit {
       this.presentationConnection = connection
     } catch (err) {
       console.error(err)
+      this.isPresentationLive = false
     }
   }
 
@@ -63,6 +67,11 @@ export class PrePresentationComponent implements OnInit {
       this.presentationConnection.terminate()
     }
     this.presentationConnection = null
+    this.isPresentationLive = false
     this.currentDisplayedVerse = null
+  }
+
+  setBlackScreen() {
+    this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
   }
 }
