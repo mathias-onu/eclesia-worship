@@ -18,6 +18,7 @@ export class PresentationViewComponent implements OnInit {
 
   async getConnection() {
     try {
+      // Checks for available connections and connects with the controller (selecting the first connection)
       // @ts-ignore: Unreachable code error
       const connectionList = await navigator.presentation.receiver.connectionList
       this.receiveMessage(connectionList.connections[0])
@@ -27,6 +28,7 @@ export class PresentationViewComponent implements OnInit {
   }
 
   receiveMessage(connection: any) {
+    // Receives data from the controller
     connection.addEventListener('message', (event: any) => {
       if (event.data.blackScreen === true) {
         this.blackScreen = true;
