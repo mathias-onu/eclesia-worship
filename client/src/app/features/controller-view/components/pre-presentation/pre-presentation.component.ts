@@ -72,6 +72,8 @@ export class PrePresentationComponent implements OnInit {
   }
 
   setBlackScreen() {
-    this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
+    }
   }
 }
