@@ -77,7 +77,7 @@ export class SongsComponent implements OnInit {
   }
 
   openBibleBooksDialog() {
-    const bibleBooksDialog = this.dialog.open(BibleBooksDialogComponent, { height: '80vh', width: '450px' })
+    const bibleBooksDialog = this.dialog.open(BibleBooksDialogComponent, { height: '80vh', width: '500px' })
 
     bibleBooksDialog.afterClosed().subscribe(passage => {
       console.log(passage)
