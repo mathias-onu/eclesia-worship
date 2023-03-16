@@ -7,6 +7,7 @@ import { IFormattedSong, ISong } from 'src/app/shared/models/song.model';
 import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
 import { environment } from 'src/environments/environment.dev';
 import * as moment from 'moment';
+import { IBibleReference } from 'src/app/shared/models/bible.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,8 @@ export class SongsService {
   currentPlaylist!: IFormattedCompletePlaylist
   @LocalStorage('currentDisplayedSong')
   currentDisplayedSong!: IFormattedSong
+  @LocalStorage('currentDisplayedBiblePassage')
+  currentDisplayedBiblePassage!: IFormattedSong
 
   constructor(
     private http: HttpClient,
@@ -46,6 +49,10 @@ export class SongsService {
 
   syncPlaylists(): Observable<HttpResponse<IPlaylist[]>> {
     return this.http.post<any>(this.resourceUrl + '/sync/playlists', {}, { observe: 'response' })
+  }
+
+  getBible(passage: string | null): Observable<HttpResponse<IBibleReference>> {
+    return this.http.get<IBibleReference>(`${this.resourceUrl}/bible?passage=${passage}`, { observe: 'response' })
   }
 
   getFormattedCompletePlaylist() {
