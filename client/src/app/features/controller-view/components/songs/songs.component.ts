@@ -80,7 +80,6 @@ export class SongsComponent implements OnInit {
     const bibleBooksDialog = this.dialog.open(BibleBooksDialogComponent, { height: '80vh', width: '500px' })
 
     bibleBooksDialog.afterClosed().subscribe(passage => {
-      console.log(passage)
       this.searchBibleInput.setValue(passage.data)
     })
   }
