@@ -16,7 +16,7 @@ import protect from '../middleware/authMiddleware.js'
 router.post('/refresh-token', refreshToken)
 router.post('/sync/songs', protect, syncSongs)
 router.get('/songs', protect, getSongs)
-router.get('/songs/:id', protect, getSong)
+router.get('/songs/:title', protect, getSong)
 
 router.post('/sync/playlists', protect, syncPlaylists)
 router.get('/playlists', protect, getPlaylists)
