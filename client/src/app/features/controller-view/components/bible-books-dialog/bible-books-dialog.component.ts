@@ -1,5 +1,4 @@
-
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IBible, IBibleBook } from 'src/app/shared/models/bible.model';
 import { getBibleObj } from 'src/app/shared/utils/bibleBooks';
@@ -12,7 +11,7 @@ import { getBibleObj } from 'src/app/shared/utils/bibleBooks';
 export class BibleBooksDialogComponent implements OnInit {
   bibleBooks: IBible = getBibleObj()
   selectedBook: IBibleBook = {
-    title: "Genesis",
+    title: "Geneza",
     chapters: [
       1,
       2,
@@ -70,20 +69,11 @@ export class BibleBooksDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<BibleBooksDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
 
-  }
-
-  generateArray(bookChapters: number) {
-    const chapters = []
-    for (let i = 1; i <= bookChapters; i++) {
-      chapters.push(i)
-    }
-
-    return chapters
   }
 
   selectBook(book: IBibleBook) {

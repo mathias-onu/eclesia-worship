@@ -29,11 +29,14 @@
             </button>
         </div>
         <div *ngIf="searchedBiblePassage else noPassageFound" class="bible-passage-container">
-            <button mat-stroked-button class="present-passage-btn">Present passage</button>
-            <p *ngFor="let verse of searchedBiblePassage.verses" class="bible-verse">
-                <sup>{{ verse.verse }}</sup>
-                {{ verse.text }}
-            </p>
+            <button (click)="addPassageToPresentation(searchedBiblePassage)" mat-stroked-button
+                class="present-passage-btn">Present passage</button>
+            <div *ngFor="let verse of searchedBiblePassage.verses" class="bible-verse">
+                <span><sup>{{ verse.verse }}</sup> {{ verse.text }}</span>
+                <div>
+                    <mat-icon fontIcon="add" class="add-icon" (click)="addVerseToPresentation(verse)"></mat-icon>
+                </div>
+            </div>
         </div>
         <ng-template #noPassageFound>
             <p *ngIf="searchBibleInput.dirty && !searchBibleInput.pristine">No passages found...</p>

@@ -24,3 +24,8 @@ export interface IBibleBook {
     title: string,
     chapters: number[]
 }
+
+export interface IBiblePassageSlide {
+    slideIndex: number,
+    text: string
+}

@@ -1,8 +1,9 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { BibleService } from 'src/app/core/services/bible.service';
 import { SongsService } from 'src/app/core/services/songs.service';
-import { IBibleReference } from 'src/app/shared/models/bible.model';
+import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'src/app/shared/models/bible.model';
 import { ISong } from 'src/app/shared/models/song.model';
 import { BibleBooksDialogComponent } from '../bible-books-dialog/bible-books-dialog.component';
 
@@ -20,6 +21,7 @@ export class SongsComponent implements OnInit {
 
   constructor(
     private songsService: SongsService,
+    private bibleService: BibleService,
     private dialog: MatDialog
   ) { }
 
@@ -40,7 +42,7 @@ export class SongsComponent implements OnInit {
     })
 
     this.searchBibleInput.valueChanges.subscribe(passage => {
-      this.songsService.getBible(passage).subscribe({
+      this.bibleService.getBible(passage).subscribe({
         next: res => {
           if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
             res.body!.verses.shift()
@@ -80,7 +82,31 @@ export class SongsComponent implements OnInit {
     const bibleBooksDialog = this.dialog.open(BibleBooksDialogComponent, { height: '80vh', width: '500px' })
 
     bibleBooksDialog.afterClosed().subscribe(passage => {
-      this.searchBibleInput.setValue(passage.data)
+      if (passage) {
+        this.searchBibleInput.setValue(passage.data)
+      }
     })
+  }
+
+  addPassageToPresentation(passage: IBibleReference) {
+    const verses = passage.verses
+
+    const presentationSlides: IBiblePassageSlide[] = [{ slideIndex: 1, text: "" }]
+    let slideCount = 0
+
+    for (let i = 0; i < verses.length; i++) {
+      if (presentationSlides[slideCount].text.length < 750) {
+        presentationSlides[slideCount].text += verses[i].text
+      } else {
+        slideCount++
+        presentationSlides.push({ slideIndex: slideCount + 1, text: verses[i].text })
+      }
+    }
+
+    this.bibleService.setCurrentDisplayedBiblePassage(presentationSlides)
+  }
+
+  addVerseToPresentation(verse: IBibleVerse) {
+    this.bibleService.addToCurrentDisplayedBiblePassage(verse)
   }
 }

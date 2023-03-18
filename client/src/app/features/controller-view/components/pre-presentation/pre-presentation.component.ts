@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorage } from 'ngx-webstorage';
+import { BibleService } from 'src/app/core/services/bible.service';
 import { SongsService } from 'src/app/core/services/songs.service';
+import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
 import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-pre-presentation',
@@ -10,8 +12,11 @@ import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
 })
 export class PrePresentationComponent implements OnInit {
   @LocalStorage('currentDisplayedSong')
-  currentDisplayedSong!: IFormattedSong
+  currentDisplayedSong!: IFormattedSong | null
   currentDisplayedVerse!: IVerse | null
+  @LocalStorage('currentDisplayedBiblePassage')
+  currentDisplayedBiblePassage!: IBiblePassageSlide[] | null
+  currentDisplayedPassage!: IBiblePassageSlide | null
 
   // @ts-ignore: Unreachable code error
   presentationRequest = new PresentationRequest('/live')
@@ -19,11 +24,14 @@ export class PrePresentationComponent implements OnInit {
   isPresentationLive: boolean = false
 
   constructor(
-    private songsService: SongsService
+    private songsService: SongsService,
+    private bibleService: BibleService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
-    this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong()
+    this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
+    this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
   }
 
   async startPresentation() {
@@ -64,8 +72,14 @@ export class PrePresentationComponent implements OnInit {
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify(verse))
     }
+  }
+
+  displayPassage(passage: IBiblePassageSlide) {
+    this.currentDisplayedPassage = passage
+
+    // Sends song verses to the receiver if a connection is established
     if (this.presentationConnection) {
-      this.presentationConnection.send(JSON.stringify(verse))
+      this.presentationConnection.send(JSON.stringify(passage))
     }
   }
 
@@ -77,12 +91,23 @@ export class PrePresentationComponent implements OnInit {
     this.presentationConnection = null
     this.isPresentationLive = false
     this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
   }
 
   setBlackScreen() {
-    // Hides
+    this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
+
+    // Make the text on the second text disappear
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
     }
+  }
+
+  removePresentationItem() {
+    this.localStorageService.clear('currentDisplayedSong')
+    this.localStorageService.clear('currentDisplayedBiblePassage')
+    this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
   }
 }
