@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
 import { IVerse } from 'src/app/shared/models/song.model';
 
 @Component({
@@ -7,7 +8,8 @@ import { IVerse } from 'src/app/shared/models/song.model';
   styleUrls: ['./presentation-view.component.scss']
 })
 export class PresentationViewComponent implements OnInit {
-  currentVerse!: IVerse
+  currentVerse!: IVerse | null
+  currentBiblePassage!: IBiblePassageSlide | null
   blackScreen: boolean = false;
 
   constructor() { }
@@ -30,10 +32,18 @@ export class PresentationViewComponent implements OnInit {
   receiveMessage(connection: any) {
     // Receives data from the controller
     connection.addEventListener('message', (event: any) => {
-      if (event.data.blackScreen === true) {
-        this.blackScreen = true;
+      const parsedData = JSON.parse(event.data)
+      if (parsedData.verse) {
+        this.blackScreen = false
+        this.currentBiblePassage = null
+        this.currentVerse = parsedData
+      } else if (parsedData.blackScreen) {
+        this.blackScreen = true
       } else {
-        this.currentVerse = JSON.parse(event.data)
+        this.blackScreen = false
+        this.currentVerse = null
+        this.currentBiblePassage = parsedData
+        console.log(this.currentBiblePassage)
       }
     })
   }

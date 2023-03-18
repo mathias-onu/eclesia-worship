@@ -39,7 +39,7 @@
 .song div {
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .add-icon {
@@ -49,8 +49,18 @@
 }
 
 .bible-verse {
-    padding-right: 10px;
+    display: flex;
     margin-bottom: 5px;
+}
+
+.bible-verse span {
+    flex: 7;
+}
+
+.bible-verse div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .present-passage-btn {

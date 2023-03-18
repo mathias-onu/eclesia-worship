@@ -1,9 +1,9 @@
 <div class="container">
     <div class="presentation-buttons">
+        <mat-icon class="delete-icon" (click)="removePresentationItem()">delete</mat-icon>
         <button mat-flat-button (click)="setBlackScreen()" class="black-screen-btn"></button>
         <button class="{{isPresentationLive ? 'ongoing-presentation-btn' : 'live-btn'}}" mat-mini-fab
-            (click)="displayVerse(currentDisplayedSong.verses[0]); isPresentationLive ? terminatePresentation() : startPresentation()"
-            class="live-btn">
+            (click)="isPresentationLive ? terminatePresentation() : startPresentation()" class="live-btn">
             <mat-icon fontIcon="videocam"></mat-icon>
         </button>
     </div>
@@ -14,10 +14,20 @@
                 <p *ngFor="let line of verse!.lines">{{ line }}</p>
             </div>
         </div>
+        <div *ngIf="currentDisplayedBiblePassage">
+            <div class="verse-container">
+                <div *ngFor="let slide of currentDisplayedBiblePassage" class="slide">
+                    <p (click)="displayPassage(slide)">{{ slide.text }}</p>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="live-presentation-container">
         <div *ngIf="currentDisplayedVerse && presentationConnection">
             <p *ngFor="let line of currentDisplayedVerse.lines">{{ line }}</p>
+        </div>
+        <div *ngIf="currentDisplayedPassage && presentationConnection">
+            <p>{{ currentDisplayedPassage.text }}</p>
         </div>
     </div>
 </div>
