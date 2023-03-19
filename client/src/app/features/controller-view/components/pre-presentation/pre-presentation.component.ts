@@ -98,7 +98,7 @@ export class PrePresentationComponent implements OnInit {
     this.currentDisplayedVerse = null
     this.currentDisplayedPassage = null
 
-    // Make the text on the second text disappear
+    // Makes the text on the second text disappear
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
     }
