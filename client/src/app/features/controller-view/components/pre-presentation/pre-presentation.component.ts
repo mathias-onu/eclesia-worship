@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BibleService } from 'src/app/core/services/bible.service';
 import { SongsService } from 'src/app/core/services/songs.service';
 import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
-import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
 import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
-import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 
 @Component({
@@ -19,9 +17,6 @@ export class PrePresentationComponent implements OnInit {
   @LocalStorage('currentDisplayedBiblePassage')
   currentDisplayedBiblePassage!: IBiblePassageSlide[] | null
   currentDisplayedPassage!: IBiblePassageSlide | null
-  @LocalStorage('currentDisplayedBiblePassage')
-  currentDisplayedBiblePassage!: IBiblePassageSlide[] | null
-  currentDisplayedPassage!: IBiblePassageSlide | null
 
   // @ts-ignore: Unreachable code error
   presentationRequest = new PresentationRequest('/live')
@@ -32,13 +27,10 @@ export class PrePresentationComponent implements OnInit {
     private songsService: SongsService,
     private bibleService: BibleService,
     private localStorageService: LocalStorageService,
-    private bibleService: BibleService,
-    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
-    this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null ? this.songsService.getCurrentDisplayedSong() : null
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
   }
 
@@ -80,12 +72,6 @@ export class PrePresentationComponent implements OnInit {
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify(verse))
     }
-  }
-
-  displayPassage(passage: IBiblePassageSlide) {
-    this.currentDisplayedPassage = passage
-
-    // Sends song verses to the receiver if a connection is established
   }
 
   displayPassage(passage: IBiblePassageSlide) {
