@@ -90,13 +90,12 @@ export class SongsComponent implements OnInit {
 
   addPassageToPresentation(passage: IBibleReference) {
     const verses = passage.verses
-
     const presentationSlides: IBiblePassageSlide[] = [{ slideIndex: 1, text: "" }]
     let slideCount = 0
 
     for (let i = 0; i < verses.length; i++) {
-      if (presentationSlides[slideCount].text.length < 750) {
-        presentationSlides[slideCount].text += verses[i].text
+      if (presentationSlides[slideCount].text.length < 500) {
+        presentationSlides[slideCount].text += `${verses[i].verse.toString()}. ${verses[i].text}`
       } else {
         slideCount++
         presentationSlides.push({ slideIndex: slideCount + 1, text: verses[i].text })

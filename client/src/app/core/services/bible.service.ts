@@ -38,10 +38,10 @@ export class BibleService {
     if (this.currentDisplayedBiblePassage) {
       const lastSlidePassage = this.currentDisplayedBiblePassage[this.currentDisplayedBiblePassage.length - 1]
 
-      if (this.currentDisplayedBiblePassage.some(slide => !slide.text.includes(verse.text)) && this.currentDisplayedBiblePassage.length > 0 && verse.text.length + lastSlidePassage.text.length < 750) {
+      if (!this.currentDisplayedBiblePassage.some(slide => slide.text.includes(verse.text)) && this.currentDisplayedBiblePassage.length > 0 && verse.text.length + lastSlidePassage.text.length < 500) {
         lastSlidePassage.text += verse.text
       } else {
-        if (this.currentDisplayedBiblePassage.some(slide => !slide.text.includes(verse.text))) {
+        if (!this.currentDisplayedBiblePassage.some(slide => slide.text.includes(verse.text))) {
           this.currentDisplayedBiblePassage.push({ slideIndex: this.currentDisplayedBiblePassage.length, text: verse.text })
         }
       }
