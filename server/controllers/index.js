@@ -155,3 +155,12 @@ export const getPlaylists = asyncHandler(async (req, res) => {
 
   res.json(playlists)
 })
+
+export const getBible = asyncHandler(async (req, res) => {
+  const { passage } = req.query
+
+  const bible = await fetch(`https://bible-api.com/${passage}?translation=rccv`)
+  const response = await bible.json()
+
+  res.send(response)
+})

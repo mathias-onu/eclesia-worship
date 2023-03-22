@@ -75,6 +75,7 @@ export class SongsService {
   }
 
   setCurrentDisplayedSong(song: IFormattedSong) {
+    this.localStorageService.store('currentDisplayedBiblePassage', null)
     this.currentDisplayedSong = song
     this.localStorageService.store('currentDisplayedSong', song)
   }

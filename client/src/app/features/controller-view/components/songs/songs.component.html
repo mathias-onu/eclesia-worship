@@ -1,24 +1,45 @@
-<div class="container">
-    <div class="header-container">
-        <h2>Songs</h2>
-        <div class="sync-songs">
+<mat-tab-group>
+    <mat-tab label="Songs">
+        <div class="search-container">
+            <mat-form-field class="search-input">
+                <mat-label>Search songs...</mat-label>
+                <input matInput [formControl]="searchSongInput">
+            </mat-form-field>
             <button mat-icon-button class="search-btn" (click)="syncSongs()">
                 <mat-icon>sync</mat-icon>
             </button>
         </div>
-    </div>
-    <div class="search-container">
-        <mat-form-field class="search-input">
-            <mat-label>Search songs...</mat-label>
-            <input matInput [formControl]="searchSong">
-        </mat-form-field>
-    </div>
-    <div class="songs-container" (scroll)="onScroll($event)">
-        <div *ngFor="let song of songs" class="song">
-            <span>{{ song.title.split(' (')[0].split(' - ')[0] }}</span>
-            <div>
-                <mat-icon fontIcon="add" class="add-icon" (click)="addSongToPlaylist(song)"></mat-icon>
+        <div class="songs-container" (scroll)="onScroll($event)">
+            <div *ngFor="let song of songs" class="song">
+                <span>{{ song.title.split(' (')[0].split(' - ')[0] }}</span>
+                <div>
+                    <mat-icon fontIcon="add" class="add-icon" (click)="addSongToPlaylist(song)"></mat-icon>
+                </div>
             </div>
-        </div>        
-    </div>
-</div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Bible">
+        <div class="bible-search-container">
+            <mat-form-field class="search-input">
+                <mat-label>Search bible passages...</mat-label>
+                <input matInput [formControl]="searchBibleInput">
+            </mat-form-field>
+            <button mat-icon-button class="bible-books-btn" (click)="openBibleBooksDialog()">
+                <mat-icon>menu_book</mat-icon>
+            </button>
+        </div>
+        <div *ngIf="searchedBiblePassage else noPassageFound" class="bible-passage-container">
+            <button (click)="addPassageToPresentation(searchedBiblePassage)" mat-stroked-button
+                class="present-passage-btn">Present passage</button>
+            <div *ngFor="let verse of searchedBiblePassage.verses" class="bible-verse">
+                <span><sup>{{ verse.verse }}</sup> {{ verse.text }}</span>
+                <div>
+                    <mat-icon fontIcon="add" class="add-icon" (click)="addVerseToPresentation(verse)"></mat-icon>
+                </div>
+            </div>
+        </div>
+        <ng-template #noPassageFound>
+            <p *ngIf="searchBibleInput.dirty && !searchBibleInput.pristine">No passages found...</p>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

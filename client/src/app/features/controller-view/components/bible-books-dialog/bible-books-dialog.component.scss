@@ -1,0 +1,22 @@
+.bible-books-container {
+    display: flex;
+    padding: 10px;
+}
+
+.old-testament-container, 
+.new-testament-container,
+.selected-book,
+.divider {
+    margin-left: 15px;
+}
+
+.old-testament-container h3, 
+.new-testament-container h3 {
+    font-weight: bold;
+}
+
+.old-testament-container p, 
+.new-testament-container p,
+.selected-book {
+    cursor: pointer;
+}
