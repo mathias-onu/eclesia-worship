@@ -18,8 +18,7 @@ export class PrePresentationComponent implements OnInit {
   currentDisplayedBiblePassage!: IBiblePassageSlide[] | null
   currentDisplayedPassage!: IBiblePassageSlide | null
 
-  // @ts-ignore: Unreachable code error
-  presentationRequest = new PresentationRequest('/live')
+  presentationRequest!: any
   presentationConnection!: any
   isPresentationLive: boolean = false
 
@@ -30,6 +29,12 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    try {
+      // @ts-ignore: Unreachable code error
+      this.presentationRequest = new PresentationRequest('/live')
+    } catch (error) {
+      console.error("Presentation API is not supported")
+    }
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
   }

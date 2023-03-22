@@ -12,7 +12,7 @@
 .verse, .passage {
     margin-top: 5vh;
     height: 95vh;
-    padding: 0 80px 0 80px;
+    padding: 0 10px 0 10px;
 }
 
 .line,
@@ -21,6 +21,10 @@
     text-align: center;
     margin-bottom: 60px;
     line-height: 175%;
+}
+
+.line {
+    line-height: 100%;
 }
 
 .bible-verse {
