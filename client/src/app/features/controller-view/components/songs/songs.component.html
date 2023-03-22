@@ -5,7 +5,7 @@
                 <mat-label>Search songs...</mat-label>
                 <input matInput [formControl]="searchSongInput">
             </mat-form-field>
-            <button mat-icon-button class="search-btn" (click)="syncSongs()">
+            <button mat-icon-button class="search-btn" (click)="syncSongs()" [disabled]="syncLoading">
                 <mat-icon>sync</mat-icon>
             </button>
         </div>

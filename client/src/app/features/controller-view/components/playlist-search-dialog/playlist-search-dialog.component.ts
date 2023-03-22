@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SongsService } from 'src/app/core/services/songs.service';
 import { IFormattedPlaylist, IPlaylist } from 'src/app/shared/models/playlist.model';
 import { FormatPlaylistPipe } from 'src/app/shared/pipes/format-playlist.pipe';
+import { AlertService } from 'src/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-playlist-search-dialog',
@@ -15,12 +16,14 @@ export class PlaylistSearchDialogComponent implements OnInit {
   playlists!: IPlaylist[] | null
   numberOfRequestedPlaylists!: number
   formattedPlaylist!: IFormattedPlaylist
+  syncLoading: boolean = false
 
   constructor(
     public dialogRef: MatDialogRef<PlaylistSearchDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private songsService: SongsService,
-    private formatPlaylist: FormatPlaylistPipe
+    private formatPlaylist: FormatPlaylistPipe,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -54,11 +57,19 @@ export class PlaylistSearchDialogComponent implements OnInit {
   }
 
   syncPlaylists() {
-    this.songsService.syncPlaylists().subscribe(() => {
-      console.log("Playlists synced successfully!")
-      this.songsService.getPlaylists(15).subscribe(res => {
-        this.playlists = res.body
-      })
+    this.syncLoading = true
+    this.songsService.syncPlaylists().subscribe({
+      next: () => {
+        this.songsService.getPlaylists(15).subscribe(res => {
+          this.playlists = res.body
+          this.syncLoading = false
+        })
+        this.alertService.openSnackBar('Songs have been synced successfully!', 'success')
+      },
+      error: () => {
+        this.syncLoading = false
+        this.alertService.openSnackBar('An error occurred while syncing songs...', 'error')
+      }
     })
   }
 }

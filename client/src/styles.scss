@@ -45,15 +45,11 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html,
-body {
-  height: 100%;
+:root {
+  --success-color: #198754;
+  --error-color: #dc3545;
 }
 
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
 
 /* width */
 ::-webkit-scrollbar {
@@ -76,4 +72,34 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(122, 122, 122);
   transition: .5s ease-in-out all;
+}
+
+// Alert styling
+.success-alert {
+  background-color: rgb(12, 119, 12) !important;
+  color: white !important;
+}
+
+.error-alert {
+  background-color: rgb(139, 7, 7) !important;
+  color: white !important;
+}
+
+.success-snackbar {
+  color: white;
+  --mdc-snackbar-container-color: var(--success-color) !important;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.error-snackbar {
+  max-width: max-content !important;
+  color: white;
+  --mdc-snackbar-container-color: var(--error-color) !important;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
 }

@@ -5,6 +5,7 @@ import { BibleService } from 'src/app/core/services/bible.service';
 import { SongsService } from 'src/app/core/services/songs.service';
 import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'src/app/shared/models/bible.model';
 import { ISong } from 'src/app/shared/models/song.model';
+import { AlertService } from 'src/app/shared/services/alert.service';
 import { BibleBooksDialogComponent } from '../bible-books-dialog/bible-books-dialog.component';
 
 @Component({
@@ -18,11 +19,13 @@ export class SongsComponent implements OnInit {
   numberOfRequestedSongs: number = 30
   searchBibleInput = new FormControl('')
   searchedBiblePassage!: IBibleReference | null
+  syncLoading: boolean = false
 
   constructor(
     private songsService: SongsService,
     private bibleService: BibleService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
@@ -75,7 +78,20 @@ export class SongsComponent implements OnInit {
   }
 
   syncSongs() {
-    this.songsService.syncSongs().subscribe(() => console.log("Songs synced successfully!"))
+    this.syncLoading = true
+    this.songsService.syncSongs().subscribe({
+      next: () => {
+        this.songsService.getSongs(15).subscribe(res => {
+          this.songs = res.body
+          this.syncLoading = false
+        })
+        this.alertService.openSnackBar('Songs have been synced successfully!', 'success')
+      },
+      error: () => {
+        this.syncLoading = false
+        this.alertService.openSnackBar('An error occurred while syncing songs...', 'error')
+      }
+    })
   }
 
   openBibleBooksDialog() {
