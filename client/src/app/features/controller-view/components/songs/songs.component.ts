@@ -80,11 +80,9 @@ export class SongsComponent implements OnInit {
   syncSongs() {
     this.syncLoading = true
     this.songsService.syncSongs().subscribe({
-      next: () => {
-        this.songsService.getSongs(15).subscribe(res => {
-          this.songs = res.body
-          this.syncLoading = false
-        })
+      next: (res) => {
+        this.songs = res.body
+        this.syncLoading = false
         this.alertService.openSnackBar('Songs have been synced successfully!', 'success')
       },
       error: () => {
