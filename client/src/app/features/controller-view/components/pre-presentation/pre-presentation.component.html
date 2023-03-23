@@ -1,26 +1,33 @@
 <div class="container">
     <div class="presentation-buttons">
-        <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()">text_decrease</mat-icon>
-        <mat-icon class="increase-font-size-icon" (click)="increaseFontSize()">text_increase</mat-icon>
-        <mat-icon class="delete-icon" (click)="removePresentationItem()">delete</mat-icon>
-        <button mat-flat-button (click)="setBlackScreen()" class="black-screen-btn"></button>
+        <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()" data-testid="decreaseFontSizeBtn">
+            text_decrease</mat-icon>
+        <mat-icon class="increase-font-size-icon" (click)="increaseFontSize()" data-testid="increaseFontSizeBtn">
+            text_increase</mat-icon>
+        <mat-icon class="delete-icon" (click)="removePresentationItem()" data-testid="removePresentationItemBtn">delete
+        </mat-icon>
+        <button mat-flat-button (click)="setBlackScreen()" class="black-screen-btn"
+            data-testid="blackScreenBtn"></button>
         <button class="{{isPresentationLive ? 'ongoing-presentation-btn' : 'live-btn'}}" mat-mini-fab
-            (click)="isPresentationLive ? terminatePresentation() : startPresentation()" class="live-btn">
+            (click)="isPresentationLive ? terminatePresentation() : startPresentation()" class="live-btn"
+            data-testid="presentBtn">
             <mat-icon fontIcon="videocam"></mat-icon>
         </button>
     </div>
     <div class="pre-presentation-container">
         <div *ngIf="currentDisplayedSong">
             <div *ngFor="let verse of currentDisplayedSong!.verses; let i = index" (click)="displayVerse(verse)"
-                class="verse-container" [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
+                class="verse-container" [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}"
+                data-testid="displayVerseBtn">
                 <p *ngFor="let line of verse!.lines">{{ line }}</p>
             </div>
         </div>
         <div *ngIf="currentDisplayedBiblePassage">
             <div class="verse-container">
-                <div *ngFor="let slide of currentDisplayedBiblePassage" class="slide"
-                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
-                    <p (click)="displayPassage(slide)">{{ slide.text }}</p>
+                <div *ngFor="let slide of currentDisplayedBiblePassage" (click)="displayPassage(slide)" class="slide"
+                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}"
+                    data-testid="displayPassageBtn">
+                    <p data-testid="displayPassageBtn">{{ slide.text }}</p>
                 </div>
             </div>
         </div>
