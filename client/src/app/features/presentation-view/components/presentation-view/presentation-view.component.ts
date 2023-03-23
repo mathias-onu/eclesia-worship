@@ -10,7 +10,9 @@ import { IVerse } from 'src/app/shared/models/song.model';
 export class PresentationViewComponent implements OnInit {
   currentVerse!: IVerse | null
   currentBiblePassage!: IBiblePassageSlide | null
-  blackScreen: boolean = false;
+  blackScreen: boolean = false
+  fontSize: number = 16
+  lineHeight: number = 150
 
   constructor() { }
 
@@ -33,17 +35,20 @@ export class PresentationViewComponent implements OnInit {
     // Receives data from the controller
     connection.addEventListener('message', (event: any) => {
       const parsedData = JSON.parse(event.data)
-      if (parsedData.verse) {
+
+      if (parsedData.verse) {  // Gets the song verses
         this.blackScreen = false
         this.currentBiblePassage = null
         this.currentVerse = parsedData
-      } else if (parsedData.blackScreen) {
-        this.blackScreen = true
-      } else {
+      } else if (parsedData.text) {  // Gets the Bible text
         this.blackScreen = false
         this.currentVerse = null
         this.currentBiblePassage = parsedData
-        console.log(this.currentBiblePassage)
+      } else if (parsedData.blackScreen) {  // Sets the screen to black
+        this.blackScreen = true
+      } else if (parsedData.fontSize) {  // Modifies the font size
+        this.fontSize = parsedData.fontSize
+        this.lineHeight = parsedData.textLineHeight
       }
     })
   }

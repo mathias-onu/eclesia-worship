@@ -22,6 +22,9 @@ export class PrePresentationComponent implements OnInit {
   presentationConnection!: any
   isPresentationLive: boolean = false
 
+  fontSize: number = 16
+  lineHeight: number = 130
+
   constructor(
     private songsService: SongsService,
     private bibleService: BibleService,
@@ -29,6 +32,10 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 16
+    this.lineHeight = this.localStorageService.retrieve('lineHeight') ? this.localStorageService.retrieve('lineHeight') : 170
+
+    // Checks if Presentation API is supported by the user's browser
     try {
       // @ts-ignore: Unreachable code error
       this.presentationRequest = new PresentationRequest('/live')
@@ -115,5 +122,24 @@ export class PrePresentationComponent implements OnInit {
     this.localStorageService.clear('currentDisplayedBiblePassage')
     this.currentDisplayedVerse = null
     this.currentDisplayedPassage = null
+  }
+
+  increaseFontSize() {
+    this.manipulateFontSize('addition')
+  }
+
+  decreaseFontSize() {
+    this.manipulateFontSize('substract')
+  }
+
+  manipulateFontSize(typeOfOperation: string) {
+    typeOfOperation === 'addition' ? this.fontSize++ : this.fontSize--
+    typeOfOperation === 'addition' ? this.lineHeight += 10 : this.lineHeight -= 10
+    this.localStorageService.store('fontSize', this.fontSize)
+    this.localStorageService.store('lineHeight', this.lineHeight)
+
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify({ fontSize: this.fontSize, lineHeight: this.lineHeight }))
+    }
   }
 }
