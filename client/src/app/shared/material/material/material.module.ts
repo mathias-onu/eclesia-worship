@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDividerModule,
     DragDropModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatButtonToggleModule
   ],
   exports: [
     MatButtonModule,
@@ -34,7 +36,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatDividerModule,
     DragDropModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatButtonToggleModule
   ]
 })
 export class MaterialModule { }
