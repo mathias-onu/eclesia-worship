@@ -19,7 +19,8 @@
             <mat-button-toggle-group name="currentDisplayedSong" class="toggle-container">
                 <mat-button-toggle *ngFor="let verse of currentDisplayedSong!.verses; let i = index"
                     (click)="displayVerse(verse)" class="verse-container"
-                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
+                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}"
+                    data-testid="displayVerseBtn">
                     <p *ngFor="let line of verse!.lines">{{ line }}</p>
                 </mat-button-toggle>
             </mat-button-toggle-group>
@@ -27,7 +28,8 @@
         <div *ngIf="currentDisplayedBiblePassage">
             <mat-button-toggle-group name="currentDisplayedBiblePassage" class="toggle-container">
                 <mat-button-toggle *ngFor="let slide of currentDisplayedBiblePassage" class="slide"
-                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
+                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}"
+                    data-testid="displayPassageBtn">
                     <p (click)="displayPassage(slide)">{{ slide.text }}</p>
                 </mat-button-toggle>
             </mat-button-toggle-group>
