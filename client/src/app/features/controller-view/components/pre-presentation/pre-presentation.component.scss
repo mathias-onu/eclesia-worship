@@ -26,8 +26,10 @@
     flex: 1.5;
 }
 
-.verse-container:nth-child(0) {
-    font-weight: bold;
+.toggle-container, 
+.verse-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .verse-container {
@@ -79,6 +81,15 @@
     margin-bottom: 30px;
     font-size: 16px;
     line-height: 150%;
+}
+
+.mat-button-toggle-group, 
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+    border: none !important;    
+}
+
+.mat-button-toggle {
+    white-space: pre-wrap !important;
 }
 
 .slide p {

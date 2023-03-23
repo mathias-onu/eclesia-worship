@@ -6,6 +6,7 @@ import { SongsService } from 'src/app/core/services/songs.service';
 import { IFormattedCompletePlaylist } from 'src/app/shared/models/playlist.model';
 import { IFormattedSong } from 'src/app/shared/models/song.model';
 import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
+import { AlertService } from 'src/app/shared/services/alert.service';
 import { PlaylistSearchDialogComponent } from '../playlist-search-dialog/playlist-search-dialog.component';
 
 @Component({
@@ -21,7 +22,8 @@ export class PlaylistComponent implements OnInit {
     private dialog: MatDialog,
     private localStorageService: LocalStorageService,
     private songsService: SongsService,
-    private formatSong: FormatSongPipe
+    private formatSong: FormatSongPipe,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void { }
@@ -36,21 +38,17 @@ export class PlaylistComponent implements OnInit {
       if (playlist) {
         this.localStorageService.clear('currentPlaylist')
 
-        const formattedCompletePLaylist = {
+        const formattedCompletePlaylist = {
           date: playlist.selectedPlaylist.date,
           songs: Array()
         }
         for (let i = 0; i < playlist.selectedPlaylist.songs.length; i++) {
-          this.songsService.getSongs(undefined, playlist.selectedPlaylist.songs[i].split(' (')[0].split(' - ')[0]).subscribe(
-            (song) => {
-              if (song!.body!.length !== 0) {
-                formattedCompletePLaylist.songs.push(this.formatSong.transform(song.body![0]))
-                this.songsService.setFormattedCompletePlaylist(formattedCompletePLaylist)
-              } else {
-                console.error(`Song "${playlist.selectedPlaylist.songs[i].split(' (')[0].split(' - ')[0]}" could not be found...`)
-              }
-            }
-          )
+          console.log(playlist.selectedPlaylist.songs[i])
+          formattedCompletePlaylist.songs.push({
+            title: playlist.selectedPlaylist.songs[i].split(' (')[0].split(' - ')[0],
+            verses: []
+          })
+          this.songsService.setFormattedCompletePlaylist(formattedCompletePlaylist)
         }
       }
     })
@@ -69,7 +67,31 @@ export class PlaylistComponent implements OnInit {
   }
 
   presentSong(song: any) {
-    this.songsService.setCurrentDisplayedSong(song)
+    if (song.verses.length === 0) {
+      const preSong = {
+        title: song.title,
+        verses: Array()
+      }
+
+      this.songsService.getSongs(undefined, song.title).subscribe((res) => {
+        if (res!.body!.length !== 0) {
+          preSong.verses = this.formatSong.transform(res.body![0]).verses
+          this.currentPlaylist.songs.forEach(playlistSong => {
+            if (playlistSong.title.includes(preSong.title)) {
+              playlistSong.verses = preSong.verses
+            }
+          })
+          this.songsService.setFormattedCompletePlaylist(this.currentPlaylist)
+          this.songsService.setCurrentDisplayedSong(preSong)
+        } else {
+          this.alertService.openSnackBar(`Song "${song.title}" could not be found...`, 'error')
+        }
+      }
+      )
+    } else {
+      this.songsService.setCurrentDisplayedSong(song)
+    }
+
   }
 
   drop(event: CdkDragDrop<IFormattedSong[]>) {
