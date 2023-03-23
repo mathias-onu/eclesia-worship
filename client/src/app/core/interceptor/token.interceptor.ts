@@ -33,11 +33,7 @@ export class TokenInterceptor implements HttpInterceptor {
   handleAuthError(err: HttpErrorResponse): Observable<any> {
     console.error(err)
     if (err.status === 401) {
-      this.localStorageService.clear('token')
-      this.authService.getToken().subscribe(res => {
-        this.localStorageService.store('token', res.body!.access_token)
-        this.router.navigateByUrl('/home')
-      })
+      this.router.navigateByUrl('/authorize')
 
       return of(err.message)
     }

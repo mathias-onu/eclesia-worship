@@ -1,12 +1,12 @@
-.header-container {
+.container {
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.search-container,
+.bible-search-container {
     display: flex;
-    align-items: center;
 }
-
-.header-container h2 {
-    flex: 3;
-}
-
 .sync-songs {
     flex: 1;
     display: flex;
@@ -17,11 +17,13 @@
     width: 100%;
 }
 
-.songs-container {
+.songs-container,
+.bible-passage-container {
     height: 38vh;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: auto;
+    padding: 5px;
 }
 
 .song {
@@ -37,11 +39,32 @@
 .song div {
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .add-icon {
     color: #888888;
     transform: scale(0.8);
     cursor: pointer;
+}
+
+.bible-verse {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.bible-verse span {
+    flex: 7;
+}
+
+.bible-verse div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.present-passage-btn {
+    margin-bottom: 5px;
+    width: 160px;
+    height: 30px;
 }

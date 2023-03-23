@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PlaylistComponent } from './components/playlist/playlist.component';
 import { PlaylistSearchDialogComponent } from './components/playlist-search-dialog/playlist-search-dialog.component';
 import { PrePresentationComponent } from './components/pre-presentation/pre-presentation.component';
+import { BibleBooksDialogComponent } from './components/bible-books-dialog/bible-books-dialog.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { PrePresentationComponent } from './components/pre-presentation/pre-pres
     SongsComponent,
     PlaylistComponent,
     PlaylistSearchDialogComponent,
-    PrePresentationComponent
+    PrePresentationComponent,
+    BibleBooksDialogComponent
   ],
   imports: [
     CommonModule,

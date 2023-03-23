@@ -1,6 +1,6 @@
 <div class="mat-dialog-header">
     <h2>Search playlists</h2>
-    <button mat-flat-button color="primary" (click)="syncPlaylists()">Sync playlists</button>
+    <button mat-flat-button color="primary" (click)="syncPlaylists()" [disabled]="syncLoading">Sync playlists</button>
 </div>
 <div mat-dialog-title>
     <mat-form-field class="search-input">

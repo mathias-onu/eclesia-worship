@@ -1,22 +1,38 @@
 <div class="container">
     <div class="presentation-buttons">
-        <button mat-flat-button (click)="terminatePresentation()" class="end-btn">stop</button>
-        <button mat-mini-fab (click)="displayVerse(currentDisplayedSong.verses[0]); startPresentation()"
-            class="live-btn">
+        <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()">text_decrease</mat-icon>
+        <mat-icon class="increase-font-size-icon" (click)="increaseFontSize()">text_increase</mat-icon>
+        <mat-icon class="delete-icon" (click)="removePresentationItem()">delete</mat-icon>
+        <button mat-flat-button (click)="setBlackScreen()" class="black-screen-btn"></button>
+        <button class="{{isPresentationLive ? 'ongoing-presentation-btn' : 'live-btn'}}" mat-mini-fab
+            (click)="isPresentationLive ? terminatePresentation() : startPresentation()" class="live-btn">
             <mat-icon fontIcon="videocam"></mat-icon>
         </button>
     </div>
     <div class="pre-presentation-container">
         <div *ngIf="currentDisplayedSong">
             <div *ngFor="let verse of currentDisplayedSong!.verses; let i = index" (click)="displayVerse(verse)"
-                class="verse-container">
+                class="verse-container" [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
                 <p *ngFor="let line of verse!.lines">{{ line }}</p>
+            </div>
+        </div>
+        <div *ngIf="currentDisplayedBiblePassage">
+            <div class="verse-container">
+                <div *ngFor="let slide of currentDisplayedBiblePassage" class="slide"
+                    [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
+                    <p (click)="displayPassage(slide)">{{ slide.text }}</p>
+                </div>
             </div>
         </div>
     </div>
     <div class="live-presentation-container">
-        <div *ngIf="currentDisplayedVerse && presentationConnection">
+        <div *ngIf="currentDisplayedVerse && presentationConnection"
+            [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
             <p *ngFor="let line of currentDisplayedVerse.lines">{{ line }}</p>
+        </div>
+        <div *ngIf="currentDisplayedPassage && presentationConnection"
+            [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + '%'}">
+            <p>{{ currentDisplayedPassage.text }}</p>
         </div>
     </div>
 </div>
