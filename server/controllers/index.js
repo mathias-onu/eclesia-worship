@@ -7,6 +7,7 @@ import DeletedSong from '../models/DeletedSong.js'
 import { Dropbox } from 'dropbox';
 
 export const refreshToken = asyncHandler(async (req, res) => {
+  console.log(process.env.DROPBOX_REFRESH_TOKEN)
   const response = await fetch("https://api.dropbox.com/oauth2/token", {
     body: `grant_type=refresh_token&refresh_token=${process.env.DROPBOX_REFRESH_TOKEN}&client_id=${process.env.DROPBOX_CLIENT_ID}&client_secret=${process.env.DROPBOX_CLIENT_SECRET}`,
     headers: {
@@ -60,7 +61,7 @@ export const syncSongs = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalSongs = await Song.find()
+  const finalSongs = await Song.find().sort({ title: 1 })
   res.send(finalSongs)
 })
 
@@ -153,4 +154,13 @@ export const getPlaylists = asyncHandler(async (req, res) => {
   const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: -1 })
 
   res.json(playlists)
+})
+
+export const getBible = asyncHandler(async (req, res) => {
+  const { passage } = req.query
+
+  const bible = await fetch(`https://bible-api.com/${passage}?translation=rccv`)
+  const response = await bible.json()
+
+  res.send(response)
 })

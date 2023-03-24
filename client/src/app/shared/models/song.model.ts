@@ -8,5 +8,9 @@ export interface ISong {
 
 export interface IFormattedSong {
     title: string,
-    verses: string[]
+    verses: IVerse[]
+}
+export interface IVerse {
+    verseIndex: number,
+    lines: string[]
 }

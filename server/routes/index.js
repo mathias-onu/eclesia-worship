@@ -9,7 +9,8 @@ import {
   getSongs,
   syncPlaylists,
   getPlaylist,
-  getPlaylists
+  getPlaylists,
+  getBible
 } from '../controllers/index.js'
 import protect from '../middleware/authMiddleware.js'
 
@@ -21,5 +22,7 @@ router.get('/songs/:title', protect, getSong)
 router.post('/sync/playlists', protect, syncPlaylists)
 router.get('/playlists', protect, getPlaylists)
 router.get('/playlists/:id', protect, getPlaylist)
+
+router.get('/bible', getBible)
 
 export default router
