@@ -9,11 +9,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - run: ls
-      - run: cd server
-      - run: npm install
-      - run: npm run server
-      - run: cd ../client
+      - run: ls && cd server
+      - run: ls && npm install
+      - run: npm run && npm run server
+      - run: cd ../client && ls
       - run: npm install
       - run: npm start
       - run: npm cy:run
