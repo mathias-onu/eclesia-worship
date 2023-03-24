@@ -30,7 +30,7 @@ export class PlaylistComponent implements OnInit {
 
   openSearchPlaylistsDialog() {
     const selectPlaylistDialog = this.dialog.open(PlaylistSearchDialogComponent, {
-      height: '550px',
+      height: '700px',
       width: '550px'
     })
 

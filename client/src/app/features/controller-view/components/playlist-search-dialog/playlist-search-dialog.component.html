@@ -1,16 +1,20 @@
 <div class="mat-dialog-header">
     <h2>Search playlists</h2>
-    <button mat-flat-button color="primary" (click)="syncPlaylists()" [disabled]="syncLoading">Sync playlists</button>
+    <button mat-icon-button class="search-btn" (click)="syncPlaylists()" [disabled]="syncLoading"
+        data-testid="syncPlaylistsBtn">
+        <mat-icon>sync</mat-icon>
+    </button>
 </div>
 <div mat-dialog-title>
     <mat-form-field class="search-input">
         <mat-label>Search playlists...</mat-label>
-        <input matInput [formControl]="searchPlaylist" autocomplete="off">
+        <input matInput [formControl]="searchPlaylist" autocomplete="off" data-testid="searchPlaylistsInput">
     </mat-form-field>
 </div>
 <div mat-dialog-content class="playlists-container" (scroll)="onScroll($event)">
     <mat-accordion multi>
-        <mat-expansion-panel *ngFor="let playlist of playlists" (click)="displayPlaylistSongs(playlist)">
+        <mat-expansion-panel *ngFor="let playlist of playlists" (click)="displayPlaylistSongs(playlist)"
+            data-testid="expandPlaylistBtn">
             <mat-expansion-panel-header>
                 <mat-panel-title>{{ playlist.title }}</mat-panel-title>
             </mat-expansion-panel-header>
@@ -22,7 +26,8 @@
                 </p>
             </div>
             <div class="action-container">
-                <button mat-flat-button color="primary" (click)="selectPlaylist(playlist)">Select playlist</button>
+                <button mat-flat-button color="primary" (click)="selectPlaylist(playlist)"
+                    data-testid="selectPlaylistBtn">Select playlist</button>
             </div>
         </mat-expansion-panel>
     </mat-accordion>

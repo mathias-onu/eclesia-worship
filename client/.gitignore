@@ -35,3 +35,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Test files
+/cypress/videos/*
+/cypress/screenshots/*
+/cypress/report/*

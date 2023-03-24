@@ -59,9 +59,11 @@ export class SongsService {
   addSongToPlaylist(song: ISong) {
     const formattedSong = this.formatSong.transform(song)
 
-    if (this.currentPlaylist !== null && !this.currentPlaylist.songs.some(playlistSong => playlistSong.title.includes(song.title))) {
-      this.currentPlaylist.songs.push(this.formatSong.transform(song))
-    } else if (!this.currentPlaylist.songs.some(song => song.title.includes(song.title))) {
+    if (this.currentPlaylist !== null) {
+      if (!this.currentPlaylist.songs.some(playlistSong => playlistSong.title.includes(song.title))) {
+        this.currentPlaylist.songs.push(this.formatSong.transform(song))
+      }
+    } else {
       this.currentPlaylist = {
         date: moment().format("YYYY-MM-DD"),
         songs: Array()
