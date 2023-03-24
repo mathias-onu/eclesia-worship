@@ -1,0 +1,18 @@
+name: ci-cd
+run-name: ${{ github.actor }} built and tested the frontend
+on: [push]
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: cd server
+      - run: npm install
+      - run: npm run server
+      - run: cd ../client
+      - run: npm install
+      - run: npm start
+      - run: npm cy:run
