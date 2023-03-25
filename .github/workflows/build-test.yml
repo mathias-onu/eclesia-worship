@@ -31,4 +31,5 @@ jobs:
           npm start &
           cd ../client &&
           npm ci &&
-          npm start
+          npm start &
+          echo "Done!"
