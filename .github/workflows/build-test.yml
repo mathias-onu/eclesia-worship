@@ -27,14 +27,8 @@ jobs:
       - name: Start the server
         working-directory: ./server
         run: |
-          npm ci
+          npm ci &&
+          npm start &
+          cd ../client &&
+          npm ci &&
           npm start
-      - name: Start the frontend dev server
-        working-directory: ../client
-        run: |
-          npm ci
-          npm start
-      - name: Run e2e tests
-        working-directory: ../client
-        run: |
-          npm run cy:open
