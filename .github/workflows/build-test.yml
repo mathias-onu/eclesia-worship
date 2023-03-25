@@ -4,7 +4,7 @@ on: [push]
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    container: cypress/included:12.3.0
+    # container: cypress/included:12.3.0
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -27,12 +27,12 @@ jobs:
       - name: Start the server
         working-directory: ./server
         run: |
-          npm install
-          npm run server
+          npm ci
+          npm start
       - name: Start the frontend dev server
         working-directory: ../client
         run: |
-          npm install
+          npm ci
           npm start
       - name: Run e2e tests
         working-directory: ../client
