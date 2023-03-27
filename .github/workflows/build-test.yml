@@ -24,7 +24,7 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
       - uses: cypress-io/github-action@v5
         with:
-          working_directory: ./client
+          working-directory: ./client
           runTests: false
       - name: Start the server
         run: |
