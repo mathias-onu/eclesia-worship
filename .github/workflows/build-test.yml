@@ -22,7 +22,7 @@ jobs:
           DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
           DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
-      - uses: actions/checkout@v5
+      - uses: cypress-io/github-action@v5
         with:
           runTests: false
       - name: Start the server
