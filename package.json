@@ -8,7 +8,7 @@
     "client:install": "cd client && npm install",
     "server:dev": "cd server && npm run server",
     "client:dev": "cd client && npm start",
-    "test:e2e": "cd client && npm run cy:open"
+    "test:e2e": "cd client && npm run cy:run"
   },
   "repository": {
     "type": "git",
