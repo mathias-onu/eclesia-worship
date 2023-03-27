@@ -32,6 +32,7 @@ jobs:
           working-directory: ./client
           start: npm start
       - name: archive test artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
