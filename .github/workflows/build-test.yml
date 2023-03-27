@@ -4,7 +4,6 @@ on: [push]
 jobs:
   build-test:
     runs-on: ubuntu-latest
-    # container: cypress/included:12.3.0
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -23,13 +22,13 @@ jobs:
           DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
           DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
-
+      - uses: actions/checkout@v5
+        with:
+          runTests: false
       - name: Start the server
-        working-directory: ./server
         run: |
-          npm ci &&
-          npm start &
-          cd ../client &&
-          npm ci &&
-          npm start &
-          echo "Done!"
+          npm run server:install
+          npm run client:install
+          npm run server:dev & 
+          npm run client:dev &
+          npm run test:e2e
