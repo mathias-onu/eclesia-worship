@@ -38,5 +38,5 @@ jobs:
         with:
           name: test-results
           path: |
-            ./cypress/videos
+            ./client/cypress/videos
             ./client/cypress/screenshots
