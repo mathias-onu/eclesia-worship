@@ -31,4 +31,4 @@ jobs:
             npm run server & 
             cd ../client &&
             npm install
-          run: npm start
+          start: npm start
