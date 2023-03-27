@@ -26,12 +26,13 @@ jobs:
           cd ./server &&
           npm install &&
           npm run server &
+          cd ../client &&
+          npm install &&
+          npm start &
           cd ../
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
-          build: npm install
-          start: npm start
       - name: archive test artifacts
         uses: actions/upload-artifact@v3
         with:
