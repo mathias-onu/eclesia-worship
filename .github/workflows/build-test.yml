@@ -25,7 +25,8 @@ jobs:
       - run: |
           cd ./server &&
           npm install &&
-          npm run server
+          npm run server &
+          cd ../
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
