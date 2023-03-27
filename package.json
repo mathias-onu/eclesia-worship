@@ -4,7 +4,11 @@
   "description": "Web app that syncs with a shared Dropbox folder to manage and present songs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server:install": "cd server && npm install",
+    "client:install": "cd client && npm install",
+    "server:dev": "cd server && npm run server",
+    "client:dev": "cd client && npm start",
+    "test:e2e": "cd client && npm run cy:open"
   },
   "repository": {
     "type": "git",
