@@ -22,13 +22,12 @@ jobs:
           DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
           DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
+      - run: |
+          cd ../server &&
+          npm install &&
+          npm run server
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
-          build: |
-            cd ../server &&
-            npm install &&
-            npm run server & 
-            cd ../client &&
-            npm install
+          build: npm install
           start: npm start
