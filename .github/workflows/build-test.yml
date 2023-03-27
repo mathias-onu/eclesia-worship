@@ -25,11 +25,10 @@ jobs:
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
-          runTests: false
-      - name: Start the server
-        run: |
-          npm run server:install
-          npm run client:install
-          npm run server:dev & 
-          npm run client:dev &
-          npm run test:e2e
+          build: |
+            cd ../server &&
+            npm install &&
+            npm run server & 
+            cd ../client &&
+            npm install
+          run: npm start
