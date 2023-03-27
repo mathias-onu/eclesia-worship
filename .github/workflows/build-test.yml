@@ -31,6 +31,7 @@ jobs:
         with:
           working-directory: ./client
           start: npm start
+          wait-on: 'http://localhost:4200'
       - name: archive test artifacts
         if: always()
         uses: actions/upload-artifact@v3
