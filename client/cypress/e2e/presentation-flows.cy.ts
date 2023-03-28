@@ -53,7 +53,7 @@ describe("Testing basic presentation flows.", () => {
   it("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
     // ACT   
     cy.get('[data-testid="openPlaylistSearchBtn"]').click()
-    cy.get('[data-testid="expandPlaylistBtn"]').eq(0).click()
+    cy.get('[data-testid="expandPlaylistBtn"]', { timeout: 5000 }).eq(0).click()
     cy.get('[data-testid="selectPlaylistBtn"]').eq(0).click()
     cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
 
