@@ -134,7 +134,8 @@ export class SongsComponent implements OnInit {
     this.songsService.getSongs(limit ? limit : undefined, searchValue ? searchValue : undefined).subscribe({
       next: res => {
         if (res.body!.length === 0) {
-          this.alertService.openSnackBar("Sorry, but there was an error while getting the songs...", 'error')
+          this.alertService.openSnackBar("Sorry, but there was an error while getting the songs... Please try again later...", 'error')
+          this.syncSongs()
         } else {
           this.songs = res.body
         }
