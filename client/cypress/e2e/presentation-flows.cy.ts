@@ -4,7 +4,7 @@ describe("Testing basic presentation flows.", () => {
     cy.visit('/')
   })
 
-  it.skip("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
+  it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
     // ACT
     cy.wait(3000)
     cy.request({
@@ -27,7 +27,7 @@ describe("Testing basic presentation flows.", () => {
     cy.get('[data-testid="displayVerseBtn"]').should('be.visible')
   })
 
-  it.skip("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
+  it("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
     // ACT   
     cy.wait(3000)
     cy.get('[data-testid="openPlaylistSearchBtn"]').click()
