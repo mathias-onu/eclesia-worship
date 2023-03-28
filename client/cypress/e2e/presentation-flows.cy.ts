@@ -41,6 +41,7 @@ describe("Testing basic presentation flows.", () => {
 
   it("should click on the 'Bible' tab, open the Bible books and chapter dialog, select a book and chapter, and then present the given passage", () => {
     // ACT   
+    cy.wait(5000)
     cy.get('span').contains('Bible').click()
     cy.get('[data-testid="openBibleBooksBtn"]').click()
     cy.get('[data-testid="selectOTBookBtn"]').eq(1).click()
@@ -53,6 +54,7 @@ describe("Testing basic presentation flows.", () => {
 
   it("should click on the 'Bible' tab, search for a passage, and then present the given passage", () => {
     // ACT   
+    cy.wait(5000)
     cy.get('span').contains('Bible').click()
     cy.get('[data-testid="searchBibleInput"]').type('Romani 3:23-24', { force: true })
     cy.get('[data-testid="searchPassagesBtn"]').click()
