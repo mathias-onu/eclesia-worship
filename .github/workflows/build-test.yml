@@ -22,16 +22,18 @@ jobs:
           DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
           DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
-      - run: |
-          cd ./server &&
-          npm install &&
-          npm run server &
-          ls
+
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
-          start: npm start
-          wait-on: 'http://localhost:4200'
+          start: |
+            cd ../server &&
+            npm install &&
+            npm run server &
+            cd ../client &&
+            npm start
+          wait-on: 'http://localhost:5000, http://localhost:4200'
+
       - name: archive test artifacts
         if: always()
         uses: actions/upload-artifact@v3
