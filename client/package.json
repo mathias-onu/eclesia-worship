@@ -9,7 +9,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "backend:server": "cd ../server && npm run server",
+    "start:all:servers": "concurrently \"npm run backend:server\" \"npm start\""
   },
   "private": true,
   "dependencies": {
@@ -35,6 +37,7 @@
     "@angular/cli": "~15.1.5",
     "@angular/compiler-cli": "^15.1.0",
     "@types/jasmine": "~4.3.0",
+    "concurrently": "^7.6.0",
     "cypress": "^12.8.1",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
