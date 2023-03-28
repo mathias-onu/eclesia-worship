@@ -2,6 +2,40 @@ describe("Testing basic presentation flows.", () => {
   beforeEach(() => {
     // ARRANGE
     cy.visit('/')
+
+    // Seeding the database
+    // Requesting an access token
+    cy.request({
+      url: 'http://localhost:5000/refresh-token',
+      method: 'POST',
+    }).then(token => {
+      // Syncing songs
+      cy.request({
+        url: 'http://localhost:5000/sync/songs',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token.body.access_token!}`
+        },
+        timeout: 200000
+      }).then(syncedSongs => {
+        if (syncedSongs.isOkStatusCode) {
+          cy.log('Database has been seeded successfully!')
+        }
+      })
+      // Syncing playlists
+      cy.request({
+        url: 'http://localhost:5000/sync/playlists',
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token.body.access_token!}`
+        },
+        timeout: 200000
+      }).then(syncedPlaylists => {
+        if (syncedPlaylists.isOkStatusCode) {
+          cy.log('Database has been seeded successfully!')
+        }
+      })
+    })
   })
 
   it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
