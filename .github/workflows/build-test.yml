@@ -23,24 +23,18 @@ jobs:
           DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
 
-      - name: Start the backend server 
-        working-directory: ./server
-        run: |
-          npm install &&
-          npm run server
+      - name: Start the frontend server and run e2e tests
+        uses: cypress-io/github-action@v5
+        with:
+          working-directory: ./client
+          start: npm run start:all:servers
+          wait-on: 'http://localhost:4200'
 
-      # - name: Start the frontend server and run e2e tests
-      #   uses: cypress-io/github-action@v5
-      #   with:
-      #     working-directory: ./client
-      #     start: npm start
-      #     wait-on: 'http://localhost:4200'
-
-      # - name: archive test artifacts
-      #   if: always()
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: test-results
-      #     path: |
-      #       ./client/cypress/videos
-      #       ./client/cypress/screenshots
+      - name: archive test artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            ./client/cypress/videos
+            ./client/cypress/screenshots
