@@ -7,6 +7,17 @@ describe("Testing basic presentation flows.", () => {
   it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
     // ACT
     cy.wait(3000)
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:5000/songs?limit=15',
+      headers: {
+        'Authorization': 'Bearer sl.BbboYaIBi3m4aEvsPWyB858tH-N9U2xUqSn6UKDB5DrAl3oDyh5OzcpFTIjabFwrzZ3n2TTemIffIKvY38BI6e7MfTjdf--TTTG3sXNxjEzzIb3hArB-2R6G625WqOaJDSzlvO6Y5qFs',
+      }
+    }).then(res => {
+      console.log(res)
+      cy.log(`GET songs status code: ${res.status}`)
+      cy.log(`Sample response item: ${res.body[0].body}`)
+    })
     cy.get('[data-testid="searchSongsInput"]').type('Biruitor', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
     cy.get('span').contains('Biruitor', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
