@@ -43,7 +43,6 @@ export class PlaylistComponent implements OnInit {
           songs: Array()
         }
         for (let i = 0; i < playlist.selectedPlaylist.songs.length; i++) {
-          console.log(playlist.selectedPlaylist.songs[i])
           formattedCompletePlaylist.songs.push({
             title: playlist.selectedPlaylist.songs[i].split(' (')[0].split(' - ')[0],
             verses: []
