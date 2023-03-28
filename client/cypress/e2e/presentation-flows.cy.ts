@@ -7,7 +7,7 @@ describe("Testing basic presentation flows.", () => {
   it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
     // ACT
     cy.wait(3000)
-    cy.get('[data-testid="searchSongsInputs"]').type('Biruitor', { force: true })
+    cy.get('[data-testid="searchSongsInput"]').type('Biruitor', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
     cy.get('span').contains('Biruitor', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
 
