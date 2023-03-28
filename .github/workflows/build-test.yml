@@ -26,12 +26,7 @@ jobs:
       - uses: cypress-io/github-action@v5
         with:
           working-directory: ./client
-          start: |
-            cd ../server &&
-            npm install &&
-            npm run server &
-            cd ../client &&
-            npm start
+          start: cd ../server, npm install, npm run server, cd ../client, npm start
           wait-on: 'http://localhost:5000, http://localhost:4200'
 
       - name: archive test artifacts
