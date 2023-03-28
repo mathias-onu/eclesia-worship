@@ -6,17 +6,6 @@ describe("Testing basic presentation flows.", () => {
 
   it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
     // ACT
-    cy.wait(3000)
-    cy.request({
-      method: 'GET',
-      url: 'http://localhost:5000/songs?limit=15',
-      headers: {
-        'Authorization': 'Bearer sl.BbboYaIBi3m4aEvsPWyB858tH-N9U2xUqSn6UKDB5DrAl3oDyh5OzcpFTIjabFwrzZ3n2TTemIffIKvY38BI6e7MfTjdf--TTTG3sXNxjEzzIb3hArB-2R6G625WqOaJDSzlvO6Y5qFs',
-      }
-    }).then(res => {
-      console.log(res)
-      cy.log(`GET songs status code: ${res.status}`)
-    })
     cy.get('[data-testid="searchSongsInput"]').type('Biruitor', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
     cy.get('span').contains('Biruitor', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
@@ -29,7 +18,6 @@ describe("Testing basic presentation flows.", () => {
 
   it("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
     // ACT   
-    cy.wait(3000)
     cy.get('[data-testid="openPlaylistSearchBtn"]').click()
     cy.get('[data-testid="expandPlaylistBtn"]', { timeout: 5000 }).eq(0).click()
     cy.get('[data-testid="selectPlaylistBtn"]').eq(0).click()
@@ -41,7 +29,6 @@ describe("Testing basic presentation flows.", () => {
 
   it("should click on the 'Bible' tab, open the Bible books and chapter dialog, select a book and chapter, and then present the given passage", () => {
     // ACT   
-    cy.wait(5000)
     cy.get('span').contains('Bible').click()
     cy.get('[data-testid="openBibleBooksBtn"]').click()
     cy.get('[data-testid="selectOTBookBtn"]').eq(1).click()
@@ -54,7 +41,6 @@ describe("Testing basic presentation flows.", () => {
 
   it("should click on the 'Bible' tab, search for a passage, and then present the given passage", () => {
     // ACT   
-    cy.wait(5000)
     cy.get('span').contains('Bible').click()
     cy.get('[data-testid="searchBibleInput"]').type('Romani 3:23-24', { force: true })
     cy.get('[data-testid="searchPassagesBtn"]').click()
