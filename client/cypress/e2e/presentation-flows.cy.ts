@@ -16,7 +16,6 @@ describe("Testing basic presentation flows.", () => {
     }).then(res => {
       console.log(res)
       cy.log(`GET songs status code: ${res.status}`)
-      cy.log(`Sample response item: ${res.body[0].body}`)
     })
     cy.get('[data-testid="searchSongsInput"]').type('Biruitor', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
