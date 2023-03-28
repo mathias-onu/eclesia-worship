@@ -32,9 +32,15 @@ export class SongsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingSongs = true
-    this.songsService.getSongs(15).subscribe(res => {
-      this.loadingSongs = false
-      this.songs = res.body
+    this.songsService.getSongs(15).subscribe({
+      next: res => {
+        this.songs = res.body
+        this.loadingSongs = false
+      },
+      error: err => {
+        this.alertService.openSnackBar(err.message, 'error')
+        this.loadingSongs = false
+      }
     })
 
     this.searchSongInput.valueChanges.subscribe(res => {
@@ -71,9 +77,15 @@ export class SongsComponent implements OnInit {
 
   searchSong() {
     this.loadingSongs = true
-    this.songsService.getSongs(undefined, this.searchSongInput.value).subscribe(res => {
-      this.songs = res.body
-      this.loadingSongs = false
+    this.songsService.getSongs(undefined, this.searchSongInput.value).subscribe({
+      next: res => {
+        this.songs = res.body
+        this.loadingSongs = false
+      },
+      error: err => {
+        this.alertService.openSnackBar(err.message, 'error')
+        this.loadingSongs = false
+      }
     })
   }
 
