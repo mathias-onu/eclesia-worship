@@ -30,7 +30,11 @@ export class PlaylistSearchDialogComponent implements OnInit {
   ngOnInit(): void {
     this.loadingPlaylists = true
     this.songsService.getPlaylists(15).subscribe(res => {
-      this.playlists = res.body
+      if (res.body!.length === 0) {
+        this.syncPlaylists()
+      } else {
+        this.playlists = res.body
+      }
       this.loadingPlaylists = false
     })
 
