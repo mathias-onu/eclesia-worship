@@ -32,24 +32,12 @@ export class SongsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingSongs = true
-    this.songsService.getSongs(15).subscribe({
-      next: res => {
-        this.songs = res.body
-        this.loadingSongs = false
-      },
-      error: err => {
-        this.alertService.openSnackBar(err.message, 'error')
-        this.loadingSongs = false
-      }
-    })
+    this.getSongs(15)
 
     this.searchSongInput.valueChanges.subscribe(res => {
       if (res === '') {
         this.loadingSongs = true
-        this.songsService.getSongs(15).subscribe(res => {
-          this.loadingSongs = false
-          this.songs = res.body
-        })
+        this.getSongs(15)
       }
     })
 
@@ -77,16 +65,7 @@ export class SongsComponent implements OnInit {
 
   searchSong() {
     this.loadingSongs = true
-    this.songsService.getSongs(undefined, this.searchSongInput.value).subscribe({
-      next: res => {
-        this.songs = res.body
-        this.loadingSongs = false
-      },
-      error: err => {
-        this.alertService.openSnackBar(err.message, 'error')
-        this.loadingSongs = false
-      }
-    })
+    this.getSongs(undefined, this.searchSongInput.value)
   }
 
   searchPassage() {
@@ -149,5 +128,22 @@ export class SongsComponent implements OnInit {
 
   addVerseToPresentation(verse: IBibleVerse) {
     this.bibleService.addToCurrentDisplayedBiblePassage(verse)
+  }
+
+  getSongs(limit?: number, searchValue?: string | null) {
+    this.songsService.getSongs(limit ? limit : undefined, searchValue ? searchValue : undefined).subscribe({
+      next: res => {
+        if (res.body!.length === 0) {
+          this.alertService.openSnackBar("Sorry, but there was an error while getting the songs...", 'error')
+        } else {
+          this.songs = res.body
+        }
+        this.loadingSongs = false
+      },
+      error: err => {
+        this.alertService.openSnackBar(err.message, 'error')
+        this.loadingSongs = false
+      }
+    })
   }
 }
