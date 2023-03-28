@@ -12,10 +12,11 @@ import { AlertService } from 'src/app/shared/services/alert.service';
   styleUrls: ['./playlist-search-dialog.component.scss']
 })
 export class PlaylistSearchDialogComponent implements OnInit {
-  searchPlaylist = new FormControl()
+  searchPlaylistsInput = new FormControl()
   playlists!: IPlaylist[] | null
   numberOfRequestedPlaylists!: number
   formattedPlaylist!: IFormattedPlaylist
+  loadingPlaylists: boolean = false
   syncLoading: boolean = false
 
   constructor(
@@ -27,14 +28,24 @@ export class PlaylistSearchDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadingPlaylists = true
     this.songsService.getPlaylists(15).subscribe(res => {
-      this.playlists = res.body
+      if (res.body!.length === 0) {
+        this.syncPlaylists()
+      } else {
+        this.playlists = res.body
+      }
+      this.loadingPlaylists = false
     })
 
-    this.searchPlaylist.valueChanges.subscribe(data => {
-      this.songsService.getPlaylists(undefined, data!.toLowerCase().trim()).subscribe(res => {
-        this.playlists = res.body
-      })
+    this.searchPlaylistsInput.valueChanges.subscribe(data => {
+      if (data === '') {
+        this.loadingPlaylists = true
+        this.songsService.getPlaylists(15).subscribe(res => {
+          this.playlists = res.body
+          this.loadingPlaylists = false
+        })
+      }
     })
   }
 
@@ -63,13 +74,21 @@ export class PlaylistSearchDialogComponent implements OnInit {
         this.songsService.getPlaylists(15).subscribe(res => {
           this.playlists = res.body
           this.syncLoading = false
+          this.alertService.openSnackBar('Playlists have been synced successfully!', 'success')
         })
-        this.alertService.openSnackBar('Songs have been synced successfully!', 'success')
       },
       error: () => {
         this.syncLoading = false
-        this.alertService.openSnackBar('An error occurred while syncing songs...', 'error')
+        this.alertService.openSnackBar('An error occurred while syncing playlists...', 'error')
       }
+    })
+  }
+
+  searchPlaylist() {
+    this.loadingPlaylists = true
+    this.songsService.getPlaylists(undefined, this.searchPlaylistsInput.value.toLowerCase().trim()).subscribe(res => {
+      this.playlists = res.body
+      this.loadingPlaylists = false
     })
   }
 }

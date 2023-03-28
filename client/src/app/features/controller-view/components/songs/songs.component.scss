@@ -6,24 +6,30 @@
 .search-container,
 .bible-search-container {
     display: flex;
+    width: 100%;
 }
-.sync-songs {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
+
+.search-form {
+    width: 15vw;
 }
 
 .search-input {
     width: 100%;
 }
 
+.buttons-container {
+    width: 130px;
+    display: flex;
+    justify-content: flex-end
+}
+
 .songs-container,
 .bible-passage-container {
-    height: 38vh;
+    height: 40vh;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 5px;
+    padding: 0 5px 5px 5px;
 }
 
 .song {
@@ -67,4 +73,10 @@
     margin-bottom: 5px;
     width: 160px;
     height: 30px;
+}
+
+@media screen and (max-width: 1163px) {
+    .search-form {
+        width: 13vw;
+    }
 }

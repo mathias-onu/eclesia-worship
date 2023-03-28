@@ -17,8 +17,10 @@ export class SongsComponent implements OnInit {
   searchSongInput = new FormControl('')
   songs!: ISong[] | null
   numberOfRequestedSongs: number = 30
+  loadingSongs: boolean = false
   searchBibleInput = new FormControl('')
   searchedBiblePassage!: IBibleReference | null
+  loadingPassage: boolean = false
   syncLoading: boolean = false
 
   constructor(
@@ -29,37 +31,21 @@ export class SongsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.songsService.getSongs(15).subscribe(res => {
-      this.songs = res.body
-    })
+    this.loadingSongs = true
+    this.getSongs(15)
 
-    this.searchSongInput.valueChanges.subscribe(song => {
-      if (song === '') {
-        this.songsService.getSongs(15).subscribe(res => {
-          this.songs = res.body
-        })
+    this.searchSongInput.valueChanges.subscribe(res => {
+      if (res === '') {
+        this.loadingSongs = true
+        this.getSongs(15)
       }
-      this.songsService.getSongs(undefined, song).subscribe(res => {
-        this.songs = res.body
-      })
     })
 
     this.searchBibleInput.valueChanges.subscribe(passage => {
-      this.bibleService.getBible(passage).subscribe({
-        next: res => {
-          if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
-            res.body!.verses.shift()
-            this.searchedBiblePassage = res.body ? res.body : null
-          } else if (res.body!.reference!) {
-            this.searchedBiblePassage = res.body ? res.body : null
-          } else {
-            this.searchedBiblePassage = null
-          }
-        },
-        error: err => {
-          console.log(err)
-        }
-      })
+      if (passage === '') {
+        this.loadingSongs = false
+        this.searchedBiblePassage = null
+      }
     })
   }
 
@@ -75,6 +61,26 @@ export class SongsComponent implements OnInit {
 
   addSongToPlaylist(song: ISong) {
     this.songsService.addSongToPlaylist(song)
+  }
+
+  searchSong() {
+    this.loadingSongs = true
+    this.getSongs(undefined, this.searchSongInput.value)
+  }
+
+  searchPassage() {
+    this.loadingPassage = true
+    this.bibleService.getBible(this.searchBibleInput.value).subscribe(res => {
+      this.loadingPassage = false
+      if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
+        res.body!.verses.shift()
+        this.searchedBiblePassage = res.body ? res.body : null
+      } else if (res.body!.reference!) {
+        this.searchedBiblePassage = res.body ? res.body : null
+      } else {
+        this.searchedBiblePassage = null
+      }
+    })
   }
 
   syncSongs() {
@@ -98,12 +104,13 @@ export class SongsComponent implements OnInit {
     bibleBooksDialog.afterClosed().subscribe(passage => {
       if (passage) {
         this.searchBibleInput.setValue(passage.data)
+        this.searchPassage()
       }
     })
   }
 
-  addPassageToPresentation(passage: IBibleReference) {
-    const verses = passage.verses
+  addPassageToPresentation() {
+    const verses = this.searchedBiblePassage!.verses
     const presentationSlides: IBiblePassageSlide[] = [{ slideIndex: 1, text: "" }]
     let slideCount = 0
 
@@ -121,5 +128,23 @@ export class SongsComponent implements OnInit {
 
   addVerseToPresentation(verse: IBibleVerse) {
     this.bibleService.addToCurrentDisplayedBiblePassage(verse)
+  }
+
+  getSongs(limit?: number, searchValue?: string | null) {
+    this.songsService.getSongs(limit ? limit : undefined, searchValue ? searchValue : undefined).subscribe({
+      next: res => {
+        if (res.body!.length === 0) {
+          this.alertService.openSnackBar("Sorry, but there was an error while getting the songs... Please try again later...", 'error')
+          this.syncSongs()
+        } else {
+          this.songs = res.body
+        }
+        this.loadingSongs = false
+      },
+      error: err => {
+        this.alertService.openSnackBar(err.message, 'error')
+        this.loadingSongs = false
+      }
+    })
   }
 }

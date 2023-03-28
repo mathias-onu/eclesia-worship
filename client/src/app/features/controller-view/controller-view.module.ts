@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControllerViewComponent } from './components/controller-view/controller-view.component';
 import { ControllerViewRoutingModule } from './controller-view-routing.module';
+import { FormsModule } from '@angular/forms';
 import { SongsComponent } from './components/songs/songs.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -24,7 +25,8 @@ import { BibleBooksDialogComponent } from './components/bible-books-dialog/bible
     CommonModule,
     ControllerViewRoutingModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class ControllerViewModule { }
