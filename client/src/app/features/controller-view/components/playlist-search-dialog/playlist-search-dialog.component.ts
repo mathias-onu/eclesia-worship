@@ -70,12 +70,12 @@ export class PlaylistSearchDialogComponent implements OnInit {
         this.songsService.getPlaylists(15).subscribe(res => {
           this.playlists = res.body
           this.syncLoading = false
-          this.alertService.openSnackBar('Songs have been synced successfully!', 'success')
+          this.alertService.openSnackBar('Playlists have been synced successfully!', 'success')
         })
       },
       error: () => {
         this.syncLoading = false
-        this.alertService.openSnackBar('An error occurred while syncing songs...', 'error')
+        this.alertService.openSnackBar('An error occurred while syncing playlists...', 'error')
       }
     })
   }
