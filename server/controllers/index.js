@@ -65,8 +65,60 @@ export const syncSongs = asyncHandler(async (req, res) => {
   res.send(finalSongs)
 })
 
+export const syncSongsPartial = asyncHandler(async (req, res) => {
+  const accessToken = req.headers.authorization.split(' ')[1]
+  const dropbox = new Dropbox({ accessToken })
+
+  const files = await dropbox.filesListFolder({ path: '/SongBook/Română/' })
+
+  for (let i = 0; i < files.result.entries.length; i++) {
+    const file = files.result.entries[i]
+
+    if(
+      file.name.includes('Mă-nchin, o, Doamne') ||
+      file.name.includes('Slavă și cinste') ||
+      file.name.includes('Salvat!') ||
+      file.name.includes('Ție laudă-Ți cântăm') ||
+      file.name.includes('Și munții tresaltă')
+      ) {
+      const existingSong = await Song.findOne({ title: file.name.split('.')[0] })
+      if (!existingSong) {
+        const song = await dropbox.filesDownload({ path: file.path_display })
+        const newSong = new Song({
+          title: file.name.split('.')[0],
+          body: Buffer.from(song.result.fileBinary).toString(),
+          lastModified: file.server_modified
+        })
+  
+        await newSong.save()
+      } else if (existingSong.lastModified !== file.server_modified) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+  
+        existingSong.body = Buffer.from(content.result.fileBinary).toString()
+        existingSong.lastModified = file.server_modified
+  
+        await existingSong.save()
+      }
+    }
+  }
+
+  const songs = await Song.find()
+  for (let i = 0; i < songs.length; i++) {
+    const existingSong = files.result.entries.find(file => file.name === songs[i].title + '.pro')
+    if (!existingSong) {
+      await Song.deleteOne({ title: songs[i].title })
+
+      const deletedSong = new DeletedSong({ title: songs[i].title, body: songs[i].body, lastModified: songs[i].lastModified })
+      await deletedSong.save()
+    }
+  }
+
+  const finalSongs = await Song.find().sort({ title: 1 })
+  res.send(finalSongs)
+})
+
 export const getSong = asyncHandler(async (req, res) => {
-  const song = await Song.findById(req.params.id.toString())
+  const song = await Song.findOne({ title: req.params.title.toString() })
 
   res.json(song)
 })
@@ -98,6 +150,50 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     const file = files.result.entries[i]
 
     if (file['.tag'] === 'file' && file.name.split('.')[1] === 'lst') {
+      const existingPlaylist = await Playlist.findOne({ title: file.name.split('.')[0] })
+
+      if (!existingPlaylist) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
+        const playlist = new Playlist({
+          title: content.result.name.split('.')[0],
+          songs: Buffer.from(content.result.fileBinary).toString(),
+          lastModified: file.server_modified
+        })
+        await playlist.save()
+      } else if (existingPlaylist.lastModified !== file.server_modified) {
+        const content = await dropbox.filesDownload({ path: file.path_display })
+
+        existingPlaylist.songs = Buffer.from(content.result.fileBinary).toString()
+        existingPlaylist.lastModified = file.server_modified
+
+        await existingPlaylist.save()
+      }
+    }
+  }
+
+  const playlists = await Playlist.find()
+  for (let i = 0; i < playlists.length; i++) {
+    const existingPlaylist = files.result.entries.find(file => file.name === playlists[i].title + '.lst')
+    if (!existingPlaylist) {
+      await Playlist.deleteOne({ title: playlists[i].title })
+    }
+  }
+
+  const finalPlaylists = await Playlist.find().sort({ title: -1 })
+  res.send(finalPlaylists)
+})
+
+export const syncPlaylistsPartial = asyncHandler(async (req, res) => {
+  const accessToken = req.headers.authorization.split(' ')[1]
+  const dropbox = new Dropbox({ accessToken })
+
+  const files = await dropbox.filesListFolder({ path: '/SongBook' })
+
+  for (let i = 0; i < files.result.entries.length; i++) {
+    const file = files.result.entries[i]
+
+    if (file['.tag'] === 'file' && file.name.split('.')[1] === 'lst' && file.name === '2023-01-29.lst') {
       const existingPlaylist = await Playlist.findOne({ title: file.name.split('.')[0] })
 
       if (!existingPlaylist) {

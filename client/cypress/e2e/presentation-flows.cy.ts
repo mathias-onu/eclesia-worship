@@ -11,7 +11,7 @@ describe("Testing basic presentation flows.", () => {
     }).then(token => {
       // Syncing songs
       cy.request({
-        url: 'http://localhost:5000/sync/songs',
+        url: 'http://localhost:5000/sync-partial/songs',
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token.body.access_token!}`
@@ -24,7 +24,7 @@ describe("Testing basic presentation flows.", () => {
       })
       // Syncing playlists
       cy.request({
-        url: 'http://localhost:5000/sync/playlists',
+        url: 'http://localhost:5000/sync-partial/playlists',
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token.body.access_token!}`
@@ -40,9 +40,9 @@ describe("Testing basic presentation flows.", () => {
 
   it("should add a song to the playlist, add the song the the pre-presentation section, and the present the song", () => {
     // ACT
-    cy.get('[data-testid="searchSongsInput"]').type('Biruitor', { force: true })
+    cy.get('[data-testid="searchSongsInput"]').type('Salvat!', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
-    cy.get('span').contains('Biruitor', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
+    cy.get('span').contains('Salvat!', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
 
     cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
 
