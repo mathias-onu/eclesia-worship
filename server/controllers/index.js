@@ -118,7 +118,7 @@ export const syncSongsPartial = asyncHandler(async (req, res) => {
 })
 
 export const getSong = asyncHandler(async (req, res) => {
-  const song = await Song.findById(req.params.id.toString())
+  const song = await Song.findOne({ title: req.params.title.toString() })
 
   res.json(song)
 })

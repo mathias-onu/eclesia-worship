@@ -20,7 +20,7 @@ router.post('/refresh-token', refreshToken)
 router.post('/sync/songs', protect, syncSongs)
 router.post('/sync-partial/songs', protect, syncSongsPartial)
 router.get('/songs', protect, getSongs)
-router.get('/songs/:id', protect, getSong)
+router.get('/songs/:title', protect, getSong)
 
 router.post('/sync/playlists', protect, syncPlaylists)
 router.post('/sync-partial/playlists', protect, syncPlaylistsPartial)
