@@ -42,8 +42,9 @@ describe("Testing basic presentation flows.", () => {
     // ACT
     cy.get('[data-testid="searchSongsInput"]').type('Salvat!', { force: true })
     cy.get('[data-testid="searchSongsBtn"]').click()
-    cy.get('span').contains('Salvat!', { timeout: 5000 }).siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
-
+    cy.intercept('GET', `${Cypress.env('apiUrl')}/songs?search=Salvat!`).then(() => {
+      cy.get('span').contains('Salvat!').siblings('div').find('[data-testid="addSongToPlaylistBtn"]').eq(0).click()
+    })
     cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
 
     // ASSERT
@@ -53,7 +54,9 @@ describe("Testing basic presentation flows.", () => {
   it("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
     // ACT   
     cy.get('[data-testid="openPlaylistSearchBtn"]').click()
-    cy.get('[data-testid="expandPlaylistBtn"]', { timeout: 5000 }).eq(0).click()
+    cy.intercept('GET', `${Cypress.env('apiUrl')}/playlists?limit=15`).then(() => {
+      cy.get('[data-testid="expandPlaylistBtn"]').eq(0).click()
+    })
     cy.get('[data-testid="selectPlaylistBtn"]').eq(0).click()
     cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
 
@@ -67,7 +70,9 @@ describe("Testing basic presentation flows.", () => {
     cy.get('[data-testid="openBibleBooksBtn"]').click()
     cy.get('[data-testid="selectOTBookBtn"]').eq(1).click()
     cy.get('[data-testid="selectChapterBtn"]').eq(0).click()
-    cy.get('[data-testid="addPassageToPresentationBtn"]').click()
+    cy.intercept('GET', `${Cypress.env('apiUrl')}/bible?passage=Exod%201`).then(() => {
+      cy.get('[data-testid="addPassageToPresentationBtn"]').click()
+    })
 
     // ASSERT
     cy.get('[data-testid="displayPassageBtn"]').should('be.visible')
@@ -78,8 +83,10 @@ describe("Testing basic presentation flows.", () => {
     cy.get('span').contains('Bible').click()
     cy.get('[data-testid="searchBibleInput"]').type('Romani 3:23-24', { force: true })
     cy.get('[data-testid="searchPassagesBtn"]').click()
-    cy.get('[data-testid="addVerseToPresentationBtn"]', { timeout: 5000 }).eq(0).click()
-    cy.get('[data-testid="addVerseToPresentationBtn"]').eq(1).click()
+    cy.intercept('GET', `${Cypress.env('apiUrl')}/bible?passage=Romani%203:23-24`).then(() => {
+      cy.get('[data-testid="addVerseToPresentationBtn"]').eq(0).click()
+      cy.get('[data-testid="addVerseToPresentationBtn"]').eq(1).click()
+    })
 
     // ASSERT
     cy.get('[data-testid="displayPassageBtn"]').should('be.visible')
