@@ -1,0 +1,82 @@
+.container {
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+.search-container,
+.bible-search-container {
+    display: flex;
+    width: 100%;
+}
+
+.search-form {
+    width: 15vw;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.buttons-container {
+    width: 130px;
+    display: flex;
+    justify-content: flex-end
+}
+
+.songs-container,
+.bible-passage-container {
+    height: 38vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 0 5px 5px 5px;
+}
+
+.song {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.song span {
+    flex: 4;
+}
+
+.song div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.add-icon {
+    color: #888888;
+    transform: scale(0.8);
+    cursor: pointer;
+}
+
+.bible-verse {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.bible-verse span {
+    flex: 7;
+}
+
+.bible-verse div {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.present-passage-btn {
+    margin-bottom: 5px;
+    width: 160px;
+    height: 30px;
+}
+
+@media screen and (max-width: 1163px) {
+    .search-form {
+        width: 13vw;
+    }
+}
