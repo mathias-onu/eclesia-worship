@@ -13,8 +13,6 @@ jobs:
         with:
           mongodb-version: '6.0.4'
       - uses: iamsauravsharma/create-dotenv@v1.2.2
-        with:
-          directory: server/
         env:
           PORT: 5000
           NODE_ENV: development
@@ -25,7 +23,6 @@ jobs:
 
       - uses: cypress-io/github-action@v5
         with:
-          working-directory: ./client
           start: npm run start:all:servers
           wait-on: 'http://localhost:4200'
 
@@ -35,5 +32,5 @@ jobs:
         with:
           name: test-results
           path: |
-            ./client/cypress/videos
-            ./client/cypress/screenshots
+            ./cypress/videos
+            ./cypress/screenshots
