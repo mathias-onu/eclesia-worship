@@ -7,12 +7,11 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
-    "start:client": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "frontend:start": "ng serve",
+    "frontend:build": "ng build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "start:all:servers": "concurrently \"npm run server\" \"npm run start:client\""
+    "start:dev:servers": "concurrently \"npm run server\" \"npm run frontend:start\""
   },
   "author": "Denis Onu",
   "license": "ISC",

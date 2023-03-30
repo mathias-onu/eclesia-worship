@@ -6,12 +6,12 @@ describe("Testing basic presentation flows.", () => {
     // Seeding the database
     // Requesting an access token
     cy.request({
-      url: 'http://localhost:5000/refresh-token',
+      url: `${Cypress.env("apiUrl")}/refresh-token`,
       method: 'POST',
     }).then(token => {
       // Syncing songs
       cy.request({
-        url: 'http://localhost:5000/sync-partial/songs',
+        url: `${Cypress.env("apiUrl")}/sync-partial/songs`,
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token.body.access_token!}`
@@ -24,7 +24,7 @@ describe("Testing basic presentation flows.", () => {
       })
       // Syncing playlists
       cy.request({
-        url: 'http://localhost:5000/sync-partial/playlists',
+        url: `${Cypress.env("apiUrl")}/sync-partial/playlists`,
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token.body.access_token!}`

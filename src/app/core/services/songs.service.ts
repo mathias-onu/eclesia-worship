@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { IFormattedCompletePlaylist, IPlaylist } from 'src/app/shared/models/playlist.model';
 import { IFormattedSong, ISong } from 'src/app/shared/models/song.model';
 import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
-import { environment } from 'src/environments/environment.dev';
+import { environment } from 'src/environments/environment';
 import * as moment from 'moment';
 
 @Injectable({
