@@ -18,6 +18,16 @@ jobs:
         with:
           node-version: '16.x'
 
+      - name: Create dotenv file
+        uses: iamsauravsharma/create-dotenv@v1.2.2
+        env:
+          PORT: 5000
+          NODE_ENV: production
+          DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+          DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
+          DROPBOX_CLIENT_SECRET: ${{ secrets.DROPBOX_CLIENT_SECRET }}
+          MONGO_URI: ${{ secrets.PROD_MONGO_URI }}
+
       - name: npm install and build
         run: |
           npm install
