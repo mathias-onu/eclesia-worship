@@ -21,9 +21,8 @@ export class PrePresentationComponent implements OnInit {
   presentationRequest!: any
   presentationConnection!: any
   isPresentationLive: boolean = false
-
-  fontSize: number = 16
-  lineHeight: number = 130
+  @LocalStorage('fontSize')
+  fontSize: number = 38
 
   constructor(
     private songsService: SongsService,
@@ -32,8 +31,7 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 16
-    this.lineHeight = this.localStorageService.retrieve('lineHeight') ? this.localStorageService.retrieve('lineHeight') : 170
+    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 38
 
     // Checks if Presentation API is supported by the user's browser
     try {
@@ -79,19 +77,22 @@ export class PrePresentationComponent implements OnInit {
 
   displayVerse(verse: IVerse) {
     this.currentDisplayedVerse = verse
+    this.currentDisplayedPassage = null
 
     // Sends song verses to the receiver if a connection is established
     if (this.presentationConnection) {
-      this.presentationConnection.send(JSON.stringify(verse))
+      this.presentationConnection.send(JSON.stringify({ text: verse, fontSize: this.fontSize }))
     }
   }
 
   displayPassage(passage: IBiblePassageSlide) {
     this.currentDisplayedPassage = passage
+    this.currentDisplayedVerse = null
 
     // Sends song verses to the receiver if a connection is established
     if (this.presentationConnection) {
-      this.presentationConnection.send(JSON.stringify(passage))
+      console.log(passage)
+      this.presentationConnection.send(JSON.stringify({ text: passage, fontSize: this.fontSize }))
     }
   }
 
@@ -134,12 +135,10 @@ export class PrePresentationComponent implements OnInit {
 
   manipulateFontSize(typeOfOperation: string) {
     typeOfOperation === 'addition' ? this.fontSize++ : this.fontSize--
-    typeOfOperation === 'addition' ? this.lineHeight += 10 : this.lineHeight -= 10
     this.localStorageService.store('fontSize', this.fontSize)
-    this.localStorageService.store('lineHeight', this.lineHeight)
 
     if (this.presentationConnection) {
-      this.presentationConnection.send(JSON.stringify({ fontSize: this.fontSize, lineHeight: this.lineHeight }))
+      this.presentationConnection.send(JSON.stringify({ text: this.currentDisplayedVerse ? this.currentDisplayedVerse : this.currentDisplayedPassage, fontSize: this.fontSize }))
     }
   }
 }
