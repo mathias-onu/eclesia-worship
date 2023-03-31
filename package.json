@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
+    "build": "ng build",
     "frontend:start": "ng serve",
-    "frontend:build": "ng build",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "start:dev:servers": "concurrently \"npm run server\" \"npm run frontend:start\""
