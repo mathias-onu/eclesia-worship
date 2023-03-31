@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
-    "build": "ng build",
+    "build": "ng build --configuration=production",
     "frontend:start": "ng serve",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
