@@ -1,0 +1,105 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$client-primary: mat.define-palette(mat.$indigo-palette);
+$client-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$client-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$client-theme: mat.define-light-theme((color: (primary: $client-primary,
+        accent: $client-accent,
+        warn: $client-warn,
+      )));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($client-theme);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --success-color: #198754;
+  --error-color: #dc3545;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(187, 187, 187);
+  border-radius: 30px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(122, 122, 122);
+  transition: .5s ease-in-out all;
+}
+
+// Alert styling
+.success-alert {
+  background-color: rgb(12, 119, 12) !important;
+  color: white !important;
+}
+
+.error-alert {
+  background-color: rgb(139, 7, 7) !important;
+  color: white !important;
+}
+
+.success-snackbar {
+  color: white;
+  --mdc-snackbar-container-color: var(--success-color) !important;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.error-snackbar {
+  max-width: max-content !important;
+  color: white;
+  --mdc-snackbar-container-color: var(--error-color) !important;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}

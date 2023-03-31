@@ -1,0 +1,37 @@
+.mat-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 20px auto 20px auto;
+}
+
+.search-container {
+    display: flex;
+}
+
+.search-container form {
+    width: 90%;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.playlists-container {
+    height: 65vh;
+    display: flex;
+}
+
+.playlists-container mat-accordion {
+    width: 100%;
+}
+
+.playlist p {
+    cursor: pointer;
+}
+
+.action-container {
+    display: flex;
+    justify-content: flex-end;
+}

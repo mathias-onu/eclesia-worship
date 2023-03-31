@@ -1,0 +1,32 @@
+.presentation-container {
+    background-color: black;
+    height: 100vh;
+}
+
+.presentation-container {
+    display: flex;
+    justify-content: center;
+    color: white;
+}
+
+.verse, .passage {
+    margin-top: 5vh;
+    height: 95vh;
+    padding: 0 10px 0 10px;
+}
+
+.line,
+.bible-verse {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 60px;
+    line-height: 175%;
+}
+
+.line {
+    line-height: 100%;
+}
+
+.bible-verse {
+    margin-bottom: 0 !important;
+}

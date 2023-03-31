@@ -1,0 +1,68 @@
+<mat-tab-group>
+    <mat-tab label="Songs" data-testid="songsTabBtn">
+        <div class="search-container">
+            <form (ngSubmit)="searchSong()" class="search-form">
+                <mat-form-field class="search-input">
+                    <mat-label>Search songs...</mat-label>
+                    <input matInput [formControl]="searchSongInput" data-testid="searchSongsInput">
+                </mat-form-field>
+            </form>
+            <div class="buttons-container">
+                <button mat-icon-button class="search-btn" (click)="searchSong()" [disabled]="syncLoading"
+                    data-testid="searchSongsBtn">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button mat-icon-button class="sync-btn" (click)="syncSongs()" [disabled]="syncLoading"
+                    data-testid="syncSongsBtn">
+                    <mat-icon>sync</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="!loadingSongs && !syncLoading else loading" class="songs-container" (scroll)="onScroll($event)">
+            <div *ngFor="let song of songs" class="song">
+                <span>{{ song.title.split(' (')[0].split(' - ')[0] }}</span>
+                <div>
+                    <mat-icon fontIcon="add" class="add-icon" (click)="addSongToPlaylist(song)"
+                        data-testid="addSongToPlaylistBtn"></mat-icon>
+                </div>
+            </div>
+        </div>
+        <ng-template #loading>
+            <mat-spinner [diameter]="30"></mat-spinner>
+        </ng-template>
+    </mat-tab>
+    <mat-tab label="Bible" data-testid="bibleTabBtn">
+        <div class="bible-search-container">
+            <form (ngSubmit)="searchPassage()" class="search-form">
+                <mat-form-field class="search-input">
+                    <mat-label>Search bible passages...</mat-label>
+                    <input matInput [formControl]="searchBibleInput" data-testid="searchBibleInput">
+                </mat-form-field>
+            </form>
+            <div class="buttons-container">
+                <button mat-icon-button class="search-btn" (click)="searchPassage()" [disabled]="syncLoading"
+                    data-testid="searchPassagesBtn">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <button mat-icon-button class="bible-books-btn" (click)="openBibleBooksDialog()"
+                    data-testid="openBibleBooksBtn">
+                    <mat-icon>menu_book</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="!loadingPassage && searchedBiblePassage else passageLoading" class="bible-passage-container">
+            <button (click)="addPassageToPresentation()" mat-stroked-button class="present-passage-btn"
+                data-testid="addPassageToPresentationBtn">Present passage</button>
+            <div *ngFor="let verse of searchedBiblePassage!.verses!" class="bible-verse">
+                <span><sup>{{ verse!.verse }}</sup> {{ verse!.text }}</span>
+                <div>
+                    <mat-icon fontIcon="add" class="add-icon" (click)="addVerseToPresentation(verse)"
+                        data-testid="addVerseToPresentationBtn"></mat-icon>
+                </div>
+            </div>
+        </div>
+        <ng-template #passageLoading>
+            <mat-spinner *ngIf="loadingPassage" [diameter]="30"></mat-spinner>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>
