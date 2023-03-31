@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'eclesiaworship'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_b4992fc620a94c818720cd0909808aac }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile}}
           package: .
