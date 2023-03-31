@@ -22,12 +22,13 @@ jobs:
         run: |
           npm install
           npm run build
+          zip -r eclesia-worship.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: eclesia-worship
-          path: .
+          path: eclesia-worship.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -41,6 +42,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: eclesia-worship
+      - run: |
+          unzip eclesia-worship.zip
+          rm eclesia-worship.zip
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -48,5 +52,5 @@ jobs:
         with:
           app-name: 'eclesiaworship'
           slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_b4992fc620a94c818720cd0909808aac }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile}}
           package: .
