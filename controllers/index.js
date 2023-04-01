@@ -61,7 +61,7 @@ export const syncSongs = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalSongs = await Song.find()
+  const finalSongs = await Song.find().sort({ title: 1 })
   res.send(finalSongs)
 })
 
@@ -113,7 +113,7 @@ export const syncSongsPartial = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalSongs = await Song.find()
+  const finalSongs = await Song.find().sort({ title: 1 })
   res.send(finalSongs)
 })
 
@@ -180,8 +180,8 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalPlaylists = await Playlist.find()
-  res.send(finalPlaylists)
+  const finalPlaylists = await Playlist.find().sort({ title: -1 })
+  res.json(finalPlaylists)
 })
 
 export const syncPlaylistsPartial = asyncHandler(async (req, res) => {
@@ -247,7 +247,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
       .replace(/s/g, '[s,ș]')
   }
 
-  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit)
+  const playlists = await Playlist.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: -1 })
 
   res.json(playlists)
 })
