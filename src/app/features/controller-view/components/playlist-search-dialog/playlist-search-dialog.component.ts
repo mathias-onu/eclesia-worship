@@ -86,9 +86,15 @@ export class PlaylistSearchDialogComponent implements OnInit {
 
   searchPlaylist() {
     this.loadingPlaylists = true
-    this.songsService.getPlaylists(undefined, this.searchPlaylistsInput.value.toLowerCase().trim()).subscribe(res => {
-      this.playlists = res.body
-      this.loadingPlaylists = false
+    this.songsService.getPlaylists(undefined, this.searchPlaylistsInput.value.toLowerCase().trim()).subscribe({
+      next: res => {
+        this.playlists = res.body
+        this.loadingPlaylists = false
+      },
+      error: err => {
+        this.alertService.openSnackBar(err.message, 'error')
+        this.loadingPlaylists = false
+      }
     })
   }
 }
