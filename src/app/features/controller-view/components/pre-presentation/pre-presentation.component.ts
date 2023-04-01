@@ -4,6 +4,7 @@ import { SongsService } from 'src/app/core/services/songs.service';
 import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
 import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-pre-presentation',
@@ -22,7 +23,9 @@ export class PrePresentationComponent implements OnInit {
   presentationConnection!: any
   isPresentationLive: boolean = false
   @LocalStorage('fontSize')
-  fontSize: number = 38
+  fontSize: number = 35
+  fontSizeOptions: any[] = [{ value: 20, viewValue: '20px' }, { value: 25, viewValue: '25px' }, { value: 30, viewValue: '30px' }, { value: 35, viewValue: '35px' }, { value: 40, viewValue: '40px' }, { value: 45, viewValue: '45px' }, { value: 50, viewValue: '50px' }, { value: 60, viewValue: '60px' }, { value: 65, viewValue: '65px' }]
+  fontSizeInput = new FormControl()
 
   constructor(
     private songsService: SongsService,
@@ -31,7 +34,7 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 38
+    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 35
 
     // Checks if Presentation API is supported by the user's browser
     try {
@@ -42,6 +45,12 @@ export class PrePresentationComponent implements OnInit {
     }
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
+
+    this.fontSizeInput.valueChanges.subscribe((value: number) => {
+      if (this.presentationConnection) {
+        this.presentationConnection.send(JSON.stringify({ text: this.currentDisplayedVerse ? this.currentDisplayedVerse : this.currentDisplayedPassage, fontSize: value }))
+      }
+    })
   }
 
   async startPresentation() {

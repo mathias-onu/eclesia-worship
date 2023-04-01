@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
+    align-items: center;
 }
 
 .pre-presentation-container,
@@ -15,30 +17,9 @@
     padding: 0 80px 0 80px;
 }
 
-.live-presentation-container {
-    flex: 1;
-    background-color: black;
-    color: white;
-    padding-top: 25px;
-}
-
-.live-presentation-container div p {
-    line-height: 35px;
-}
-
 .pre-presentation-container {
-    flex: 1.5;
-}
-
-.toggle-container, 
-.verse-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.verse-container {
-    margin-bottom: 30px;
-    cursor: pointer;
+    flex: 2;
+    width: 100%;
 }
 
 .presentation-buttons {
@@ -46,6 +27,19 @@
     align-items: center;
     justify-content: flex-end;
     padding: 10px;
+    width: 100%;
+}
+
+.font-size-select {
+    height: 40px;
+    width: 75px;
+    padding: 10px;
+    margin-right: 10px;
+    border: none;
+    color: #555555;
+    outline: none;
+    border-radius: 5px;
+    background-color: rgb(238, 238, 238);
 }
 
 .black-screen-btn {
@@ -81,10 +75,38 @@
     color: #858585;
 }
 
+.live-presentation-container {
+    flex: 1;
+    background-color: black;
+    color: white;
+    padding-top: 25px;
+    width: 80%;
+}
+
+.live-presentation-container div p {
+    line-height: 35px;
+}
+
+.toggle-container, 
+.verse-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.verse-container {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.verse-container p {
+    font-size: 13px;
+    padding-top: 5px;
+    line-height: 15px;
+}
+
 .slide {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     font-size: 16px;
-    line-height: 150%;
 }
 
 .mat-button-toggle-group, 
