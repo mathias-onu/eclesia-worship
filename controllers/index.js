@@ -66,7 +66,7 @@ export const syncSongs = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalSongs = await Song.find();
+  const finalSongs = await Song.find().sort({ title: 1 });
   res.send(finalSongs);
 });
 
@@ -152,7 +152,7 @@ export const getSongs = asyncHandler(async (req, res) => {
     title: { $regex: diacriticSensitiveRegex(search) || "", $options: "i" },
   })
     .collation({ locale: "ro", strength: 1 })
-    .limit(limit);
+    .limit(limit).sort({ title: 1 });
   res.json(songs);
 });
 
@@ -292,7 +292,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
     title: { $regex: diacriticSensitiveRegex(search) || "", $options: "i" },
   })
     .collation({ locale: "ro", strength: 1 })
-    .limit(limit);
+    .limit(limit).sort({ title: -1 });
 
   res.json(playlists);
 });
