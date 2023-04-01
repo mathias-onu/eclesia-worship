@@ -1,7 +1,7 @@
 {
-  "name": "eclesia-worship-server",
+  "name": "eclesia-worship",
   "version": "1.0.0",
-  "description": "The server for Eclesia Worship",
+  "description": "Web app that syncs with a shared Dropbox folder to manage and present songs.",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -13,7 +13,7 @@
     "cy:run": "cypress run",
     "start:dev:servers": "concurrently \"npm run server\" \"npm run frontend:start\""
   },
-  "author": "Denis Onu",
+  "author": "Mathias Onu, Denis Onu",
   "license": "ISC",
   "dependencies": {
     "@angular/animations": "^15.1.0",
