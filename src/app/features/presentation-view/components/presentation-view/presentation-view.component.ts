@@ -11,8 +11,8 @@ export class PresentationViewComponent implements OnInit {
   currentVerse!: IVerse | null
   currentBiblePassage!: IBiblePassageSlide | null
   blackScreen: boolean = false
-  fontSize: number = 38
-  lineHeight: number = this.fontSize * 1.5
+  fontSize: number = 35
+  lineHeight: number = this.fontSize / 2
 
   constructor() { }
 
@@ -40,7 +40,10 @@ export class PresentationViewComponent implements OnInit {
         this.currentBiblePassage = null
         this.currentVerse = parsedData.text
         this.fontSize = parsedData.fontSize
-        this.lineHeight = 20
+        this.lineHeight = this.fontSize / 2
+        if (this.fontSize >= 40) {
+          this.lineHeight = 35
+        }
       } else if (parsedData?.text?.text) {  // Gets the Bible text and modifies the font size
         this.blackScreen = false
         this.currentVerse = null
