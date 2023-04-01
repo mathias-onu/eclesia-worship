@@ -1,12 +1,12 @@
 <div class="presentation-container">
     <div *ngIf="!blackScreen && currentVerse" class="verse">
         <div *ngFor="let line of currentVerse.lines" class="line"
-            [ngStyle]="{'font-size': fontSize + 40 + 'px', 'line-height': lineHeight + '%'}">
+            [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + 'px'}">
             {{ line }}
         </div>
     </div>
     <div *ngIf="!blackScreen && currentBiblePassage" class="passage">
-        <p class="bible-verse" [ngStyle]="{'font-size': fontSize + 40 + 'px', 'line-height': lineHeight + '%'}">
+        <p class="bible-verse" [ngStyle]="{'font-size': fontSize + 'px', 'line-height': lineHeight + 'px'}">
             {{ currentBiblePassage.text }}
         </p>
     </div>
