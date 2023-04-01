@@ -1,3 +1,4 @@
 export const environment = {
-    apiUrl: 'http://localhost:5000/api'
+    isProduction: true,
+    apiUrl: 'https://eclesiaworship.azurewebsites.net/api'
 };
