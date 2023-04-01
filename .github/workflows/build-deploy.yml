@@ -32,7 +32,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r eclesia-worship.zip . -x node_modules/\*
+          zip -r eclesia-worship.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
