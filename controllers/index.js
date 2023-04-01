@@ -74,13 +74,13 @@ export const syncSongsPartial = asyncHandler(async (req, res) => {
   for (let i = 0; i < files.result.entries.length; i++) {
     const file = files.result.entries[i]
 
-    if(
+    if (
       file.name.includes('Mă-nchin, o, Doamne') ||
       file.name.includes('Slavă și cinste') ||
       file.name.includes('Salvat!') ||
       file.name.includes('Ție laudă-Ți cântăm') ||
       file.name.includes('Și munții tresaltă')
-      ) {
+    ) {
       const existingSong = await Song.findOne({ title: file.name.split('.')[0] })
       if (!existingSong) {
         const song = await dropbox.filesDownload({ path: file.path_display })
@@ -89,14 +89,14 @@ export const syncSongsPartial = asyncHandler(async (req, res) => {
           body: Buffer.from(song.result.fileBinary).toString(),
           lastModified: file.server_modified
         })
-  
+
         await newSong.save()
       } else if (existingSong.lastModified !== file.server_modified) {
         const content = await dropbox.filesDownload({ path: file.path_display })
-  
+
         existingSong.body = Buffer.from(content.result.fileBinary).toString()
         existingSong.lastModified = file.server_modified
-  
+
         await existingSong.save()
       }
     }
@@ -137,7 +137,7 @@ export const getSongs = asyncHandler(async (req, res) => {
   }
 
   const songs = await Song.find({ title: { $regex: diacriticSensitiveRegex(search) || '', $options: 'i' } }).collation({ locale: 'ro', strength: 1 }).limit(limit).sort({ title: 1 })
-  res.json(songs)
+  res.json(songs).sort({ title: 1 })
 })
 
 export const syncPlaylists = asyncHandler(async (req, res) => {

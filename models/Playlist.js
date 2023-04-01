@@ -3,15 +3,18 @@ import mongoose from "mongoose"
 const playlistSchema = mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   songs: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   lastModified: {
     type: String,
-    required: true
+    required: true,
+    index: true
   }
 })
 
