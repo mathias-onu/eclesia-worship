@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: 18
 
       - name: Create dotenv file
         uses: iamsauravsharma/create-dotenv@v1.2.2
@@ -32,7 +32,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r eclesia-worship.zip .
+          zip -r eclesia-worship.zip . -x node_modules/\* package-lock.json
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
