@@ -32,8 +32,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip -r eclesia-worship.zip . -x node_modules/\* package-lock.json
-
+          zip -r eclesia-worship.zip .
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -42,11 +41,6 @@ jobs:
             eclesia-worship.zip
 
   deploy:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-      
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -61,10 +55,12 @@ jobs:
       - run: |
           unzip eclesia-worship.zip
           rm eclesia-worship.zip
-
+          
       - name: 'Deploy to Azure Web App'
-        uses: azure/login@v1
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
-          az webapp config set --resource-group eclesiaworship_group --name eclesiaworship --startup-file "npm install && npm start"
+          app-name: 'eclesiaworship'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile}}
+          package: .
