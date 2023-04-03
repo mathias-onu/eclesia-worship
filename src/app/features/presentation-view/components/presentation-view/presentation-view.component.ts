@@ -35,7 +35,7 @@ export class PresentationViewComponent implements OnInit {
     // Receives data from the controller
     connection.addEventListener('message', (event: any) => {
       const parsedData = JSON.parse(event.data)
-      if (parsedData?.text?.verse) {  // Gets the song verses and modifies the font size
+      if (parsedData?.text?.verseIndex) {  // Gets the song verses and modifies the font size
         this.blackScreen = false
         this.currentBiblePassage = null
         this.currentVerse = parsedData.text

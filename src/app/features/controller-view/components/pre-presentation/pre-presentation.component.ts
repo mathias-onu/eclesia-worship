@@ -25,7 +25,7 @@ export class PrePresentationComponent implements OnInit {
   presentationConnection!: any
   isPresentationLive: boolean = false
   @LocalStorage('fontSize')
-  fontSize: number = 35
+  fontSize!: number
   fontSizeOptions: any[] = fontSizeOptions()
   fontSizeInput = new FormControl()
 
@@ -37,7 +37,6 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 35
     this.fontSizeInput.setValue(this.fontSize)
 
     // Checks if Presentation API is supported by the user's browser
@@ -50,9 +49,10 @@ export class PrePresentationComponent implements OnInit {
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
 
-    this.fontSizeInput.valueChanges.subscribe((value: number) => {
+    this.fontSizeInput.valueChanges.subscribe((value) => {
+      this.fontSize = Number(value)
+      this.localStorageService.store('fontSize', this.fontSize)
       if (this.presentationConnection) {
-        this.fontSize = value
         this.presentationConnection.send(JSON.stringify({ text: this.currentDisplayedVerse ? this.currentDisplayedVerse : this.currentDisplayedPassage, fontSize: value }))
       }
     })
