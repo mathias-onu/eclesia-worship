@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - eclesiaworship
+name: Build and deploy the app to Azure Web App
 
 on:
   push:
@@ -33,7 +33,6 @@ jobs:
           npm install
           npm run build
           zip -r eclesia-worship.zip .
-
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -56,7 +55,7 @@ jobs:
       - run: |
           unzip eclesia-worship.zip
           rm eclesia-worship.zip
-
+          
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2

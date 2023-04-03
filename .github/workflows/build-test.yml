@@ -1,4 +1,5 @@
-name: ci-cd
+name: Build and test the application
+
 run-name: ${{ github.actor }} built and tested the frontend
 on: [pull_request, workflow_dispatch]
 jobs:
