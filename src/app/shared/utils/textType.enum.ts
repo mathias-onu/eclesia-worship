@@ -1,4 +1,4 @@
-export enum textTypeAccessor {
+export enum TextTypeAccessor {
     SONG = 'body',
     PLAYLIST = 'songs'
 }
