@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { IFormattedSong, ISong } from '../models/song.model';
 import { chordProParser } from '../utils/chordProParser';
-import { textTypeAccessor } from '../utils/textType.enum';
+import { TextTypeAccessor } from '../utils/textType.enum';
 
 @Pipe({
   name: 'formatSong'
@@ -9,7 +9,7 @@ import { textTypeAccessor } from '../utils/textType.enum';
 export class FormatSongPipe implements PipeTransform {
 
   transform(value: ISong): IFormattedSong {
-    const formattedSong = chordProParser(value, textTypeAccessor.SONG)
+    const formattedSong = chordProParser(value, TextTypeAccessor.SONG)
 
     const songContent: IFormattedSong = {
       title: value.title,
