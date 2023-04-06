@@ -24,7 +24,7 @@ app.use(express.json());
 
 app.use(cors(corsOptions));
 
-app.use(compression)
+app.use(compression())
 app.use("/api", router);
 
 if (process.env.NODE_ENV === 'production') {
