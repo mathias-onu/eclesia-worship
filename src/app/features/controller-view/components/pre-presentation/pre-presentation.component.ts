@@ -4,6 +4,9 @@ import { SongsService } from 'src/app/core/services/songs.service';
 import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
 import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
+import { FormControl } from '@angular/forms';
+import { AlertService } from 'src/app/shared/services/alert.service';
+import { fontSizeOptions } from 'src/app/shared/utils/fontSizeOptions';
 
 @Component({
   selector: 'app-pre-presentation',
@@ -22,26 +25,37 @@ export class PrePresentationComponent implements OnInit {
   presentationConnection!: any
   isPresentationLive: boolean = false
   @LocalStorage('fontSize')
-  fontSize: number = 38
+  fontSize!: number
+  fontSizeOptions: any[] = fontSizeOptions()
+  fontSizeInput = new FormControl()
 
   constructor(
     private songsService: SongsService,
     private bibleService: BibleService,
     private localStorageService: LocalStorageService,
+    private alertService: AlertService
   ) { }
 
   ngOnInit(): void {
-    this.fontSize = this.localStorageService.retrieve('fontSize') ? this.localStorageService.retrieve('fontSize') : 38
+    this.fontSizeInput.setValue(this.fontSize)
 
     // Checks if Presentation API is supported by the user's browser
     try {
       // @ts-ignore: Unreachable code error
       this.presentationRequest = new PresentationRequest('/live')
     } catch (error) {
-      console.error("Presentation API is not supported")
+      this.alertService.openSnackBar("Sorry but the browser you are using cannot present to a secondary screen... Use Chrome instead (or a chromium-based browser).", 'error')
     }
     this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
+
+    this.fontSizeInput.valueChanges.subscribe((value) => {
+      this.fontSize = Number(value)
+      this.localStorageService.store('fontSize', this.fontSize)
+      if (this.presentationConnection) {
+        this.presentationConnection.send(JSON.stringify({ text: this.currentDisplayedVerse ? this.currentDisplayedVerse : this.currentDisplayedPassage, fontSize: value }))
+      }
+    })
   }
 
   async startPresentation() {
@@ -57,7 +71,6 @@ export class PrePresentationComponent implements OnInit {
       const connection = await this.presentationRequest.start()
       this.presentationConnection = connection
     } catch (err) {
-      console.error(err)
       this.isPresentationLive = false
     }
   }
@@ -65,12 +78,8 @@ export class PrePresentationComponent implements OnInit {
   async getPresentationAvailability() {
     try {
       // Checks for available external displays and availability to start a connection
-      const availability = await this.presentationRequest.getAvailability()
-      availability.addEventListener('change', () => {
-        console.log(availability)
-      })
+      await this.presentationRequest.getAvailability()
     } catch (error) {
-      console.error(error)
       this.isPresentationLive = false
     }
   }
@@ -91,7 +100,6 @@ export class PrePresentationComponent implements OnInit {
 
     // Sends song verses to the receiver if a connection is established
     if (this.presentationConnection) {
-      console.log(passage)
       this.presentationConnection.send(JSON.stringify({ text: passage, fontSize: this.fontSize }))
     }
   }
@@ -136,6 +144,7 @@ export class PrePresentationComponent implements OnInit {
   manipulateFontSize(typeOfOperation: string) {
     typeOfOperation === 'addition' ? this.fontSize++ : this.fontSize--
     this.localStorageService.store('fontSize', this.fontSize)
+    this.fontSizeInput.setValue(this.fontSize)
 
     if (this.presentationConnection) {
       this.presentationConnection.send(JSON.stringify({ text: this.currentDisplayedVerse ? this.currentDisplayedVerse : this.currentDisplayedPassage, fontSize: this.fontSize }))

@@ -39,14 +39,14 @@ export class BibleService {
       const lastSlidePassage = this.currentDisplayedBiblePassage[this.currentDisplayedBiblePassage.length - 1]
 
       if (!this.currentDisplayedBiblePassage.some(slide => slide.text.includes(verse.text)) && this.currentDisplayedBiblePassage.length > 0 && verse.text.length + lastSlidePassage.text.length < 500) {
-        lastSlidePassage.text += verse.text
+        lastSlidePassage.text += `${verse.verse.toString()}. ${verse.text}`
       } else {
         if (!this.currentDisplayedBiblePassage.some(slide => slide.text.includes(verse.text))) {
-          this.currentDisplayedBiblePassage.push({ slideIndex: this.currentDisplayedBiblePassage.length, text: verse.text })
+          this.currentDisplayedBiblePassage.push({ slideIndex: this.currentDisplayedBiblePassage.length, text: `${verse.verse.toString()}. ${verse.text}` })
         }
       }
     } else {
-      this.currentDisplayedBiblePassage = [{ slideIndex: 1, text: verse.text }]
+      this.currentDisplayedBiblePassage = [{ slideIndex: 1, text: `${verse.verse.toString()}. ${verse.text}` }]
     }
 
     this.localStorageService.store('currentDisplayedBiblePassage', this.currentDisplayedBiblePassage)
