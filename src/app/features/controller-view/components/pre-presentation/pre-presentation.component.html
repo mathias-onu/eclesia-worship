@@ -1,5 +1,9 @@
 <div class="container">
     <div class="presentation-buttons">
+        <select class="font-size-select" [formControl]="fontSizeInput">
+            <option *ngFor="let font of fontSizeOptions" [value]="font.value">{{font.viewValue}}
+            </option>
+        </select>
         <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()" data-testid="decreaseFontSizeBtn">
             text_decrease</mat-icon>
         <mat-icon class="increase-font-size-icon" (click)="increaseFontSize()" data-testid="increaseFontSizeBtn">

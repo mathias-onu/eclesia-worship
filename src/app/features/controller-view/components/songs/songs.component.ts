@@ -70,15 +70,21 @@ export class SongsComponent implements OnInit {
 
   searchPassage() {
     this.loadingPassage = true
-    this.bibleService.getBible(this.searchBibleInput.value).subscribe(res => {
-      this.loadingPassage = false
-      if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
-        res.body!.verses.shift()
-        this.searchedBiblePassage = res.body ? res.body : null
-      } else if (res.body!.reference!) {
-        this.searchedBiblePassage = res.body ? res.body : null
-      } else {
-        this.searchedBiblePassage = null
+    this.bibleService.getBible(this.searchBibleInput.value).subscribe({
+      next: res => {
+        this.loadingPassage = false
+        if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
+          res.body!.verses.shift()
+          this.searchedBiblePassage = res.body ? res.body : null
+        } else if (res.body!.reference!) {
+          this.searchedBiblePassage = res.body ? res.body : null
+        } else {
+          this.searchedBiblePassage = null
+        }
+      },
+      error: () => {
+        this.loadingPassage = false
+        this.alertService.openSnackBar('An error occurred while searching the passage...', 'error')
       }
     })
   }

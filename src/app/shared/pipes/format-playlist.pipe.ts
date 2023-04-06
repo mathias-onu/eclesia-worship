@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { IFormattedPlaylist, IPlaylist } from '../models/playlist.model';
 import { chordProParser } from '../utils/chordProParser';
-import { textTypeAccessor } from '../utils/textType.enum';
+import { TextTypeAccessor } from '../utils/textType.enum';
 
 @Pipe({
   name: 'formatPlaylist'
@@ -9,7 +9,7 @@ import { textTypeAccessor } from '../utils/textType.enum';
 export class FormatPlaylistPipe implements PipeTransform {
 
   transform(value: IPlaylist): IFormattedPlaylist {
-    const formattedPlaylist = chordProParser(value, textTypeAccessor.PLAYLIST)
+    const formattedPlaylist = chordProParser(value, TextTypeAccessor.PLAYLIST)
     formattedPlaylist.pop()
 
     let playlistObj = {
