@@ -12,7 +12,7 @@
         <div *ngIf="currentPlaylist" cdkDropList class="playlist" (cdkDropListDropped)="drop($event)">
             <div *ngFor="let song of currentPlaylist.songs" class="playlist-song-container" cdkDrag>
                 <span>{{ song.title }}</span>
-                <div>
+                <div class="actions-container">
                     <mat-icon class="live-icon" (click)="presentSong(song)" data-testid="addSongToPresentationBtn">
                         play_arrow_outline</mat-icon>
                     <mat-icon class="delete-icon" (click)="removeSongFromPlaylist(song)"
