@@ -181,4 +181,96 @@ export const fontSizeOptions = () => {
             viewValue: "64px"
         }
     ]
+}
+export const bibleFontSizeOptions = () => {
+    return [
+        {
+            value: 20,
+            viewValue: "20px"
+        },
+        {
+            value: 21,
+            viewValue: "21px"
+        },
+        {
+            value: 22,
+            viewValue: "22px"
+        },
+        {
+            value: 23,
+            viewValue: "23px"
+        },
+        {
+            value: 24,
+            viewValue: "24px"
+        },
+        {
+            value: 25,
+            viewValue: "25px"
+        },
+        {
+            value: 26,
+            viewValue: "26px"
+        },
+        {
+            value: 27,
+            viewValue: "27px"
+        },
+        {
+            value: 28,
+            viewValue: "28px"
+        },
+        {
+            value: 29,
+            viewValue: "29px"
+        },
+        {
+            value: 30,
+            viewValue: "30px"
+        },
+        {
+            value: 31,
+            viewValue: "31px"
+        },
+        {
+            value: 32,
+            viewValue: "32px"
+        },
+        {
+            value: 33,
+            viewValue: "33px"
+        },
+        {
+            value: 34,
+            viewValue: "34px"
+        },
+        {
+            value: 35,
+            viewValue: "35px"
+        },
+        {
+            value: 36,
+            viewValue: "36px"
+        },
+        {
+            value: 37,
+            viewValue: "37px"
+        },
+        {
+            value: 38,
+            viewValue: "38px"
+        },
+        {
+            value: 39,
+            viewValue: "39px"
+        },
+        {
+            value: 40,
+            viewValue: "40px"
+        },
+        {
+            value: 41,
+            viewValue: "41px"
+        }
+    ]
 } 

@@ -75,6 +75,12 @@
     color: #858585;
 }
 
+.select-icon {
+    color: #555555;
+    margin-right: 10px;
+    transform: scale(.9);
+}
+
 .live-presentation-container {
     flex: 1;
     background-color: black;
@@ -106,7 +112,11 @@
 
 .slide {
     margin-bottom: 25px;
-    font-size: 16px;
+}
+
+.slide p {
+    font-size: 13px;
+    line-height: 18px;
 }
 
 .mat-button-toggle-group, 

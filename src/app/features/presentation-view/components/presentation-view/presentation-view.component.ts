@@ -11,8 +11,8 @@ export class PresentationViewComponent implements OnInit {
   currentVerse!: IVerse | null
   currentBiblePassage!: IBiblePassageSlide | null
   blackScreen: boolean = false
-  fontSize: number = 35
-  lineHeight: number = this.fontSize / 2
+  songFontSize: number = 35
+  bibleFontSize: number = 41
 
   constructor() { }
 
@@ -35,21 +35,18 @@ export class PresentationViewComponent implements OnInit {
     // Receives data from the controller
     connection.addEventListener('message', (event: any) => {
       const parsedData = JSON.parse(event.data)
+      console.log(parsedData)
       if (parsedData?.text?.verseIndex) {  // Gets the song verses and modifies the font size
         this.blackScreen = false
         this.currentBiblePassage = null
         this.currentVerse = parsedData.text
-        this.fontSize = parsedData.fontSize
-        this.lineHeight = this.fontSize / 2
-        if (this.fontSize >= 40) {
-          this.lineHeight = 35
-        }
+        this.songFontSize = parsedData.songFontSize
       } else if (parsedData?.text?.text) {  // Gets the Bible text and modifies the font size
         this.blackScreen = false
         this.currentVerse = null
         this.currentBiblePassage = parsedData.text
-        this.fontSize = parsedData.fontSize
-        this.lineHeight = 65
+        this.bibleFontSize = parsedData.bibleFontSize
+        console.log(this.bibleFontSize)
       } else if (parsedData?.blackScreen) {  // Sets the screen to black
         this.blackScreen = true
       }

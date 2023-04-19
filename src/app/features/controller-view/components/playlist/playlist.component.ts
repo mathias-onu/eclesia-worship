@@ -76,7 +76,7 @@ export class PlaylistComponent implements OnInit {
         if (res!.body!.length !== 0) {
           preSong.verses = this.formatSong.transform(res.body![0]).verses
           this.currentPlaylist.songs.forEach(playlistSong => {
-            if (playlistSong.title.includes(preSong.title)) {
+            if (playlistSong.title === preSong.title) {
               playlistSong.verses = preSong.verses
             }
           })
