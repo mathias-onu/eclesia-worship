@@ -22,9 +22,7 @@ export class FormatSongPipe implements PipeTransform {
     let verseIndex = 0
     for (let i = 0; i < formattedSong.length; i++) {
       const line = formattedSong[i]
-
-      console.log(line)
-      if (line === "" && i !== formattedSong.length - 1) {
+      if ((line === "" || line === '**********') && i !== formattedSong.length - 1) {
         verseIndex++
         songContent.verses.push({ verseIndex: verseIndex, lines: [] })
       } else if (verseIndex > 0 && !line.includes('#') && line !== "") {
