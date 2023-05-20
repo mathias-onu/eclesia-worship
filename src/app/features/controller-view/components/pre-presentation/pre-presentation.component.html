@@ -1,9 +1,19 @@
 <div class="container">
     <div class="presentation-buttons">
-        <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()" data-testid="decreaseFontSizeBtn">
+        <mat-icon class="select-icon">music_note</mat-icon>
+        <select class="font-size-select" [formControl]="songFontSizeInput">
+            <option *ngFor="let font of fontSizeOptions" [value]="font.value">{{ font.viewValue }}
+            </option>
+        </select>
+        <mat-icon class="select-icon">menu_book</mat-icon>
+        <select class="font-size-select" [formControl]="bibleFontSizeInput">
+            <option *ngFor="let font of bibleFontSizeOptions" [value]="font.value">{{ font.viewValue }}
+            </option>
+        </select>
+        <!-- <mat-icon class="decrease-font-size-icon" (click)="decreaseFontSize()" data-testid="decreaseFontSizeBtn">
             text_decrease</mat-icon>
         <mat-icon class="increase-font-size-icon" (click)="increaseFontSize()" data-testid="increaseFontSizeBtn">
-            text_increase</mat-icon>
+            text_increase</mat-icon> -->
         <mat-icon class="delete-icon" (click)="removePresentationItem()" data-testid="removePresentationItemBtn">delete
         </mat-icon>
         <button mat-flat-button (click)="setBlackScreen()" class="black-screen-btn"

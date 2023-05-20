@@ -3,15 +3,18 @@ import mongoose from 'mongoose'
 const deletedSongSchema = mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   body: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   lastModified: {
     type: String,
-    required: true
+    required: true,
+    index: true
   }
 })
 

@@ -66,7 +66,7 @@ export const syncSongs = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalSongs = await Song.find();
+  const finalSongs = await Song.find().sort({ title: 1 });
   res.send(finalSongs);
 });
 
@@ -80,33 +80,29 @@ export const syncSongsPartial = asyncHandler(async (req, res) => {
     const file = files.result.entries[i];
 
     if (
-      file.name.includes("Mă-nchin, o, Doamne") ||
-      file.name.includes("Slavă și cinste") ||
-      file.name.includes("Salvat!") ||
-      file.name.includes("Ție laudă-Ți cântăm") ||
-      file.name.includes("Și munții tresaltă")
+      file.name.includes('Mă-nchin, o, Doamne') ||
+      file.name.includes('Slavă și cinste') ||
+      file.name.includes('Salvat!') ||
+      file.name.includes('Ție laudă-Ți cântăm') ||
+      file.name.includes('Și munții tresaltă')
     ) {
-      const existingSong = await Song.findOne({
-        title: file.name.split(".")[0],
-      });
+      const existingSong = await Song.findOne({ title: file.name.split('.')[0] })
       if (!existingSong) {
         const song = await dropbox.filesDownload({ path: file.path_display });
         const newSong = new Song({
           title: file.name.split(".")[0],
           body: Buffer.from(song.result.fileBinary).toString(),
-          lastModified: file.server_modified,
-        });
+          lastModified: file.server_modified
+        })
 
-        await newSong.save();
+        await newSong.save()
       } else if (existingSong.lastModified !== file.server_modified) {
-        const content = await dropbox.filesDownload({
-          path: file.path_display,
-        });
+        const content = await dropbox.filesDownload({ path: file.path_display })
 
-        existingSong.body = Buffer.from(content.result.fileBinary).toString();
-        existingSong.lastModified = file.server_modified;
+        existingSong.body = Buffer.from(content.result.fileBinary).toString()
+        existingSong.lastModified = file.server_modified
 
-        await existingSong.save();
+        await existingSong.save()
       }
     }
   }
@@ -156,7 +152,7 @@ export const getSongs = asyncHandler(async (req, res) => {
     title: { $regex: diacriticSensitiveRegex(search) || "", $options: "i" },
   })
     .collation({ locale: "ro", strength: 1 })
-    .limit(limit);
+    .limit(limit).sort({ title: 1 });
   res.json(songs);
 });
 
@@ -210,9 +206,9 @@ export const syncPlaylists = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalPlaylists = await Playlist.find();
-  res.send(finalPlaylists);
-});
+  const finalPlaylists = await Playlist.find().sort({ title: -1 })
+  res.json(finalPlaylists)
+})
 
 export const syncPlaylistsPartial = asyncHandler(async (req, res) => {
   const accessToken = req.headers.authorization.split(" ")[1];
@@ -268,9 +264,9 @@ export const syncPlaylistsPartial = asyncHandler(async (req, res) => {
     }
   }
 
-  const finalPlaylists = await Playlist.find();
-  res.send(finalPlaylists);
-});
+  const finalPlaylists = await Playlist.find()
+  res.send(finalPlaylists)
+})
 
 export const getPlaylist = asyncHandler(async (req, res) => {
   const playlist = await Playlist.findById(req.params.id.toString());
@@ -296,7 +292,7 @@ export const getPlaylists = asyncHandler(async (req, res) => {
     title: { $regex: diacriticSensitiveRegex(search) || "", $options: "i" },
   })
     .collation({ locale: "ro", strength: 1 })
-    .limit(limit);
+    .limit(limit).sort({ title: -1 });
 
   res.json(playlists);
 });

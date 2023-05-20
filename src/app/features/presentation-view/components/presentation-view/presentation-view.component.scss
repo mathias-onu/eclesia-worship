@@ -17,6 +17,7 @@
 
 .line,
 .bible-verse {
+    line-height: initial;
     text-align: center;
     margin-bottom: 60px;
 }
@@ -24,4 +25,5 @@
 .bible-verse {
     margin-bottom: 0 !important;
     padding: 0 10px 0 10px;
+    line-height: 1.5em;
 }
