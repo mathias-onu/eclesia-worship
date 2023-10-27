@@ -10,7 +10,6 @@ export class FormatSongPipe implements PipeTransform {
 
   transform(value: ISong): IFormattedSong {
     const formattedSong = chordProParser(value, TextTypeAccessor.SONG)
-    console.warn(formattedSong)
 
     const songContent: IFormattedSong = {
       title: value.title,
@@ -19,12 +18,28 @@ export class FormatSongPipe implements PipeTransform {
       ]
     }
 
-    let verseIndex = 0
-    for (let i = 0; i < formattedSong.length; i++) {
-      const line = formattedSong[i]
+    let verseCount: number = 0
+    for(let i = 0; i < formattedSong.length; i++) {
+      if(formattedSong[i] !== "" && formattedSong[i] !== '**********') {
+        verseCount++
+      } else {
+        verseCount = 0
+      }
+      
+      if(verseCount > 2) {
+        formattedSong.splice(i, 0, "")
+        verseCount = 0;
+      }
+    }
 
-      console.log(line)
-      if (line === "" && i !== formattedSong.length - 1) {
+    const song = [...formattedSong]
+
+    let verseIndex: number = 0
+
+    for (let i = 0; i < song.length; i++) {
+      const line = song[i]
+      
+      if (line === "" && i !== song.length - 1) {
         verseIndex++
         songContent.verses.push({ verseIndex: verseIndex, lines: [] })
       } else if (verseIndex > 0 && !line.includes('#') && line !== "") {
