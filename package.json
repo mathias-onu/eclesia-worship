@@ -29,6 +29,7 @@
     "@builder.io/partytown": "^0.7.6",
     "bcryptjs": "^2.4.3",
     "chordproject-parser": "^0.2.14",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "dropbox": "^10.34.0",
