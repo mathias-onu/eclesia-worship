@@ -9,8 +9,10 @@ import { TextTypeAccessor } from '../utils/textType.enum';
 export class FormatSongPipe implements PipeTransform {
 
   transform(value: ISong): IFormattedSong {
+    // song is parsed and converted into an array of strings
     const formattedSong = chordProParser(value, TextTypeAccessor.SONG)
 
+    // after the process, the song will be converted into an object
     const songContent: IFormattedSong = {
       title: value.title,
       verses: [
@@ -18,6 +20,9 @@ export class FormatSongPipe implements PipeTransform {
       ]
     }
 
+    console.log(formattedSong)
+
+    // the loop will detect any 
     let verseCount: number = 0
     for(let i = 0; i < formattedSong.length; i++) {
       if(formattedSong[i] !== "" && formattedSong[i] !== '**********') {
@@ -48,6 +53,13 @@ export class FormatSongPipe implements PipeTransform {
     }
     songContent.verses.shift()
 
+    for(let i = 0; i < songContent.verses[0].lines.length; i++) {
+      const verse = songContent.verses[0].lines[i]
+      if(verse === "**********") {
+        songContent.verses.shift()
+        console.log('dude')
+      }
+    }
 
     // for (let i = 0; i < songContent.verses.length; i++) {
     //   const slide = songContent.verses[i]
