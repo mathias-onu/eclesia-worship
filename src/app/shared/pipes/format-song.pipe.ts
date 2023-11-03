@@ -53,31 +53,31 @@ export class FormatSongPipe implements PipeTransform {
     }
     songContent.verses.shift()
 
+<<<<<<< HEAD
     for(let i = 0; i < songContent.verses[0].lines.length; i++) {
       const verse = songContent.verses[0].lines[i]
       if(verse === "**********") {
         songContent.verses.shift()
         console.log('dude')
+=======
+    for (let i = 0; i < songContent.verses.length; i++) {
+      const slide = songContent.verses[i]
+      if (slide.lines.length === 4) {
+        songContent.verses.splice(i, 1)
+        const nextSlide = { verseIndex: i + 1, lines: [slide.lines[2], slide.lines[3]] }
+        slide.lines.pop()
+        slide.lines.pop()
+        songContent.verses.splice(i, 0, slide)
+        songContent.verses.splice(i + 1, 0, nextSlide)
+>>>>>>> 6a4b5205f61fa6f0ef2fd7a18ea683dcea196f7b
       }
     }
 
-    // for (let i = 0; i < songContent.verses.length; i++) {
-    //   const slide = songContent.verses[i]
-    //   if (slide.lines.length === 4) {
-    //     songContent.verses.splice(i, 1)
-    //     const nextSlide = { verseIndex: i + 1, lines: [slide.lines[2], slide.lines[3]] }
-    //     slide.lines.pop()
-    //     slide.lines.pop()
-    //     songContent.verses.splice(i, 0, slide)
-    //     songContent.verses.splice(i + 1, 0, nextSlide)
-    //   }
-    // }
-
-    // for (let i = 0; i < songContent.verses.length; i++) {
-    //   if (songContent.verses[i].lines.length === 0) {
-    //     songContent.verses.splice(i, 1)
-    //   }
-    // }
+    for (let i = 0; i < songContent.verses.length; i++) {
+      if (songContent.verses[i].lines.length === 0) {
+        songContent.verses.splice(i, 1)
+      }
+    }
 
     return songContent
   }
