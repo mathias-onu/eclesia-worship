@@ -21,7 +21,7 @@ jobs:
       - name: Create dotenv file
         uses: iamsauravsharma/create-dotenv@v1.2.2
         env:
-          PORT: 5000
+          PORT: 8080
           NODE_ENV: production
           DROPBOX_REFRESH_TOKEN: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
           DROPBOX_CLIENT_ID: ${{ secrets.DROPBOX_CLIENT_ID }}
@@ -39,28 +39,29 @@ jobs:
           name: eclesia-worship
           path: |
             eclesia-worship.zip
+            
+  # No longer deploying on Azure - new cofigurations incoming
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   environment:
+  #     name: 'production'
+  #     url: 'https://eclesiaworship.com'
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'production'
-      url: 'https://eclesiaworship.com'
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: eclesia-worship
-      - run: |
-          unzip eclesia-worship.zip
-          rm eclesia-worship.zip
+  #   steps:
+  #     - name: Download artifact from build job
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: eclesia-worship
+  #     - run: |
+  #         unzip eclesia-worship.zip
+  #         rm eclesia-worship.zip
           
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'eclesiaworship'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile}}
-          package: .
+  #     - name: 'Deploy to Azure Web App'
+  #       id: deploy-to-webapp
+  #       uses: azure/webapps-deploy@v2
+  #       with:
+  #         app-name: 'eclesiaworship'
+  #         slot-name: 'production'
+  #         publish-profile: ${{ secrets.AzureAppService_PublishProfile}}
+  #         package: .
