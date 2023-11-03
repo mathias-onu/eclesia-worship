@@ -39,6 +39,6 @@ app.use(notFound);
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT || 5000, () =>
+app.listen(process.env.PORT || 8080, () =>
   console.log(`Server running on http://localhost:${process.env.PORT}`)
 );
