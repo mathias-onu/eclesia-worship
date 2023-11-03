@@ -2,7 +2,7 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   env: {
-    apiUrl: 'http://localhost:5000/api',
+    apiUrl: 'http://localhost:8080/api',
   },
   e2e: {
     retries: {
