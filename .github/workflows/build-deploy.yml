@@ -17,16 +17,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-
-      - name: Application build
-        run: |
-          npm install
-          npm run build
             
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           
+      - name: Application build
+        run: |
+          npm install
+          npm run build && ls
+
       - name: Deploy to DigitalOcean Apps Service
         run: doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }}
