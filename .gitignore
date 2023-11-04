@@ -1,8 +1,7 @@
 .env
 
 # Compiled output
-# temporarily allowed
-# /dist
+/dist
 /tmp
 /out-tsc
 /bazel-out

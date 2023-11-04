@@ -7,11 +7,11 @@
   "scripts": {
     "start": "node server",
     "server": "nodemon server",
-    "build": "ng build --configuration=production",
-    "frontend:start": "ng serve",
+    "client": "ng serve",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "start:dev:servers": "concurrently \"npm run server\" \"npm run frontend:start\""
+    "build": "ng build --configuration=production"
   },
   "author": "Mathias Onu, Denis Onu",
   "license": "ISC",
