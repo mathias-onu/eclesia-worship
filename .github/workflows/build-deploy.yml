@@ -26,7 +26,7 @@ jobs:
       - name: Application build
         run: |
           npm install
-          npm run build && ls
+          npm run build
 
       - name: Deploy to DigitalOcean Apps Service
         run: doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }}
