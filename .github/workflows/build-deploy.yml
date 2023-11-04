@@ -1,4 +1,4 @@
-name: Build and deploy the app to Azure Web App
+name: Build and deploy the app to DigitalOcean Apps Service
 
 on:
   push:
