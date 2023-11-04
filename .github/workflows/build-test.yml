@@ -24,7 +24,7 @@ jobs:
 
       - uses: cypress-io/github-action@v5
         with:
-          start: npm run start:dev:servers
+          start: npm run dev
           wait-on: "http://[::1]:4200"
           wait-on-timeout: 300
 

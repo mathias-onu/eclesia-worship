@@ -11,7 +11,7 @@ A .env file is required with the following variables: PORT (8080), NODE_ENV (pro
 Afterwards, in order to start both the backend and frontend dev servers, you can run:
 
 ```bash
-npm run start:dev:servers
+npm run dev
 ```
 
 In order to run Cypress e2e tests run:
