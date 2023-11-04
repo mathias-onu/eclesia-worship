@@ -1,7 +1,8 @@
 .env
 
 # Compiled output
-/dist
+# Temporarily removed 
+# /dist
 /tmp
 /out-tsc
 /bazel-out
