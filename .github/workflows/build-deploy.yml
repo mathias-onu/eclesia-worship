@@ -22,11 +22,6 @@ jobs:
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-          
-      - name: Application build
-        run: |
-          npm install
-          npm run build
 
       - name: Deploy to DigitalOcean Apps Service
         run: doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }}
