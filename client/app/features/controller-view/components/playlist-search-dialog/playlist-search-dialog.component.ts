@@ -1,10 +1,10 @@
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SongsService } from 'src/app/core/services/songs.service';
-import { IFormattedPlaylist, IPlaylist } from 'src/app/shared/models/playlist.model';
-import { FormatPlaylistPipe } from 'src/app/shared/pipes/format-playlist.pipe';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { SongsService } from 'client/app/core/services/songs.service';
+import { IFormattedPlaylist, IPlaylist } from 'client/app/shared/models/playlist.model';
+import { FormatPlaylistPipe } from 'client/app/shared/pipes/format-playlist.pipe';
+import { AlertService } from 'client/app/shared/services/alert.service';
 
 @Component({
   selector: 'app-playlist-search-dialog',

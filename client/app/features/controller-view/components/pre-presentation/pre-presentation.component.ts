@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { BibleService } from 'src/app/core/services/bible.service';
-import { SongsService } from 'src/app/core/services/songs.service';
-import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
-import { IFormattedSong, IVerse } from 'src/app/shared/models/song.model';
+import { BibleService } from 'client/app/core/services/bible.service';
+import { SongsService } from 'client/app/core/services/songs.service';
+import { IBiblePassageSlide } from 'client/app/shared/models/bible.model';
+import { IFormattedSong, IVerse } from 'client/app/shared/models/song.model';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { FormControl } from '@angular/forms';
-import { AlertService } from 'src/app/shared/services/alert.service';
-import { bibleFontSizeOptions, fontSizeOptions } from 'src/app/shared/utils/fontSizeOptions';
+import { AlertService } from 'client/app/shared/services/alert.service';
+import { bibleFontSizeOptions, fontSizeOptions } from 'client/app/shared/utils/fontSizeOptions';
 
 @Component({
   selector: 'app-pre-presentation',
