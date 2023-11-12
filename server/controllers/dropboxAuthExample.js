@@ -1,3 +1,5 @@
+// The following code generates the Dropbox refresh token 
+
 // Standalone example to demonstrate codeflow.
 // Start the server, hit localhost:3000 on the browser, and click through.
 // On the server logs, you should have the auth code, as well as the token

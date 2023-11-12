@@ -2,10 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from 'path'
-import connectDB from "./config/db.js";
-import router from "./routes/index.js";
+import connectDB from "./server/config/db.js";
+import router from "./server/routes/index.js";
 import { fileURLToPath } from "url";
-import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { notFound, errorHandler } from "./server/middleware/errorMiddleware.js";
 import compression from "compression";
 
 const app = express();

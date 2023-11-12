@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IBible, IBibleBook } from 'src/app/shared/models/bible.model';
-import { getBibleObj } from 'src/app/shared/utils/bibleBooks';
+import { IBible, IBibleBook } from 'client/app/shared/models/bible.model';
+import { getBibleObj } from 'client/app/shared/utils/bibleBooks';
 
 @Component({
   selector: 'app-bible-books-dialog',

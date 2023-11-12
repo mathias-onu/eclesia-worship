@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IBiblePassageSlide } from 'src/app/shared/models/bible.model';
-import { IVerse } from 'src/app/shared/models/song.model';
+import { IBiblePassageSlide } from 'client/app/shared/models/bible.model';
+import { IVerse } from 'client/app/shared/models/song.model';
 
 @Component({
   selector: 'app-presentation-view',

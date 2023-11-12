@@ -2,8 +2,8 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
-import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'src/app/shared/models/bible.model';
-import { environment } from 'src/environments/environment';
+import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'client/app/shared/models/bible.model';
+import { environment } from 'client/environments/environment';
 
 @Injectable({
   providedIn: 'root'
