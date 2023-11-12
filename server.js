@@ -4,6 +4,8 @@ import cors from "cors";
 import path from 'path'
 import connectDB from "./server/config/db.js";
 import router from "./server/routes/index.js";
+import songs from "./server/routes/songs.js";
+import playlists from "./server/routes/playlists.js";
 import { fileURLToPath } from "url";
 import { notFound, errorHandler } from "./server/middleware/errorMiddleware.js";
 import compression from "compression";
@@ -25,7 +27,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use(compression())
-app.use("/api", router);
+app.use("/api", router, songs, playlists);
 
 if (process.env.NODE_ENV === 'production') {
   const root = path.join(__dirname, 'dist', 'client')
