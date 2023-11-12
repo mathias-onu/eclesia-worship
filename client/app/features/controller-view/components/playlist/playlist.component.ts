@@ -2,11 +2,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
-import { SongsService } from 'src/app/core/services/songs.service';
-import { IFormattedCompletePlaylist } from 'src/app/shared/models/playlist.model';
-import { IFormattedSong } from 'src/app/shared/models/song.model';
-import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { SongsService } from 'client/app/core/services/songs.service';
+import { IFormattedCompletePlaylist } from 'client/app/shared/models/playlist.model';
+import { IFormattedSong } from 'client/app/shared/models/song.model';
+import { FormatSongPipe } from 'client/app/shared/pipes/format-song.pipe';
+import { AlertService } from 'client/app/shared/services/alert.service';
 import { PlaylistSearchDialogComponent } from '../playlist-search-dialog/playlist-search-dialog.component';
 
 @Component({

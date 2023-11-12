@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { BibleService } from 'src/app/core/services/bible.service';
-import { SongsService } from 'src/app/core/services/songs.service';
-import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'src/app/shared/models/bible.model';
-import { ISong } from 'src/app/shared/models/song.model';
-import { AlertService } from 'src/app/shared/services/alert.service';
+import { BibleService } from 'client/app/core/services/bible.service';
+import { SongsService } from 'client/app/core/services/songs.service';
+import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'client/app/shared/models/bible.model';
+import { ISong } from 'client/app/shared/models/song.model';
+import { AlertService } from 'client/app/shared/services/alert.service';
 import { BibleBooksDialogComponent } from '../bible-books-dialog/bible-books-dialog.component';
 
 @Component({

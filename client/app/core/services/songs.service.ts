@@ -2,10 +2,10 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
-import { IFormattedCompletePlaylist, IPlaylist } from 'src/app/shared/models/playlist.model';
-import { IFormattedSong, ISong } from 'src/app/shared/models/song.model';
-import { FormatSongPipe } from 'src/app/shared/pipes/format-song.pipe';
-import { environment } from 'src/environments/environment';
+import { IFormattedCompletePlaylist, IPlaylist } from 'client/app/shared/models/playlist.model';
+import { IFormattedSong, ISong } from 'client/app/shared/models/song.model';
+import { FormatSongPipe } from 'client/app/shared/pipes/format-song.pipe';
+import { environment } from 'client/environments/environment';
 import * as moment from 'moment';
 
 @Injectable({

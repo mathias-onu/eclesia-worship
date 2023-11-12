@@ -4,7 +4,7 @@ import { ControllerViewComponent } from './components/controller-view/controller
 import { ControllerViewRoutingModule } from './controller-view-routing.module';
 import { FormsModule } from '@angular/forms';
 import { SongsComponent } from './components/songs/songs.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from 'client/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PlaylistComponent } from './components/playlist/playlist.component';
 import { PlaylistSearchDialogComponent } from './components/playlist-search-dialog/playlist-search-dialog.component';
