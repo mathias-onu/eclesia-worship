@@ -1,12 +1,13 @@
 import asyncHandler from "express-async-handler";
 import Song from "../models/Song.js";
 import DeletedSong from "../models/DeletedSong.js";
+import { Request, Response } from "express"
 
 import { Dropbox } from "dropbox";
 
-export const syncSongs = asyncHandler(async (req, res) => {
-    const accessToken = req.headers.authorization!.split(" ")[1];
-    const dropbox = new Dropbox({ accessToken });
+export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
+    const accessToken: string = req.headers.authorization!.split(" ")[1];
+    const dropbox: Dropbox = new Dropbox({ accessToken });
 
     const files = await dropbox.filesListFolder({ path: "/SongBook/Română/" });
 
@@ -61,13 +62,13 @@ export const syncSongs = asyncHandler(async (req, res) => {
     res.send(finalSongs);
 });
 
-export const getSong = asyncHandler(async (req, res) => {
+export const getSong = asyncHandler(async (req: Request, res: Response) => {
     const song = await Song.findOne({ title: req.params.title.toString() });
 
     res.json(song);
 });
 
-export const getSongs = asyncHandler(async (req, res) => {
+export const getSongs = asyncHandler(async (req: Request, res: Response) => {
     const { search, limit } = req.query;
 
     function diacriticSensitiveRegex(string: string = "") {
@@ -89,9 +90,9 @@ export const getSongs = asyncHandler(async (req, res) => {
     res.json(songs);
 });
 
-export const syncSongsPartial = asyncHandler(async (req, res) => {
-    const accessToken = req.headers.authorization!.split(" ")[1];
-    const dropbox = new Dropbox({ accessToken });
+export const syncSongsPartial = asyncHandler(async (req: Request, res: Response) => {
+    const accessToken: string = req.headers.authorization!.split(" ")[1];
+    const dropbox: Dropbox = new Dropbox({ accessToken });
 
     const files = await dropbox.filesListFolder({ path: "/SongBook/Română/" });
 

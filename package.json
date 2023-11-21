@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server",
-    "server": "tsc -p tsconfig-server.json -w | nodemon server-dist/server.js",
+    "start": "tsc -p tsconfig-server.json -w | node server_dist/server.js",
+    "server": "tsc -p tsconfig-server.json -w | nodemon server_dist/server.js",
     "client": "ng serve",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "cy:open": "cypress open",
