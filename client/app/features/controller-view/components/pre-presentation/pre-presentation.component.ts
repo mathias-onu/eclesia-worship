@@ -26,7 +26,7 @@ export class PrePresentationComponent implements OnInit {
   isPresentationLive: boolean = false
 
   @LocalStorage('songFontSize')
-  songFontSize!: number
+  songFontSize!: number 
   @LocalStorage('bibleFontSize')
   bibleFontSize!: number
   fontSizeOptions: any[] = fontSizeOptions()
@@ -42,8 +42,17 @@ export class PrePresentationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.songFontSizeInput.setValue(this.songFontSize)
-    this.bibleFontSizeInput.setValue(this.bibleFontSize)
+    if(this.localStorageService.retrieve('songFontSize')) {
+      this.songFontSizeInput.setValue(this.songFontSize)
+    } else {
+      this.songFontSizeInput.setValue(64)
+    }
+
+    if(this.localStorageService.retrieve('bibleFontSize')) {
+      this.bibleFontSizeInput.setValue(this.bibleFontSize)
+    } else {
+      this.bibleFontSizeInput.setValue(41)
+    }
 
     // Checks if Presentation API is supported by the user's browser
     try {
@@ -56,9 +65,9 @@ export class PrePresentationComponent implements OnInit {
     this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
 
     this.songFontSizeInput.valueChanges.subscribe((value) => {
+      this.songFontSize = Number(value)
+      this.localStorageService.store('songFontSize', this.songFontSize)
       if (this.presentationConnection) {
-        this.songFontSize = Number(value)
-        this.localStorageService.store('songFontSize', this.songFontSize)
         this.presentationConnection.send(
           JSON.stringify(
             {
@@ -71,9 +80,8 @@ export class PrePresentationComponent implements OnInit {
     })
 
     this.bibleFontSizeInput.valueChanges.subscribe((value) => {
+      this.bibleFontSize = Number(value)
       if (this.presentationConnection) {
-        console.log(this.currentDisplayedPassage)
-        this.bibleFontSize = Number(value)
         this.localStorageService.store('bibleFontSize', this.bibleFontSize)
         this.presentationConnection.send(
           JSON.stringify(
