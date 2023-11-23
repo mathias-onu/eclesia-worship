@@ -5,7 +5,7 @@
         "target": "ES2022",
         "sourceMap": true,
         "allowSyntheticDefaultImports": true,
-        "outDir": "server-dist",
+        "outDir": "server_dist",
         "esModuleInterop": true
     },
     "files": ["server.ts"],
