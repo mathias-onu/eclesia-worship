@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "outDir": "server_dist",
+        "esModuleInterop": true
+    },
+    "files": ["server.ts"],
+    "include": ["server/**/*"]
+}

@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
+import mongoose, { IndexOptions } from "mongoose"
 
-const playlistSchema = mongoose.Schema({
+const playlistSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -20,6 +20,6 @@ const playlistSchema = mongoose.Schema({
 
 const Playlist = mongoose.model('playlist', playlistSchema)
 
-Playlist.createIndexes({ _id: 1, title: 1, songs: 1, lastModified: 1 })
+Playlist.createIndexes({ _id: 1, title: 1, songs: 1, lastModified: 1 } as IndexOptions)
 
 export default Playlist
