@@ -1,22 +1,23 @@
 import mongoose from 'mongoose'
 
-const songSchema = mongoose.Schema({
+const deletedSongSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    index: true
   },
   body: {
     type: String,
     required: true,
+    index: true
   },
   lastModified: {
     type: String,
     required: true,
+    index: true
   }
 })
 
-const Song = mongoose.model('song', songSchema)
+const DeletedSong = mongoose.model('deleted-song', deletedSongSchema)
 
-Song.createIndexes({ _id: 1, title: 1, body: 1, lastModified: 1 })
-
-export default Song
+export default DeletedSong

@@ -6,7 +6,7 @@ import { IFormattedCompletePlaylist, IPlaylist } from 'client/app/shared/models/
 import { IFormattedSong, ISong } from 'client/app/shared/models/song.model';
 import { FormatSongPipe } from 'client/app/shared/pipes/format-song.pipe';
 import { environment } from 'client/environments/environment';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'

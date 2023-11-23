@@ -1,6 +1,6 @@
-import express from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import path from 'path'
 import connectDB from "./server/config/db.js";
 import router from "./server/routes/index.js";
@@ -10,10 +10,10 @@ import { fileURLToPath } from "url";
 import { notFound, errorHandler } from "./server/middleware/errorMiddleware.js";
 import compression from "compression";
 
-const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const corsOptions = {
+const app: Express = express();
+let __filename: string = fileURLToPath(import.meta.url);
+const __dirname: string = path.dirname(__filename);
+const corsOptions: CorsOptions = {
   origin: "http://localhost:4200",
   optionsSuccessStatus: 200,
 };
