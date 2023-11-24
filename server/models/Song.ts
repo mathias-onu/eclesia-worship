@@ -1,4 +1,4 @@
-import mongoose, { IndexOptions } from 'mongoose'
+import mongoose from 'mongoose'
 
 const songSchema = new mongoose.Schema({
   title: {
@@ -16,7 +16,5 @@ const songSchema = new mongoose.Schema({
 })
 
 const Song = mongoose.model('song', songSchema)
-
-Song.createIndexes({ _id: 1, title: 1, body: 1, lastModified: 1 } as IndexOptions)
 
 export default Song
