@@ -30,7 +30,7 @@ app.use(compression())
 app.use("/api", router, songs, playlists);
 
 if (process.env.NODE_ENV === 'production') {
-  const root = path.join(__dirname, 'dist', 'client')
+  const root = path.join(__dirname, '../dist', 'client')
   app.use(express.static(root));
   app.get("*", (req, res) => {
     res.sendFile('index.html', { root })
