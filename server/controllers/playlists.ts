@@ -147,7 +147,6 @@ export const getPlaylists = asyncHandler(async (req: Request, res: Response) => 
     const playlists = await Playlist.find({
         title: { $regex: diacriticSensitiveRegex(search?.toString()) || "", $options: "i" },
     })
-        .collation({ locale: "ro", strength: 1 })
         .limit(Number(limit)).sort({ title: -1 });
 
     res.json(playlists);
