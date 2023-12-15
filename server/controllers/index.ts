@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import MDBReader from 'mdb-reader';
 import Verse from '../models/Verse.js';
+import fetch from 'node-fetch';
 
 export const refreshToken = asyncHandler(
   async (req: Request, res: Response) => {
