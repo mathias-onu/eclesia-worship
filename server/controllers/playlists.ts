@@ -4,6 +4,17 @@ import { Request, Response } from "express"
 
 import { Dropbox } from "dropbox";
 
+function diacriticSensitiveRegex(string: string = "") {
+    return string
+        .replace(/a/g, "[a,á,à,ä,ă,â]")
+        .replace(/e/g, "[e,é,ë]")
+        .replace(/i/g, "[i,í,ï,î]")
+        .replace(/o/g, "[o,ó,ö,ò]")
+        .replace(/u/g, "[u,ü,ú,ù]")
+        .replace(/t/g, "[t,ț]")
+        .replace(/s/g, "[s,ș]");
+}
+
 export const syncPlaylists = asyncHandler(async (req: Request, res: Response) => {
     const accessToken: string = req.headers.authorization!.split(" ")[1];
     const dropbox: Dropbox = new Dropbox({ accessToken });
@@ -30,6 +41,7 @@ export const syncPlaylists = asyncHandler(async (req: Request, res: Response) =>
                     songs: Buffer.from(content.result.fileBinary).toString(),
                     lastModified: file.server_modified,
                 });
+                
                 await playlist.save();
             } else if (existingPlaylist.lastModified !== file.server_modified) {
                 const content = await dropbox.filesDownload({
@@ -133,16 +145,6 @@ export const getPlaylist = asyncHandler(async (req: Request, res: Response) => {
 export const getPlaylists = asyncHandler(async (req: Request, res: Response) => {
     const { search, limit } = req?.query;
 
-    function diacriticSensitiveRegex(string: string = "") {
-        return string
-            .replace(/a/g, "[a,á,à,ä,ă,â]")
-            .replace(/e/g, "[e,é,ë]")
-            .replace(/i/g, "[i,í,ï,î]")
-            .replace(/o/g, "[o,ó,ö,ò]")
-            .replace(/u/g, "[u,ü,ú,ù]")
-            .replace(/t/g, "[t,ț]")
-            .replace(/s/g, "[s,ș]");
-    }
 
     const playlists = await Playlist.find({
         title: { $regex: diacriticSensitiveRegex(search?.toString()) || "", $options: "i" },
