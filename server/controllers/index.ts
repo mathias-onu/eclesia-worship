@@ -1,5 +1,4 @@
 import asyncHandler from 'express-async-handler';
-import fetch from 'node-fetch';
 import { Request, Response } from 'express';
 import { readFileSync } from 'fs';
 import MDBReader from 'mdb-reader';
@@ -316,7 +315,7 @@ export const importBible = asyncHandler(async (req: Request, res: Response) => {
   res.send('success');
 });
 
-export const getBible = asyncHandler(async (req: Request, res: Response) => {
+export const getLocalBible = asyncHandler(async (req: Request, res: Response) => {
   const { passage } = req.query;
   if (!passage) {
     res.status(400);
@@ -374,4 +373,15 @@ export const getBible = asyncHandler(async (req: Request, res: Response) => {
     });
     res.json(verses);
   }
+})
+
+export const getBible = asyncHandler(async (req: Request, res: Response) => {
+  const { passage } = req.query;
+
+  const bible = await fetch(
+    `https://bible-api.com/${passage}?translation=rccv`
+  );
+  const response = await bible.json();
+
+  res.send(response);
 });
