@@ -3,6 +3,7 @@ import Playlist from "../models/Playlist.js";
 import { Request, Response } from "express"
 
 import { Dropbox } from "dropbox";
+import Song from "../models/Song.js";
 
 function diacriticSensitiveRegex(string: string = "") {
     return string
@@ -139,7 +140,36 @@ export const syncPlaylistsPartial = asyncHandler(async (req: Request, res: Respo
 export const getPlaylist = asyncHandler(async (req: Request, res: Response) => {
     const playlist = await Playlist.findById(req.params.id.toString());
 
-    res.json(playlist);
+    const songsList: Array<string> | undefined = playlist?.songs.split('\n')
+
+    const songs: Array<Object> = []
+
+    if(songsList) {
+        for(let i = 0; i < songsList?.length; i++) {
+            const song: string = songsList[i]
+            if(song.length > 0 && song !== playlist?.title) {
+                const searchedSong = await Song.findOne({ title: song.split('[')[0].trim() })
+                if(searchedSong) {
+                    songs.push({
+                        id: searchedSong.id,
+                        title: searchedSong.title
+                    })
+                } else {
+                    songs.push({
+                        id: null,
+                        title: `Could not find song with title: ${song.split('[')[0].trim()}. Check the database for the correct song.`
+                    })
+                }
+            }
+        }
+    }
+
+    res.json({
+        id: playlist?.id,
+        title: playlist?.title,
+        lastModified: playlist?.lastModified,
+        songs
+    });
 });
 
 export const getPlaylists = asyncHandler(async (req: Request, res: Response) => {
