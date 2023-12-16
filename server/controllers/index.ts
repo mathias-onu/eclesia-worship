@@ -32,8 +32,16 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
     throw new Error('Please enter a valid passage');
   }
 
-  const bookReference: string = reference[0];
-  const versesReference: string = reference[1];
+  let bookReference: string = ""
+  let versesReference: string = ""
+
+  if(reference.length === 3) {
+    bookReference = reference[0] + " " + reference[1]
+    versesReference = reference[2]
+  } else {
+    bookReference = reference[0];
+    versesReference = reference[1];
+  }
 
   if (versesReference.split(':').length > 1) {
     const chapter: string = versesReference.split(':')[0];
@@ -76,6 +84,7 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
     });
     res.json(verses);
   }
+  
 })
 
 export const getBible = asyncHandler(async (req: Request, res: Response) => {
