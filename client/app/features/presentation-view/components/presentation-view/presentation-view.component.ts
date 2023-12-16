@@ -50,7 +50,7 @@ export class PresentationViewComponent implements OnInit {
         console.log(this.bibleFontSize)
       } else if (parsedData?.imageUrl) { // Gets the imageUrl for background images
         this.backgroundImageUrl = parsedData.imageUrl
-      } else if (parsedData?.emptyScreen) {  // Sets the screen to black
+      } else if (parsedData?.blackScreen) {  // Sets the screen to black
         this.emptyScreen = true
       }
     })
