@@ -157,7 +157,7 @@ export const getPlaylist = asyncHandler(async (req: Request, res: Response) => {
                 } else {
                     songs.push({
                         id: null,
-                        title: `Could not find song with title: ${song.split('[')[0].trim()}. Check the database for the correct song.`
+                        title: `Song not found: "${song.split('[')[0].trim()}". Perhaps the name changed.`
                     })
                 }
             }
