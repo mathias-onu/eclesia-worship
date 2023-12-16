@@ -74,14 +74,14 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
         book: bookReference,
         chapter,
         number: verse,
-      });
+      }).sort({ number: 1 });
       res.json(verses);
     }
   } else {
     const verses = await Verse.find({
       book: bookReference,
       chapter: versesReference,
-    });
+    }).sort({ number: 1 });
     res.json(verses);
   }
   
