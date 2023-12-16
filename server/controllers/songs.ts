@@ -63,7 +63,7 @@ export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getSong = asyncHandler(async (req: Request, res: Response) => {
-    const song = await Song.findOne({ title: req.params.title.toString() });
+    const song = await Song.findOne({ id: req.params.id });
 
     res.json(song);
 });
