@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { SongsService } from 'client/app/core/services/songs.service';
-import { IFormattedCompletePlaylist } from 'client/app/shared/models/playlist.model';
+import { IFormattedCompletePlaylist, IFormattedPlaylist } from 'client/app/shared/models/playlist.model';
 import { IFormattedSong } from 'client/app/shared/models/song.model';
 import { FormatSongPipe } from 'client/app/shared/pipes/format-song.pipe';
 import { AlertService } from 'client/app/shared/services/alert.service';
@@ -34,21 +34,10 @@ export class PlaylistComponent implements OnInit {
       width: '550px'
     })
 
-    selectPlaylistDialog.afterClosed().subscribe(playlist => {
+    selectPlaylistDialog.afterClosed().subscribe((playlist: IFormattedPlaylist) => {
       if (playlist) {
         this.localStorageService.clear('currentPlaylist')
-
-        const formattedCompletePlaylist = {
-          date: playlist.selectedPlaylist.date,
-          songs: Array()
-        }
-        for (let i = 0; i < playlist.selectedPlaylist.songs.length; i++) {
-          formattedCompletePlaylist.songs.push({
-            title: playlist.selectedPlaylist.songs[i].split(' (')[0].split(' - ')[0],
-            verses: []
-          })
-          this.songsService.setFormattedCompletePlaylist(formattedCompletePlaylist)
-        }
+        this.songsService.setFormattedCompletePlaylist(playlist)
       }
     })
   }
@@ -65,16 +54,17 @@ export class PlaylistComponent implements OnInit {
     }
   }
 
-  presentSong(song: any) {
-    if (song.verses.length === 0) {
-      const preSong = {
-        title: song.title,
-        verses: Array()
-      }
+  presentSong(song: IFormattedSong) {
+    const preSong = {
+      id: song.id,
+      title: song.title,
+      verses: Array()
+    }
 
-      this.songsService.getSongs(undefined, song.title).subscribe((res) => {
-        if (res!.body!.length !== 0) {
-          preSong.verses = this.formatSong.transform(res.body![0]).verses
+    if (song.id !== null) {
+      this.songsService.getSong(song.id).subscribe({
+        next: res => {
+          preSong.verses = this.formatSong.transform(res.body!).verses
           this.currentPlaylist.songs.forEach(playlistSong => {
             if (playlistSong.title === preSong.title) {
               playlistSong.verses = preSong.verses
@@ -82,16 +72,16 @@ export class PlaylistComponent implements OnInit {
           })
           this.songsService.setFormattedCompletePlaylist(this.currentPlaylist)
           this.songsService.setCurrentDisplayedSong(preSong)
-        } else {
+        },
+        error: () => {
           this.alertService.openSnackBar(`Song "${song.title}" could not be found...`, 'error')
         }
-      }
-      )
+      })
     } else {
-      this.songsService.setCurrentDisplayedSong(song)
+      this.alertService.openSnackBar(`This song cannot not be found...`, 'error')
     }
-
   }
+
 
   drop(event: CdkDragDrop<IFormattedSong[]>) {
     moveItemInArray(this.currentPlaylist.songs, event.previousIndex, event.currentIndex)

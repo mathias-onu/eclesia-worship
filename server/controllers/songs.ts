@@ -4,6 +4,7 @@ import DeletedSong from "../models/DeletedSong.js";
 import { Request, Response } from "express"
 
 import { Dropbox } from "dropbox";
+import { ObjectId } from "mongodb";
 
 export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
     const accessToken: string = req.headers.authorization!.split(" ")[1];
@@ -63,7 +64,8 @@ export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getSong = asyncHandler(async (req: Request, res: Response) => {
-    const song = await Song.findOne({ title: req.params.title.toString() });
+    const song = await Song.findById(req.params.id);
+    
 
     res.json(song);
 });

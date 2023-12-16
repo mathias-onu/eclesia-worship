@@ -2,7 +2,7 @@ import { IFormattedSong } from "./song.model"
 
 export interface IPlaylist {
     _id: string,
-    songs: string,
+    songs: IFormattedSong[],
     title: string,
     lastModified: string,
     __v: number
@@ -10,7 +10,7 @@ export interface IPlaylist {
 
 export interface IFormattedPlaylist {
     date: string,
-    songs: string[]
+    songs: IFormattedSong[]
 }
 
 export interface IFormattedCompletePlaylist {
