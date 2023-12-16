@@ -2,8 +2,7 @@
     <div class="old-testament-container">
         <h3>Vechiul Testament</h3>
         <div *ngFor="let book of bibleBooks.oldTestament">
-            <p (click)="selectBook(book)" data-testid="selectOTBookBtn">{{ book.title === "SNG" ? "Cântarea Cântărilor"
-                : book.title }}</p>
+            <p (click)="selectBook(book)" data-testid="selectOTBookBtn">{{ book.title }}</p>
         </div>
     </div>
     <div class="new-testament-container">
@@ -14,9 +13,9 @@
     </div>
     <mat-divider [vertical]="true" class="divider"></mat-divider>
     <div class="selected-book">
-        <h3>{{ selectedBook.title === "SNG" ? "Cântarea Cântărilor" : selectedBook.title }}</h3>
+        <h3>{{ selectedBook.title }}</h3>
         <div *ngFor="let chapter of selectedBook.chapters">
             <p (click)="selectPassage(selectedBook.title, chapter)" data-testid="selectChapterBtn">{{ chapter }}</p>
-        </div>
+        </div>         
     </div>
 </div>

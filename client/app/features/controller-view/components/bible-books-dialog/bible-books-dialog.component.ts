@@ -11,7 +11,6 @@ import { getBibleObj } from 'client/app/shared/utils/bibleBooks';
 export class BibleBooksDialogComponent implements OnInit {
   bibleBooks: IBible = getBibleObj()
   selectedBook: IBibleBook = getBibleObj().oldTestament[0]
-  bibleObj: any = getBibleObj()
 
   constructor(
     public dialogRef: MatDialogRef<BibleBooksDialogComponent>,
