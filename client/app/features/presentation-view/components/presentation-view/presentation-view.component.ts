@@ -10,9 +10,10 @@ import { IVerse } from 'client/app/shared/models/song.model';
 export class PresentationViewComponent implements OnInit {
   currentVerse!: IVerse | null
   currentBiblePassage!: IBiblePassageSlide | null
-  blackScreen: boolean = false
+  emptyScreen: boolean = false
   songFontSize: number = 35
   bibleFontSize: number = 41
+  backgroundImageUrl!: string 
 
   constructor() { }
 
@@ -37,18 +38,20 @@ export class PresentationViewComponent implements OnInit {
       const parsedData = JSON.parse(event.data)
       console.log(parsedData)
       if (parsedData?.text?.verseIndex) {  // Gets the song verses and modifies the font size
-        this.blackScreen = false
+        this.emptyScreen = false
         this.currentBiblePassage = null
         this.currentVerse = parsedData.text
         this.songFontSize = parsedData.songFontSize
       } else if (parsedData?.text?.text) {  // Gets the Bible text and modifies the font size
-        this.blackScreen = false
+        this.emptyScreen = false
         this.currentVerse = null
         this.currentBiblePassage = parsedData.text
         this.bibleFontSize = parsedData.bibleFontSize
         console.log(this.bibleFontSize)
-      } else if (parsedData?.blackScreen) {  // Sets the screen to black
-        this.blackScreen = true
+      } else if (parsedData?.imageUrl) { // Gets the imageUrl for background images
+        this.backgroundImageUrl = parsedData.imageUrl
+      } else if (parsedData?.emptyScreen) {  // Sets the screen to black
+        this.emptyScreen = true
       }
     })
   }

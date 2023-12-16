@@ -33,6 +33,14 @@ export class PrePresentationComponent implements OnInit {
   bibleFontSizeOptions: any[] = bibleFontSizeOptions()
   songFontSizeInput = new FormControl()
   bibleFontSizeInput = new FormControl()
+  
+  backgroundImageInput = new FormControl()
+  backgroundImageOptions = [
+    { name: 'Black background', imageUrl: 'https://eclesia-worship.fra1.cdn.digitaloceanspaces.com/black-screen.jpg' },
+    { name: 'Christmas manger', imageUrl: 'https://eclesia-worship.fra1.cdn.digitaloceanspaces.com/christmas-manger-light.jpg' },
+    { name: 'Christmas tree dark', imageUrl: 'https://eclesia-worship.fra1.cdn.digitaloceanspaces.com/christmas-tree-dark.jpg' },
+    { name: 'Christmas tree light', imageUrl: 'https://eclesia-worship.fra1.cdn.digitaloceanspaces.com/christmas-tree.jpg' }
+  ]
 
   constructor(
     private songsService: SongsService,
@@ -88,6 +96,18 @@ export class PrePresentationComponent implements OnInit {
             {
               text: this.currentDisplayedPassage,
               bibleFontSize: this.bibleFontSize
+            }
+          )
+        )
+      }
+    })
+
+    this.backgroundImageInput.valueChanges.subscribe(value => {
+      if (this.presentationConnection) {
+        this.presentationConnection.send(
+          JSON.stringify(
+            {
+              imageUrl: value
             }
           )
         )
