@@ -17,6 +17,7 @@ export class PlaylistSearchDialogComponent implements OnInit {
   numberOfRequestedPlaylists!: number
   formattedPlaylist!: IFormattedPlaylist
   loadingPlaylists: boolean = false
+  parsingPlaylist: boolean = false
   syncLoading: boolean = false
 
   constructor(
@@ -59,12 +60,35 @@ export class PlaylistSearchDialogComponent implements OnInit {
     }
   }
 
-  displayPlaylistSongs(playlistSongs: IPlaylist) {
+  // calls playlist endpoint to parse and display available and unavailable songs
+  displayPlaylistSongs(playlistSongs: IPlaylist, id: string) {
+    this.parsingPlaylist = true
     this.formattedPlaylist = this.formatPlaylist.transform(playlistSongs)
+
+    this.songsService.getPlaylist(id).subscribe({
+      next: (res) => {
+        const playlistSongs = res.body!.songs
+
+        // modifies the formattedPlaylists songs to indicate unavailable songs
+        for(let i = 0; i < playlistSongs.length; i++) {
+          if (typeof playlistSongs[i].id === 'string') {
+            this.formattedPlaylist.songs.splice(i, 1, { id: playlistSongs[i].id, title: playlistSongs[i].title, verses: [] })
+          } else {
+            this.formattedPlaylist.songs.splice(i, 1, { id: null, title: playlistSongs[i].title, verses: [] })
+          }
+        }
+
+        this.parsingPlaylist = false
+      },
+      error: () => {
+        this.parsingPlaylist = false
+        this.alertService.openSnackBar('An error occurred getting the playlist...', 'error')
+      }
+    })
   }
 
-  selectPlaylist(playlist: IPlaylist) {
-    this.dialogRef.close({ selectedPlaylist: this.formatPlaylist.transform(playlist) })
+  selectPlaylist() {
+    this.dialogRef.close(this.formattedPlaylist)
   }
 
   syncPlaylists() {

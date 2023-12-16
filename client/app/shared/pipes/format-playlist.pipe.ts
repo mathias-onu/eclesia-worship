@@ -19,7 +19,7 @@ export class FormatPlaylistPipe implements PipeTransform {
 
     for (let i = 0; i < formattedPlaylist.length; i++) {
       if (i !== 0 && i !== 1 && i !== 2) {
-        playlistObj.songs.push(formattedPlaylist[i]);
+        playlistObj.songs.push({ id: value._id, title: formattedPlaylist[i], verses: [] });
       }
     }
 

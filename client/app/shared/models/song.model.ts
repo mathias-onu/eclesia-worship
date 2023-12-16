@@ -7,6 +7,7 @@ export interface ISong {
 }
 
 export interface IFormattedSong {
+    id: string | null,
     title: string,
     verses: IVerse[]
 }
