@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { Observable } from 'rxjs';
-import { IFormattedCompletePlaylist, IPlaylist } from 'client/app/shared/models/playlist.model';
+import { IFormattedCompletePlaylist, IFormattedPlaylist, IPlaylist } from 'client/app/shared/models/playlist.model';
 import { IFormattedSong, ISong } from 'client/app/shared/models/song.model';
 import { FormatSongPipe } from 'client/app/shared/pipes/format-song.pipe';
 import { environment } from 'client/environments/environment';
@@ -28,7 +28,7 @@ export class SongsService {
     return this.http.get<ISong[]>(`${this.resourceUrl}/songs${search ? `?search=${search}` : ''}${limit ? `?limit=${limit}` : ''}`, { observe: 'response' })
   }
 
-  getSong(id: string): Observable<HttpResponse<ISong>> {
+  getSong(id: string | null): Observable<HttpResponse<ISong>> {
     return this.http.get<ISong>(`${this.resourceUrl}/songs/${id}`, { observe: 'response' })
   }
 
@@ -52,7 +52,7 @@ export class SongsService {
     return this.currentPlaylist
   }
 
-  setFormattedCompletePlaylist(playlist: any) {
+  setFormattedCompletePlaylist(playlist: IFormattedPlaylist) {
     this.localStorageService.store('currentPlaylist', playlist)
   }
 
@@ -60,7 +60,7 @@ export class SongsService {
     const formattedSong = this.formatSong.transform(song)
 
     if (this.currentPlaylist !== null) {
-      if (!this.currentPlaylist.songs.some(playlistSong => playlistSong.title.includes(song.title))) {
+      if (!this.currentPlaylist.songs.some(playlistSong => playlistSong.title === song.title)) {
         this.currentPlaylist.songs.push(this.formatSong.transform(song))
       }
     } else {

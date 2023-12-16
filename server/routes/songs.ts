@@ -14,6 +14,6 @@ import protect from '../middleware/authMiddleware.js'
 router.post('/sync/songs', protect, syncSongs)
 router.post('/sync-partial/songs', protect, syncSongsPartial)
 router.get('/songs', protect, getSongs)
-router.get('/songs/:title', protect, getSong)
+router.get('/songs/:id', protect, getSong)
 
 export default router

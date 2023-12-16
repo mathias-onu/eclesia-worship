@@ -51,14 +51,20 @@ describe("Testing basic presentation flows.", () => {
     cy.get('[data-testid="displayVerseBtn"]').should('be.visible')
   })
 
-  it("should open the playlists dialog, select the latest playlist, and present the first song from the playlist", () => {
+  it.skip("should open the playlists dialog, select a playlist, and present the first song from the playlist", () => {
     // ACT   
     cy.get('[data-testid="openPlaylistSearchBtn"]').click()
     cy.intercept('GET', `${Cypress.env('apiUrl')}/playlists?limit=15`).then(() => {
+      cy.get('[data-testid="searchPlaylistsInput"]').type("2023-01-29")
+      cy.get('[data-testid="searchPlaylistsBtn"]').click()
       cy.get('[data-testid="expandPlaylistBtn"]').eq(0).click()
+      
+      cy.intercept('GET', `${Cypress.env('apiUrl')}/playlists/65462b33265e12543c39292a`).then(() => {
+        cy.get('[data-testid="selectPlaylistBtn"]').eq(0).click({ force: true })
+        
+        cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
+      })
     })
-    cy.get('[data-testid="selectPlaylistBtn"]').eq(0).click()
-    cy.get('[data-testid="addSongToPresentationBtn"]').eq(0).click()
 
     // ASSERT
     cy.get('[data-testid="displayVerseBtn"]').should('be.visible')

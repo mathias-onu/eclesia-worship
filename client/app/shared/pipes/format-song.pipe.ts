@@ -14,6 +14,7 @@ export class FormatSongPipe implements PipeTransform {
 
     // after the process, the song will be converted into an object
     const songContent: IFormattedSong = {
+      id: value._id,
       title: value.title,
       verses: [
         { verseIndex: 0, lines: [] }
