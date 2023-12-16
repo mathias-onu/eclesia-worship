@@ -33,14 +33,14 @@
     </mat-tab>
     <mat-tab label="Bible" data-testid="bibleTabBtn">
         <div class="bible-search-container">
-            <form (ngSubmit)="searchPassage()" class="search-form">
+            <form (ngSubmit)="searchBiblePassage()" class="search-form">
                 <mat-form-field class="search-input">
                     <mat-label>Search bible passages...</mat-label>
                     <input matInput [formControl]="searchBibleInput" data-testid="searchBibleInput">
                 </mat-form-field>
             </form>
             <div class="buttons-container">
-                <button mat-icon-button class="search-btn" (click)="searchPassage()" [disabled]="syncLoading"
+                <button mat-icon-button class="search-btn" (click)="searchBiblePassage()" [disabled]="syncLoading"
                     data-testid="searchPassagesBtn">
                     <mat-icon>search</mat-icon>
                 </button>
@@ -53,8 +53,8 @@
         <div *ngIf="!loadingPassage && searchedBiblePassage else passageLoading" class="bible-passage-container">
             <button (click)="addPassageToPresentation()" mat-stroked-button class="present-passage-btn"
                 data-testid="addPassageToPresentationBtn">Present passage</button>
-            <div *ngFor="let verse of searchedBiblePassage!.verses!" class="bible-verse">
-                <span><sup>{{ verse!.verse }}</sup> {{ verse!.text }}</span>
+            <div *ngFor="let verse of searchedBiblePassage!" class="bible-verse">
+                <span><sup>{{ verse!.number }}</sup> {{ verse!.text }}</span>
                 <div>
                     <mat-icon fontIcon="add" class="add-icon" (click)="addVerseToPresentation(verse)"
                         data-testid="addVerseToPresentationBtn"></mat-icon>
