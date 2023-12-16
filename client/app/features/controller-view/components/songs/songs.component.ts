@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BibleService } from 'client/app/core/services/bible.service';
 import { SongsService } from 'client/app/core/services/songs.service';
-import { IBiblePassageSlide, IBibleReference, IBibleVerse } from 'client/app/shared/models/bible.model';
+import { IBiblePassageSlide, IBibleVerse } from 'client/app/shared/models/bible.model';
 import { ISong } from 'client/app/shared/models/song.model';
 import { AlertService } from 'client/app/shared/services/alert.service';
 import { BibleBooksDialogComponent } from '../bible-books-dialog/bible-books-dialog.component';
@@ -19,9 +19,10 @@ export class SongsComponent implements OnInit {
   numberOfRequestedSongs: number = 30
   loadingSongs: boolean = false
   searchBibleInput = new FormControl('')
-  searchedBiblePassage!: IBibleReference | null
   loadingPassage: boolean = false
   syncLoading: boolean = false
+
+  searchedBiblePassage!: IBibleVerse[] | null
 
   constructor(
     private songsService: SongsService,
@@ -68,23 +69,15 @@ export class SongsComponent implements OnInit {
     this.getSongs(undefined, this.searchSongInput.value)
   }
 
-  searchPassage() {
-    this.loadingPassage = true
-    this.bibleService.getBible(this.searchBibleInput.value).subscribe({
-      next: res => {
+  searchBiblePassage() {
+    this.bibleService.getBiblePassage(this.searchBibleInput.value).subscribe({
+      next: (res) => {
         this.loadingPassage = false
-        if (res.body!.reference! && !res.body!.reference!.includes(":")! && res.body!.verses[0].verse !== 1) {
-          res.body!.verses.shift()
-          this.searchedBiblePassage = res.body ? res.body : null
-        } else if (res.body!.reference!) {
-          this.searchedBiblePassage = res.body ? res.body : null
-        } else {
-          this.searchedBiblePassage = null
-        }
+        this.searchedBiblePassage = res.body
       },
       error: () => {
         this.loadingPassage = false
-        this.alertService.openSnackBar('An error occurred while searching the passage...', 'error')
+        this.alertService.openSnackBar('There is an error with your Bible search...', 'error')
       }
     })
   }
@@ -110,19 +103,19 @@ export class SongsComponent implements OnInit {
     bibleBooksDialog.afterClosed().subscribe(passage => {
       if (passage) {
         this.searchBibleInput.setValue(passage.data)
-        this.searchPassage()
+        this.searchBiblePassage()
       }
     })
   }
 
   addPassageToPresentation() {
-    const verses = this.searchedBiblePassage!.verses
+    const verses = this.searchedBiblePassage!
     const presentationSlides: IBiblePassageSlide[] = [{ slideIndex: 1, text: "" }]
     let slideCount = 0
 
     for (let i = 0; i < verses.length; i++) {
       if (presentationSlides[slideCount].text.length < 500) {
-        presentationSlides[slideCount].text += `${verses[i].verse.toString()}. ${verses[i].text}`
+        presentationSlides[slideCount].text += ` ${verses[i].number.toString()}. ${verses[i].text}`
       } else {
         slideCount++
         presentationSlides.push({ slideIndex: slideCount + 1, text: verses[i].text })
