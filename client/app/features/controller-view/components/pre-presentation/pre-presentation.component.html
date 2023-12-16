@@ -1,5 +1,13 @@
 <div class="container">
     <div class="presentation-buttons">
+        <mat-form-field id="background-image-select">
+            <mat-label>Background image</mat-label>
+            <mat-select [formControl]="backgroundImageInput">
+              <mat-option *ngFor="let backgroundImage of backgroundImageOptions" [value]="backgroundImage.imageUrl">
+                {{ backgroundImage.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         <mat-icon class="select-icon">music_note</mat-icon>
         <select class="font-size-select" [formControl]="songFontSizeInput">
             <option *ngFor="let font of fontSizeOptions" [value]="font.value">{{ font.viewValue }}
