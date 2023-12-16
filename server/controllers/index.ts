@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import BibleVerse from '../models/BibleVerse.js';
+import Verse from '../models/Verse.js';
 import fetch from 'node-fetch';
 
 export const refreshToken = asyncHandler(
@@ -53,7 +53,7 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
 
       const finalVerses = [];
       for (let i = lowerBound; i <= upperBound; i++) {
-        const currentVerse = await BibleVerse.find({
+        const currentVerse = await Verse.find({
           book: bookReference,
           chapter,
           number: i,
@@ -70,7 +70,7 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
         throw new Error('Please enter a valid passage');
       }
 
-      const verses = await BibleVerse.find({
+      const verses = await Verse.find({
         book: bookReference,
         chapter,
         number: verse,
@@ -78,12 +78,13 @@ export const getLocalBible = asyncHandler(async (req: Request, res: Response) =>
       res.json(verses);
     }
   } else {
-    const verses = await BibleVerse.find({
+    const verses = await Verse.find({
       book: bookReference,
       chapter: versesReference,
     }).sort({ number: 1 });
     res.json(verses);
   }
+  
 })
 
 export const getBible = asyncHandler(async (req: Request, res: Response) => {

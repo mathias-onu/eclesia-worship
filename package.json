@@ -7,7 +7,6 @@
   "scripts": {
     "start": "node server_dist/server.js",
     "server": "tsc -p tsconfig-server.json && tsc -p tsconfig-server.json -w | nodemon server_dist/server.js",
-    "import-bible": "nodemon server/scripts/populate-bible.js",
     "client": "ng serve",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "cy:open": "cypress open",
@@ -44,7 +43,6 @@
     "mongoose": ">=6.11.3",
     "ngx-webstorage": "^11.1.1",
     "node-fetch": "^3.3.0",
-    "remove-accents": "^0.5.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
