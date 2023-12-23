@@ -21,8 +21,6 @@ export class FormatSongPipe implements PipeTransform {
       ]
     }
 
-    console.log(formattedSong)
-
     // the loop will detect any verses containing more than 2 lines and will split them
     let verseCount: number = 0
     for(let i = 0; i < formattedSong.length; i++) {
@@ -49,7 +47,7 @@ export class FormatSongPipe implements PipeTransform {
     for (let i = 0; i < song.length; i++) {
       const line = song[i]
       
-      if (line === "" && i !== song.length - 1) {
+      if ((line === "" || line === "**********") && i !== song.length - 1) {
         // if a line is empty this means it needs to insert a new verse
         verseIndex++
         songContent.verses.push({ verseIndex: verseIndex, lines: [] })
@@ -59,9 +57,6 @@ export class FormatSongPipe implements PipeTransform {
       }
     }
 
-    // removes the title of the song
-    songContent.verses.shift()
-
     // this loop will detect if there's an author verse and will remove it
     for(let i = 0; i < songContent.verses[0].lines.length; i++) {
       const verse = songContent.verses[0].lines[i]
@@ -69,6 +64,18 @@ export class FormatSongPipe implements PipeTransform {
         songContent.verses.shift()
       }
     }
+
+    // checks for any empty verses and removes them
+    for(let i = 0; i < songContent.verses.length; i++) {
+      const verse = songContent.verses[i]
+
+      if(verse.lines.length === 0) {
+        songContent.verses.splice(i, 1)
+      }
+    }
+
+    // removes the title
+    songContent.verses.shift()
 
     return songContent
   }
