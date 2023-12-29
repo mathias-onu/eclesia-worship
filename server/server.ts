@@ -2,12 +2,12 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import cors, { CorsOptions } from "cors";
 import path from 'path'
-import connectDB from "./server/config/db.js";
-import router from "./server/routes/index.js";
-import songs from "./server/routes/songs.js";
-import playlists from "./server/routes/playlists.js";
+import connectDB from "./config/db.js";
+import router from "./routes/index.js";
+import songs from "./routes/songs.js";
+import playlists from "./routes/playlists.js";
 import { fileURLToPath } from "url";
-import { notFound, errorHandler } from "./server/middleware/errorMiddleware.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import compression from "compression";
 
 const app: Express = express();
