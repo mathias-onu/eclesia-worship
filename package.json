@@ -5,14 +5,14 @@
   "main": "server_dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "node server_dist/server/server.js",
+    "start": "node server_dist/server.js",
     "server": "tsc -p tsconfig.json && tsc -p tsconfig.json -w | nodemon server_dist/server/server.js",
-    "client": "ng serve",
+    "client": "cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "build": "tsc -p tsconfig-server.json && ng build --configuration=production",
-    "build:digitalocean": "npm install --production=false && npm run build && npm ci"
+    "build:server": "tsc -p tsconfig.json",
+    "build:client": "cd client && npm run build",
+    "build": "npm run build:server && npm run build:client",
+    "build:digitalocean": "npm install --production=false && cd client && npm install --production=false && cd ../ && npm run build && npm ci"
   },
   "author": "Mathias Onu, Denis Onu",
   "license": "ISC",
