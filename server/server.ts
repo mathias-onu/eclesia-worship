@@ -4,8 +4,11 @@ import cors, { CorsOptions } from "cors";
 import path from 'path'
 import connectDB from "./config/db.js";
 import router from "./routes/index.js";
+
 import songs from "./routes/songs.js";
 import playlists from "./routes/playlists.js";
+import users from './routes/users.js'
+
 import { fileURLToPath } from "url";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import compression from "compression";
@@ -27,7 +30,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 app.use(compression())
-app.use("/api", router, songs, playlists);
+app.use("/api", router, songs, playlists, users);
 
 if (process.env.NODE_ENV === 'production') {
   const root = path.join(__dirname, '../dist', 'client')

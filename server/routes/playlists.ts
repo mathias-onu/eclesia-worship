@@ -9,11 +9,11 @@ import {
   getPlaylists,
 } from '../controllers/playlists.js'
 
-import protect from '../middleware/authMiddleware.js'
+import { protectDropbox } from '../middleware/authMiddleware.js'
 
-router.post('/sync/playlists', protect, syncPlaylists)
-router.post('/sync-partial/playlists', protect, syncPlaylistsPartial)
-router.get('/playlists', protect, getPlaylists)
-router.get('/playlists/:id', protect, getPlaylist)
+router.post('/sync/playlists', protectDropbox, syncPlaylists)
+router.post('/sync-partial/playlists', protectDropbox, syncPlaylistsPartial)
+router.get('/playlists', protectDropbox, getPlaylists)
+router.get('/playlists/:id', protectDropbox, getPlaylist)
 
 export default router

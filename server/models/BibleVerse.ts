@@ -19,6 +19,6 @@ const verseSchema = new mongoose.Schema({
     }
 })
 
-const Verse = mongoose.model('verse', verseSchema)
+const Verse = mongoose.model('bible-verse', verseSchema)
 
 export default Verse

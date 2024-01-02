@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import Verse from '../models/Verse.js';
+import Verse from '../models/BibleVerse.js';
 import fetch from 'node-fetch';
 
 export const refreshToken = asyncHandler(
