@@ -9,10 +9,10 @@ import {
   syncSongsPartial
 } from '../controllers/songs.js'
 
-import { protectDropbox } from '../middleware/authMiddleware.js'
+import protect, { protectDropbox } from '../middleware/authMiddleware.js'
 
-router.post('/sync/songs', protectDropbox, syncSongs)
-router.post('/sync-partial/songs', protectDropbox, syncSongsPartial)
+router.post('/sync/songs', protect, protectDropbox, syncSongs)
+router.post('/sync-partial/songs', protect, protectDropbox, syncSongsPartial)
 router.get('/songs', protectDropbox, getSongs)
 router.get('/songs/:id', protectDropbox, getSong)
 

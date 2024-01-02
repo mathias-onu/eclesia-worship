@@ -7,14 +7,17 @@ import {
     login,
     signup,
     updateProfile,
-    deleteProfile
+    deleteProfile,
+    forgotPassword,
+    resetPassword
 } from '../controllers/users.js'
 
-import protect from '../middleware/authMiddleware.js'
+import protect, { isAdmin } from '../middleware/authMiddleware.js'
 
-router.post('/signup', signup)
+router.post('/signup', protect, isAdmin, signup)
 router.post('/login', login)
 router.route('/profile').get(protect, getProfile).put(protect, updateProfile).delete(protect, deleteProfile)
-
+router.post('/forgot-password', protect, forgotPassword)
+router.post('/reset-password/:token', protect, resetPassword)
 
 export default router

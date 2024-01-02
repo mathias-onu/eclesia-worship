@@ -1,20 +1,48 @@
 import mongoose from 'mongoose'
+import IDeletedSong from '../interfaces/deletedSongModel.js'
 
-const deletedSongSchema = new mongoose.Schema({
+const deletedSongSchema = new mongoose.Schema<IDeletedSong>({
   title: {
     type: String,
     required: true,
-    index: true
   },
-  body: {
+  worshipText: {
+    type: String,
+    required: true
+  },
+  presentationText: {
     type: String,
     required: true,
-    index: true
   },
-  lastModified: {
-    type: String,
-    required: true,
-    index: true
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  edits: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+      },
+      date: {
+        type: Date,
+        required: true
+      }
+    }
+  ],
+  deletedAt: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  deletedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   }
 })
 

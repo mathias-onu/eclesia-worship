@@ -1,18 +1,40 @@
 import mongoose from 'mongoose'
+import ISong from '../interfaces/songModel.js'
 
-const songSchema = new mongoose.Schema({
+const songSchema = new mongoose.Schema<ISong>({
   title: {
     type: String,
     required: true,
   },
-  body: {
+  worshipText: {
+    type: String,
+    required: true
+  },
+  presentationText: {
     type: String,
     required: true,
   },
-  lastModified: {
-    type: String,
-    required: true,
-  }
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  edits: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+      },
+      date: {
+        type: Date,
+        required: true
+      }
+    }
+  ]
 })
 
 const Song = mongoose.model('song', songSchema)
