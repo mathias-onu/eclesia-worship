@@ -1,21 +1,35 @@
 import mongoose from "mongoose"
+import IPlaylist from "../interfaces/playlistModel"
 
-const playlistSchema = new mongoose.Schema({
+const playlistSchema = new mongoose.Schema<IPlaylist>({
   title: {
     type: String,
     required: true,
     index: true
   },
-  songs: {
-    type: String,
+  createdAt: {
+    type: Date,
     required: true,
-    index: true
+    default: Date.now
   },
-  lastModified: {
-    type: String,
-    required: true,
-    index: true
-  }
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  songs: [{
+    id: { 
+      type: mongoose.Schema.Types.ObjectId,
+      required: true 
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    position: {
+      type: Number,
+      required: true
+    }
+  }]
 })
 
 const Playlist = mongoose.model('playlist', playlistSchema)

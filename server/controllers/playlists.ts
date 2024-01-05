@@ -1,185 +1,221 @@
 import asyncHandler from "express-async-handler";
 import Playlist from "../models/Playlist.js";
-import { Request, Response } from "express"
+import { Request, Response } from "express";
 
 import { Dropbox } from "dropbox";
 import Song from "../models/Song.js";
+import IUserRequest from "../interfaces/userRequest.js";
+import IPlaylist from "../interfaces/playlistModel.js";
+import ISong from "../interfaces/songModel.js";
 
 function diacriticSensitiveRegex(string: string = "") {
-    return string
-        .replace(/a/g, "[a,á,à,ä,ă,â]")
-        .replace(/e/g, "[e,é,ë]")
-        .replace(/i/g, "[i,í,ï,î]")
-        .replace(/o/g, "[o,ó,ö,ò]")
-        .replace(/u/g, "[u,ü,ú,ù]")
-        .replace(/t/g, "[t,ț]")
-        .replace(/s/g, "[s,ș]");
+  return string
+    .replace(/a/g, "[a,á,à,ä,ă,â]")
+    .replace(/e/g, "[e,é,ë]")
+    .replace(/i/g, "[i,í,ï,î]")
+    .replace(/o/g, "[o,ó,ö,ò]")
+    .replace(/u/g, "[u,ü,ú,ù]")
+    .replace(/t/g, "[t,ț]")
+    .replace(/s/g, "[s,ș]");
 }
 
-export const syncPlaylists = asyncHandler(async (req: Request, res: Response) => {
-    const accessToken: string = req.headers.authorization!.split(" ")[1];
-    const dropbox: Dropbox = new Dropbox({ accessToken });
-
-    const files = await dropbox.filesListFolder({ path: "/SongBook" });
-
-    for (let i = 0; i < files.result.entries.length; i++) {
-        const file = files.result.entries[i];
-
-        if (file[".tag"] === "file" && file.name.split(".")[1] === "lst") {
-            const existingPlaylist = await Playlist.findOne({
-                title: file.name.split(".")[0],
-            });
-
-            if (!existingPlaylist) {
-                const content = await dropbox.filesDownload({
-                    // @ts-ignore
-                    path: file.path_display,
-                });
-
-                const playlist = new Playlist({
-                    title: content.result.name.split(".")[0],
-                    // @ts-ignore
-                    songs: Buffer.from(content.result.fileBinary).toString(),
-                    lastModified: file.server_modified,
-                });
-                
-                await playlist.save();
-            } else if (existingPlaylist.lastModified !== file.server_modified) {
-                const content = await dropbox.filesDownload({
-                    // @ts-ignore
-                    path: file.path_display,
-                });
-
-                existingPlaylist.songs = Buffer.from(
-                    // @ts-ignore
-                    content.result.fileBinary
-                ).toString();
-                existingPlaylist.lastModified = file.server_modified;
-
-                await existingPlaylist.save();
-            }
-        }
+export const newPlaylist = asyncHandler(async (req: IUserRequest, res: Response) => {
+    const title: string = req.body.title;
+    if (!title) {
+      res.status(400);
+      throw new Error("Please insert a playlist title");
     }
 
-    const playlists = await Playlist.find();
-    for (let i = 0; i < playlists.length; i++) {
-        const existingPlaylist = files.result.entries.find(
-            (file) => file.name === playlists[i].title + ".lst"
-        );
-        if (!existingPlaylist) {
-            await Playlist.deleteOne({ title: playlists[i].title });
-        }
+    const existingPlaylist: IPlaylist = await Playlist.findOne({ title });
+    if (existingPlaylist) {
+      res.status(400);
+      throw new Error("Playlist title already taken");
     }
 
-    const finalPlaylists = await Playlist.find().sort({ title: -1 })
-    res.json(finalPlaylists)
-})
+    const newPlaylist: IPlaylist = new Playlist({
+      title,
+      songs: [],
+      createdBy: req.userId,
+    });
 
-export const syncPlaylistsPartial = asyncHandler(async (req: Request, res: Response) => {
-    const accessToken: string = req.headers.authorization!.split(" ")[1];
-    const dropbox: Dropbox = new Dropbox({ accessToken });
-
-    const files = await dropbox.filesListFolder({ path: "/SongBook" });
-
-    for (let i = 0; i < files.result.entries.length; i++) {
-        const file = files.result.entries[i];
-
-        if (
-            file[".tag"] === "file" &&
-            file.name.split(".")[1] === "lst" &&
-            file.name === "2023-01-29.lst"
-        ) {
-            const existingPlaylist = await Playlist.findOne({
-                title: file.name.split(".")[0],
-            });
-
-            if (!existingPlaylist) {
-                const content = await dropbox.filesDownload({
-                    // @ts-ignore
-                    path: file.path_display,
-                });
-
-                const playlist = new Playlist({
-                    title: content.result.name.split(".")[0],
-                    //@ts-ignore
-                    songs: Buffer.from(content.result.fileBinary).toString(),
-                    lastModified: file.server_modified,
-                });
-                await playlist.save();
-            } else if (existingPlaylist.lastModified !== file.server_modified) {
-                const content = await dropbox.filesDownload({
-                    // @ts-ignore
-                    path: file.path_display,
-                });
-
-                existingPlaylist.songs = Buffer.from(
-                    // @ts-ignore
-                    content.result.fileBinary
-                ).toString();
-                existingPlaylist.lastModified = file.server_modified;
-
-                await existingPlaylist.save();
-            }
-        }
-    }
-
-    const playlists = await Playlist.find();
-    for (let i = 0; i < playlists.length; i++) {
-        const existingPlaylist = files.result.entries.find(
-            (file) => file.name === playlists[i].title + ".lst"
-        );
-        if (!existingPlaylist) {
-            await Playlist.deleteOne({ title: playlists[i].title });
-        }
-    }
-
-    const finalPlaylists = await Playlist.find()
-    res.send(finalPlaylists)
-})
+    const playlist: IPlaylist = await newPlaylist.save();
+    res.status(201);
+    res.json({
+      id: playlist.id,
+      title: playlist.title,
+      createdAt: playlist.createdAt,
+      createdBy: playlist.createdBy,
+      songs: playlist.songs,
+    });
+});
 
 export const getPlaylist = asyncHandler(async (req: Request, res: Response) => {
-    const playlist = await Playlist.findById(req.params.id.toString());
-
-    const songsList: Array<string> | undefined = playlist?.songs.split('\n')
-
-    const songs: Array<Object> = []
-
-    if(songsList) {
-        for(let i = 0; i < songsList?.length; i++) {
-            const song: string = songsList[i]
-            if(song.length > 0 && song !== playlist?.title) {
-                const searchedSong = await Song.findOne({ title: song.split('[')[0].trim() })
-                if(searchedSong) {
-                    songs.push({
-                        id: searchedSong.id,
-                        title: searchedSong.title
-                    })
-                } else {
-                    songs.push({
-                        id: null,
-                        title: `Song not found: "${song.split('[')[0].trim()}". Perhaps the name changed.`
-                    })
-                }
-            }
-        }
+    const playlist: IPlaylist = await Playlist.findById(req.params.id)
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
     }
 
+    res.status(200)
     res.json({
-        id: playlist?.id,
-        title: playlist?.title,
-        lastModified: playlist?.lastModified,
-        songs
-    });
+        id: playlist.id,
+        title: playlist.title,
+        songs: playlist.songs,
+        createdAt: playlist.createdAt,
+        createdBy: playlist.createdBy
+    })
 });
 
 export const getPlaylists = asyncHandler(async (req: Request, res: Response) => {
     const { search, limit } = req?.query;
 
-
     const playlists = await Playlist.find({
-        title: { $regex: diacriticSensitiveRegex(search?.toString()) || "", $options: "i" },
+      title: {
+        $regex: diacriticSensitiveRegex(search?.toString()) || "",
+        $options: "i",
+      },
     })
-        .limit(Number(limit)).sort({ title: -1 });
-
+      .limit(Number(limit))
+      .sort({ title: -1 })
+      .select({ _id: 1, title: 1, createdAt: 1, createdBy: 1 });
+    res.status(200)
     res.json(playlists);
 });
+
+export const deletePlaylist = asyncHandler(async (req: Request, res: Response) => {
+    const playlist: IPlaylist = await Playlist.findById(req.params.id)
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
+    }
+
+    await Playlist.findByIdAndDelete(playlist.id)
+    res.status(200)
+    res.json({
+        msg: 'Playlist successfully deleted'
+    })
+})
+
+export const editPlaylist = asyncHandler(async (req: Request, res: Response) => {
+    const title: string = req.body.title
+
+    const playlist: IPlaylist = await Playlist.findById(req.params.id)
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
+    }
+
+    playlist.title = title || playlist.title
+    
+    const editedPlaylist: IPlaylist = await playlist.save()
+    res.status(200)
+    res.json({
+        id: editedPlaylist.id,
+        title: editedPlaylist.title,
+        songs: editedPlaylist.songs,
+        createdAt: editedPlaylist.createdAt,
+        createdBy: editedPlaylist.createdBy
+    })
+})
+
+export const addSongToPlaylist = asyncHandler(async (req: Request, res: Response) => {
+    const playlist: IPlaylist = await Playlist.findById(req.params.playlistId)
+    const song: ISong = await Song.findById(req.params.songId)
+
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
+    }
+
+    if(!song) {
+        res.status(404)
+        throw new Error('Song not found')
+    }
+
+    const existingSong = playlist.songs.find(playlistSong => playlistSong.title === song.title)
+    if(existingSong) {
+        res.status(400)
+        throw new Error('Song already in playlist')
+    }
+
+    playlist.songs.push({
+        id: song.id,
+        title: song.title,
+        position: playlist.songs.length + 1
+    })
+    
+    const savedPlaylist: IPlaylist = await playlist.save()
+    res.status(200)
+    res.json({
+        id: savedPlaylist.id,
+        title: savedPlaylist.title,
+        songs: savedPlaylist.songs,
+        createdAt: savedPlaylist.createdAt,
+        createdBy: savedPlaylist.createdBy
+    })
+})
+
+export const removeSongFromPlaylist = asyncHandler(async (req: Request, res: Response) => {
+    const playlist: IPlaylist = await Playlist.findById(req.params.playlistId)
+    const song = playlist.songs.find(playlistSong => playlistSong.id.toString() === req.params.songId.toString())
+
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
+    }
+
+    if(!song) {
+        res.status(404)
+        throw new Error('Song not found')
+    }
+
+    for(let i = 0; i < playlist.songs.length; i++) {
+        const playlistSong = playlist.songs[i]
+
+        if(playlistSong.position > song.position) {
+            playlistSong.position -= 1
+        }
+    }
+
+    for(let i = 0; i < playlist.songs.length; i++) {
+        if(playlist.songs[i].id === song.id) {
+            playlist.songs.splice(i, 1)
+        }
+    }
+
+    const savedPlaylist = await playlist.save()
+    res.status(200)
+    res.json({
+        id: savedPlaylist.id,
+        title: savedPlaylist.title,
+        songs: savedPlaylist.songs,
+        createdAt: savedPlaylist.createdAt,
+        createdBy: savedPlaylist.createdBy
+    })
+})
+
+export const changeSongsPositions = asyncHandler(async (req: Request, res: Response) => {
+    const songs = req.body.songs
+    if(!songs) {
+        res.status(400)
+        throw new Error('Please enter some songs')
+    }
+
+    const playlist: IPlaylist = await Playlist.findById(req.params.id)
+    if(!playlist) {
+        res.status(404)
+        throw new Error('Playlist not found')
+    }
+
+    playlist.songs = songs
+    
+    const savedPlaylist = await playlist.save()
+    res.status(200)
+    res.json({
+        id: savedPlaylist.id,
+        title: savedPlaylist.title,
+        songs: savedPlaylist.songs,
+        createdAt: savedPlaylist.createdAt,
+        createdBy: savedPlaylist.createdBy
+    })
+})

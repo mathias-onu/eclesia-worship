@@ -7,10 +7,12 @@ import { Dropbox } from "dropbox";
 import IUserRequest from "../interfaces/userRequest.js";
 import User from "../models/User.js";
 import ISong from "../interfaces/songModel.js";
+import IDeletedSong from "../interfaces/deletedSongModel.js";
 
 export const getSong = asyncHandler(async (req: Request, res: Response) => {
   const song = await Song.findById(req.params.id);
 
+  res.status(200)
   res.json({
     id: song.id,
     title: song.title,
@@ -35,6 +37,7 @@ export const getSongs = asyncHandler(async (req: Request, res: Response) => {
       .replace(/s/g, "[s,ș]");
   }
 
+  res.status(200)
   const songs = await Song.find({
     title: {
       $regex: diacriticSensitiveRegex(search?.toString()) || "",
@@ -74,6 +77,7 @@ export const addSong = asyncHandler(async (req: IUserRequest, res: Response) => 
   })
 
   const song: ISong = await newSong.save()
+  res.status(201)
   res.json({
     id: song.id,
     title: song.title,
@@ -102,7 +106,7 @@ export const editSong = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const updatedSong: ISong = await song.save()
-
+  res.status(200)
   res.json({
     id: updatedSong.id,
     title: updatedSong.title,
@@ -113,15 +117,26 @@ export const editSong = asyncHandler(async (req: Request, res: Response) => {
   })
 })
 
-export const deleteSong = asyncHandler(async (req: Request, res: Response) => {
+export const deleteSong = asyncHandler(async (req: IUserRequest, res: Response) => {
   const song: ISong = await Song.findById(req.params.id)
   if(!song) {
     res.status(404)
     throw new Error('Song not found')
   }
 
+  const deletedSong: IDeletedSong = new DeletedSong({
+    title: song.title,
+    songText: song.songText,
+    presentationText: song.presentationText,
+    createdAt: song.createdAt,
+    createdBy: song.createdBy,
+    deletedBy: req.userId
+  })
+
+  await deletedSong.save()
   await Song.findByIdAndDelete(song.id)
 
+  res.status(200)
   res.json({
     msg: 'Song successfully removed'
   })
