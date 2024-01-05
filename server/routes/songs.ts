@@ -3,17 +3,16 @@ import express from 'express'
 const router = express.Router()
 
 import {
-  syncSongs,
   getSong,
   getSongs,
-  syncSongsPartial
+  addSong,
+  editSong,
+  deleteSong
 } from '../controllers/songs.js'
+import protect from '../middleware/authMiddleware.js'
 
-import protect, { protectDropbox } from '../middleware/authMiddleware.js'
-
-router.post('/sync/songs', protect, protectDropbox, syncSongs)
-router.post('/sync-partial/songs', protect, protectDropbox, syncSongsPartial)
-router.get('/songs', protectDropbox, getSongs)
-router.get('/songs/:id', protectDropbox, getSong)
+router.post('/songs/new', protect, addSong)
+router.get('/songs', protect, getSongs)
+router.route('/songs/:id').get(protect, getSong).patch(protect, editSong).delete(protect, deleteSong)
 
 export default router

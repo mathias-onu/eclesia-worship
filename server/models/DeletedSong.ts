@@ -6,14 +6,14 @@ const deletedSongSchema = new mongoose.Schema<IDeletedSong>({
     type: String,
     required: true,
   },
-  worshipText: {
+  songText: {
     type: String,
     required: true
   },
-  presentationText: {
+  presentationText: [{
     type: String,
     required: true,
-  },
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -23,18 +23,6 @@ const deletedSongSchema = new mongoose.Schema<IDeletedSong>({
     type: mongoose.Schema.Types.ObjectId,
     required: true
   },
-  edits: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-      },
-      date: {
-        type: Date,
-        required: true
-      }
-    }
-  ],
   deletedAt: {
     type: Date,
     default: Date.now,

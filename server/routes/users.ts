@@ -16,7 +16,7 @@ import protect, { isAdmin } from '../middleware/authMiddleware.js'
 
 router.post('/signup', protect, isAdmin, signup)
 router.post('/login', login)
-router.route('/profile').get(protect, getProfile).put(protect, updateProfile).delete(protect, deleteProfile)
+router.route('/profile').get(protect, getProfile).patch(protect, updateProfile).delete(protect, deleteProfile)
 router.post('/forgot-password', protect, forgotPassword)
 router.post('/reset-password/:token', protect, resetPassword)
 

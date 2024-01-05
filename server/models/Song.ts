@@ -6,14 +6,14 @@ const songSchema = new mongoose.Schema<ISong>({
     type: String,
     required: true,
   },
-  worshipText: {
+  songText: {
     type: String,
     required: true
   },
-  presentationText: {
+  presentationText: [{
     type: String,
     required: true,
-  },
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -22,19 +22,7 @@ const songSchema = new mongoose.Schema<ISong>({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
-  },
-  edits: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-      },
-      date: {
-        type: Date,
-        required: true
-      }
-    }
-  ]
+  }
 })
 
 const Song = mongoose.model('song', songSchema)

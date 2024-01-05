@@ -17,7 +17,7 @@ const app: Express = express();
 let __filename: string = fileURLToPath(import.meta.url);
 const __dirname: string = path.dirname(__filename);
 const corsOptions: CorsOptions = {
-  origin: "http://localhost:4200",
+  origin: "http://localhost:3000",
   optionsSuccessStatus: 200,
 };
 
