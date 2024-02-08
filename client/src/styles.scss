@@ -1,0 +1,16 @@
+@import "primeng/resources/themes/lara-dark-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+:root {
+    --surface-ground: #111827;
+}
+
+html {
+    font-size: 12px;
+}
+
+body {
+    background-color: var(--surface-ground) !important;
+    font-family: 'Poppins', sans-serif;
+}
