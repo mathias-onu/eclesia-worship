@@ -1,0 +1,48 @@
+<p-tabView>
+    <p-tabPanel header="Songs" class="songs-panel">
+        <div class="container">
+            <div class="input-container">
+                <form (ngSubmit)="searchSong()" class="p-input-icon-right">
+                    <input type="text" pInputText [formControl]="searchSongInput" data-testid="searchSongsInput" />
+                    <i class="pi pi-search"></i>
+                </form>
+                <p-button icon="pi pi-refresh" [rounded]="true" [text]="true" (click)="syncSongs()" [disabled]="syncLoading"></p-button>
+            </div>
+            <div *ngIf="!loadingSongs && !syncLoading else loading" class="songs-container" (scroll)="onScroll($event)">
+                <div *ngFor="let song of songs" class="song">
+                    <span>{{ song.title.split(' (')[0].split(' - ')[0] }}</span>
+                    <div>
+                        <p-button icon="pi pi-plus" [rounded]="true" [text]="true" (click)="addSongToPlaylist(song)" data-testid="addSongToPlaylistBtn"></p-button>
+                    </div>
+                </div>
+            </div>
+            <ng-template #loading>
+                <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+            </ng-template>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Bible">
+        <div class="container">
+            <div class="input-container">
+                <form (ngSubmit)="searchBiblePassage()" class="p-input-icon-right">
+                    <input type="text" pInputText [formControl]="searchBibleInput" data-testid="searchBibleInput" />
+                    <i class="pi pi-search"></i>
+                </form>
+                <p-button icon="pi pi-book" [rounded]="true" [text]="true" (click)="openBibleBooksDialog()" [disabled]="syncLoading" data-testid="openBibleBooksBtn"></p-button>
+            </div>
+            <div *ngIf="!loadingPassage && searchedBiblePassage else passageLoading" class="bible-passage-container">
+                <p-button label="Present passage" (click)="addPassageToPresentation()" data-testid="addPassageToPresentationBtn"></p-button>
+                <div *ngFor="let verse of searchedBiblePassage!" class="bible-verse">
+                    <span><sup>{{ verse!.number }}</sup> {{ verse!.text }}</span>
+                    <div>
+                        <p-button icon="pi pi-plus" [rounded]="true" [text]="true" (click)="addVerseToPresentation(verse)" data-testid="addVerseToPresentationBtn"></p-button>
+                    </div>
+                </div>
+            </div>
+            <ng-template #passageLoading>
+                <p-progressSpinner *ngIf="loadingPassage" styleClass="w-1rem h-1rem"></p-progressSpinner>
+            </ng-template>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+<p-toast></p-toast>

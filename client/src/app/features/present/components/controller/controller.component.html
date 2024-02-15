@@ -1,3 +1,15 @@
-<p>controller works!</p>
-<p-button label="Sync" (click)="sync()"></p-button>
-<p-toast></p-toast>
+<p-splitter [panelSizes]="[30, 70]" [minSizes]="[20, 50]" [style]="{ height: '100vh', background: '#111827' }">
+    <ng-template pTemplate>
+        <p-splitter [minSizes]="[20, 20]" [style]="{ height: '96vh', background: '#111827' }" layout="vertical">
+            <ng-template pTemplate>
+                <app-songs-bible-tabs></app-songs-bible-tabs>
+            </ng-template>
+            <ng-template pTemplate>
+                <app-playlist></app-playlist>
+            </ng-template>
+        </p-splitter>
+    </ng-template>
+    <ng-template pTemplate>
+        <div>Panel 3</div>
+    </ng-template>
+</p-splitter>

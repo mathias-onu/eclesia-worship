@@ -7,9 +7,11 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { NgxWebstorageModule } from 'ngx-webstorage';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './core/interceptor/token';
 import { HomeModule } from './features/home/home.module';
+import { FormatSongPipe } from './shared/pipes/format-song.pipe';
+import { FormatPlaylistPipe } from './shared/pipes/format-playlist.pipe';
 
 @NgModule({
   declarations: [
@@ -19,9 +21,10 @@ import { HomeModule } from './features/home/home.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
+    NgxWebstorageModule.forRoot(),
     CoreModule,
     SharedModule,
-    NgxWebstorageModule.forRoot(),
     HomeModule
   ],
   providers: [
@@ -29,7 +32,9 @@ import { HomeModule } from './features/home/home.module';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    FormatSongPipe,
+    FormatPlaylistPipe
   ],
   bootstrap: [AppComponent]
 })

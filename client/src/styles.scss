@@ -3,7 +3,7 @@
 @import "primeicons/primeicons.css";
 
 :root {
-    --surface-ground: #111827;
+    --surface-ground: #111827; 
 }
 
 html {
@@ -11,6 +11,32 @@ html {
 }
 
 body {
+    margin: 0;
+    padding: 0;
     background-color: var(--surface-ground) !important;
     font-family: 'Poppins', sans-serif;
 }
+
+// Scroball styles
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--surface-ground);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(187, 187, 187);
+    border-radius: 30px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(122, 122, 122);
+    transition: .5s ease-in-out all;
+  }
