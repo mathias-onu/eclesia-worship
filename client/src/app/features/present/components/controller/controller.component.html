@@ -1,4 +1,4 @@
-<p-splitter [panelSizes]="[30, 70]" [minSizes]="[20, 50]" [style]="{ height: '100vh', background: '#111827' }">
+<p-splitter [panelSizes]="[panel1Size, panel2Size]" [minSizes]="[20, 50]" [style]="{ height: '100vh', background: '#111827' }" (onResizeEnd)="splitterChange($event)">
     <ng-template pTemplate>
         <p-splitter [minSizes]="[20, 20]" [style]="{ height: '96vh', background: '#111827' }" layout="vertical">
             <ng-template pTemplate>
