@@ -9,6 +9,7 @@ import { SongsBibleTabsComponent } from './components/songs-bible-tabs/songs-bib
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BibleBooksDialogComponent } from './components/bible-books-dialog/bible-books-dialog.component';
 import { PlaylistComponent } from './components/playlist/playlist.component';
+import { PlaylistSearchDialogComponent } from './components/playlist-search-dialog/playlist-search-dialog.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { PlaylistComponent } from './components/playlist/playlist.component';
     ReceiverComponent,
     SongsBibleTabsComponent,
     BibleBooksDialogComponent,
-    PlaylistComponent
+    PlaylistComponent,
+    PlaylistSearchDialogComponent
   ],
   imports: [
     CommonModule,

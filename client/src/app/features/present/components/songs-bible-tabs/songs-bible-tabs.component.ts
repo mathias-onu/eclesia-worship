@@ -149,4 +149,5 @@ export class SongsBibleTabsComponent implements OnInit {
         this.loadingSongs = false
       }
     })
-  }}
+  }
+}

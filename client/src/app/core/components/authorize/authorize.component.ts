@@ -19,7 +19,7 @@ export class AuthorizeComponent implements OnInit {
     this.localStorageService.clear('token')
     this.authService.getToken().subscribe(res => {
       this.localStorageService.store('token', res.body!.access_token)
-      this.router.navigateByUrl('/home')
+      this.router.navigateByUrl('/present')
     })
   }
 }

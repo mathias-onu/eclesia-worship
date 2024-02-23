@@ -11,6 +11,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
+import { AccordionModule } from 'primeng/accordion';
+import { ScrollerModule } from 'primeng/scroller';
+import { PickListModule } from 'primeng/picklist';
 
 @NgModule({
   declarations: [],
@@ -24,7 +27,10 @@ import { DividerModule } from 'primeng/divider';
     InputTextModule,
     ProgressSpinnerModule,
     DynamicDialogModule,
-    DividerModule
+    DividerModule,
+    AccordionModule,
+    ScrollerModule,
+    PickListModule
   ],
   exports: [
     CommonModule,
@@ -36,7 +42,10 @@ import { DividerModule } from 'primeng/divider';
     InputTextModule,
     ProgressSpinnerModule,
     DynamicDialogModule,
-    DividerModule
+    DividerModule,
+    AccordionModule,
+    ScrollerModule,
+    PickListModule
   ],
   providers: [
     MessageService,

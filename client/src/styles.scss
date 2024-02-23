@@ -4,6 +4,7 @@
 
 :root {
     --surface-ground: #111827; 
+    // --surface-d: #111827 !important;
 }
 
 html {
@@ -17,11 +18,33 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.p-picklist-buttons, .p-picklist-target-wrapper {
+  display: none !important;
+}
+
+.p-picklist-source-wrapper {
+  border-style: none;
+  background-color: #111827;
+}
+
+.cdk-drop-list li {
+  border-radius: 10px;
+  padding: 0 0 5px 12px !important;
+}
+
+.p-tabview .p-tabview-panels, .p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  background-color: #111827;
+}
+
+.p-splitter {
+  border: none;
+}
+
 // Scroball styles
 /* width */
 ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 3px;
+    height: 3px;
   }
   
   /* Track */

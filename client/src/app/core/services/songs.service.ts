@@ -61,14 +61,14 @@ export class SongsService {
 
     if (this.currentPlaylist !== null) {
       if (!this.currentPlaylist.songs.some(playlistSong => playlistSong.title === song.title)) {
-        this.currentPlaylist.songs.push(this.formatSong.transform(song))
+        this.currentPlaylist.songs = [...this.currentPlaylist.songs, formattedSong]
       }
     } else {
       this.currentPlaylist = {
         date: moment().format("YYYY-MM-DD"),
         songs: Array()
       }
-      this.currentPlaylist.songs.push(formattedSong)
+      this.currentPlaylist.songs = [...this.currentPlaylist.songs, formattedSong]
     }
     this.localStorageService.store('currentPlaylist', this.currentPlaylist)
   }

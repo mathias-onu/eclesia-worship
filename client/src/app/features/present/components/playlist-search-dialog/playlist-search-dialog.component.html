@@ -1,0 +1,32 @@
+<div class="dialog-header">
+    <h2>Search playlists</h2>
+    <p-button icon="pi pi-sync" [rounded]="true" [text]="true" (click)="syncPlaylists()" [disabled]="syncLoading" data-testid="syncPlaylistsBtn"></p-button>
+</div>
+<div class="search-container">
+    <form (ngSubmit)="searchPlaylist()">
+        <label for="searchPlaylists">Search playlists</label>
+        <input type="text" pInputText [formControl]="searchPlaylistsInput" autocomplete="off" id="searchPlaylists" data-testid="searchPlaylistsInput" />
+    </form>
+    <p-button icon="pi pi-search" [rounded]="true" [text]="true" (click)="searchPlaylist()" [disabled]="syncLoading" data-testid="searchPlaylistsBtn"></p-button>
+</div>
+<div class="playlists-container" (scroll)="onScroll($event)">
+    <p-accordion *ngIf="!loadingPlaylists && !syncLoading else loading" (onOpen)="displayPlaylistSongs($event.index)">
+        <p-accordionTab *ngFor="let playlist of playlists; let i = index" header="{{ playlist.title }}">
+            <div *ngIf="!parsingPlaylist && formattedPlaylist else loadingPlaylist" class="formatted-playlist-songs">
+                <p *ngFor="let song of formattedPlaylist.songs">
+                    {{ song.title }}
+                    <p-divider layout="horizontal"></p-divider>
+                </p>
+            </div>
+            <ng-template #loadingPlaylist>
+                <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+            </ng-template>
+            <div class="action-container">
+                <p-button label="Select playlist" (click)="selectPlaylist()" data-testid="selectPlaylistBtn"></p-button>
+            </div>
+        </p-accordionTab>
+    </p-accordion>   
+    <ng-template #loading>
+        <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+    </ng-template>
+</div>

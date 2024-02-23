@@ -1,19 +1,19 @@
 .container {
     display: flex;
     flex-direction: column;
-    // height: 35vh;
     width: 100%;
 }
 
 .input-container {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 30px;
 }
 
 .input-container p-button {
-    margin-left: 10px;
+    margin-right: 8px;
 }
 
 .songs-container,
@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 0 5px 5px 5px;
+    padding: 5px;
 }
 
 .song {
@@ -56,8 +56,6 @@
 
 .bible-verse div {
     flex: 1;
-    display: flex;
-    justify-content: flex-end;
 }
 
 .present-passage-btn {

@@ -1,0 +1,25 @@
+.dialog-header, .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.search-container {
+    margin-top: 2vh;
+}
+
+.search-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-container form label {
+    margin-bottom: 5px;
+}
+
+.playlists-container {
+    margin-top: 10px;
+    height: 75%;
+    overflow-y: auto;
+}
