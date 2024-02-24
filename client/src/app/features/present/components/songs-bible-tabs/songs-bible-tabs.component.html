@@ -17,7 +17,9 @@
                 </div>
             </div>
             <ng-template #loading>
-                <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+                <div>
+                    <i class="pi pi-spin pi-spinner" style="font-size: 2rem; margin-top: 20px;"></i>
+                </div>
             </ng-template>
         </div>
     </p-tabPanel>
@@ -40,7 +42,9 @@
                 </div>
             </div>
             <ng-template #passageLoading>
-                <p-progressSpinner *ngIf="loadingPassage" styleClass="w-1rem h-1rem"></p-progressSpinner>
+                <div>
+                    <i *ngIf="loadingPassage" class="pi pi-spin pi-spinner" style="font-size: 2rem; margin-top: 20px;"></i>
+                </div>
             </ng-template>
         </div>
     </p-tabPanel>
