@@ -142,6 +142,8 @@ export const getPlaylist = asyncHandler(async (req: Request, res: Response) => {
 
     const songsList: Array<string> | undefined = playlist?.songs.split('\n')
 
+    songsList?.shift()
+
     const songs: Array<Object> = []
 
     if(songsList) {

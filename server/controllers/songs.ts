@@ -47,8 +47,7 @@ export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
         const existingSong = files.result.entries.find(
             (file) => file.name === songs[i].title + ".pro"
         );
-        if (!existingSong) {
-            await Song.deleteOne({ title: songs[i].title });
+        if (!existingSong && songs[i].title && songs[i].body && songs[i].lastModified) {
 
             const deletedSong = new DeletedSong({
                 title: songs[i].title,
@@ -56,6 +55,8 @@ export const syncSongs = asyncHandler(async (req: Request, res: Response) => {
                 lastModified: songs[i].lastModified,
             });
             await deletedSong.save();
+
+            await Song.deleteOne({ title: songs[i].title });
         }
     }
 
@@ -140,7 +141,7 @@ export const syncSongsPartial = asyncHandler(async (req: Request, res: Response)
         const existingSong = files.result.entries.find(
             (file) => file.name === songs[i].title + ".pro"
         );
-        if (!existingSong) {
+        if (!existingSong && songs[i].title && songs[i].body && songs[i].lastModified) {
             await Song.deleteOne({ title: songs[i].title });
 
             const deletedSong = new DeletedSong({
