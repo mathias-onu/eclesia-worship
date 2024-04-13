@@ -6,9 +6,12 @@
 /tmp
 /out-tsc
 /bazel-out
+client/.angular
+client/dist
 
 # Node
 /node_modules
+client/node_modules
 npm-debug.log
 yarn-error.log
 
