@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from 'ngx-webstorage';
+import { FormControl } from '@angular/forms';
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage';
 import { SplitterResizeEndEvent } from 'primeng/splitter';
+import { BibleService } from '../../../../core/services/bible.service';
+import { SongsService } from '../../../../core/services/songs.service';
+import { IBiblePassageSlide } from '../../../../shared/models/bible.model';
+import { IFormattedSong, IVerse } from '../../../../shared/models/song.model';
+import { fontSizeOptions, bibleFontSizeOptions } from '../../../../shared/utils/fontSizeOptions';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-controller',
@@ -8,18 +15,211 @@ import { SplitterResizeEndEvent } from 'primeng/splitter';
   styleUrl: './controller.component.scss'
 })
 export class ControllerComponent implements OnInit {
-  panel1Size: number = 30
-  panel2Size: number = 70
+  @LocalStorage('currentDisplayedSong')
+  currentDisplayedSong!: IFormattedSong | null | null
+  currentDisplayedVerse!: IVerse | null
+  @LocalStorage('currentDisplayedBiblePassage')
+  currentDisplayedBiblePassage!: IBiblePassageSlide[] | null
+  currentDisplayedPassage!: IBiblePassageSlide | null
 
-  constructor(private localStorageService: LocalStorageService) {}
+  presentationRequest!: any
+  presentationConnection!: any
+  isPresentationLive: boolean = false
+
+  @LocalStorage('songFontSize')
+  songFontSize!: number 
+  @LocalStorage('bibleFontSize')
+  bibleFontSize!: number
+  fontSizeOptions: any[] = fontSizeOptions()
+  bibleFontSizeOptions: any[] = bibleFontSizeOptions()
+  songFontSizeInput = new FormControl()
+  bibleFontSizeInput = new FormControl()
+  
+  panel1Size: number = 30
+  panel2Size: number = this.panel1Size / 4 
+
+  constructor(
+    private songsService: SongsService,
+    private bibleService: BibleService,
+    private localStorageService: LocalStorageService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
+    if (this.localStorageService.retrieve('songFontSize')) {
+      this.songFontSizeInput.setValue(this.songFontSize)
+    } else {
+      this.songFontSizeInput.setValue(64)
+    }
+
+    if (this.localStorageService.retrieve('bibleFontSize')) {
+      this.bibleFontSizeInput.setValue(this.bibleFontSize)
+    } else {
+      this.bibleFontSizeInput.setValue(41)
+    }
+
+    
     this.panel1Size = this.localStorageService.retrieve('panel1Size')
     this.panel2Size = this.localStorageService.retrieve('panel2Size')
+
+    // Checks if Presentation API is supported by the user's browser
+    try {
+      // @ts-ignore: Unreachable code error
+      this.presentationRequest = new PresentationRequest('/live')
+    } catch (error) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Sorry but the browser you are using cannot present to a secondary screen... Use Chrome instead (or a chromium based browser).' });
+    }
+    this.currentDisplayedSong = this.songsService.getCurrentDisplayedSong() ? this.songsService.getCurrentDisplayedSong() : null
+    this.currentDisplayedBiblePassage = this.bibleService.getCurrentDisplayedBiblePassage() ? this.bibleService.getCurrentDisplayedBiblePassage() : null
+
+    this.songFontSizeInput.valueChanges.subscribe((value) => {
+      this.songFontSize = Number(value)
+      this.localStorageService.store('songFontSize', this.songFontSize)
+      if (this.presentationConnection) {
+        this.presentationConnection.send(
+          JSON.stringify(
+            {
+              text: this.currentDisplayedVerse,
+              songFontSize: this.songFontSize
+            }
+          )
+        )
+      }
+    })
+
+    this.bibleFontSizeInput.valueChanges.subscribe((value) => {
+      this.bibleFontSize = Number(value)
+      if (this.presentationConnection) {
+        this.localStorageService.store('bibleFontSize', this.bibleFontSize)
+        this.presentationConnection.send(
+          JSON.stringify(
+            {
+              text: this.currentDisplayedPassage,
+              bibleFontSize: this.bibleFontSize
+            }
+          )
+        )
+      }
+    })
   }
 
   splitterChange(event: SplitterResizeEndEvent) {
     this.localStorageService.store('panel1Size', event.sizes[0])
     this.localStorageService.store('panel2Size', event.sizes[1])
   }
+
+  async startPresentation() {
+    // Terminates existing presentation connections (if any)
+    this.terminatePresentation()
+
+    // Checks for available external displays and availability to start a connection
+    this.getPresentationAvailability()
+    this.isPresentationLive = true
+
+    try {
+      // Starts a presentation connection and displaying to the selected external display
+      const connection = await this.presentationRequest.start()
+      this.presentationConnection = connection
+    } catch (err) {
+      this.isPresentationLive = false
+    }
+  }
+
+  async getPresentationAvailability() {
+    try {
+      // Checks for available external displays and availability to start a connection
+      await this.presentationRequest.getAvailability()
+    } catch (error) {
+      this.isPresentationLive = false
+    }
+  }
+
+  displayVerse(verse: IVerse) {
+    this.currentDisplayedVerse = verse
+    this.currentDisplayedPassage = null
+
+    // Sends song verses to the receiver if a connection is established
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify({ text: verse, songFontSize: this.songFontSize }))
+    }
+  }
+
+  displayPassage(passage: IBiblePassageSlide) {
+    this.currentDisplayedPassage = passage
+    this.currentDisplayedVerse = null
+
+    // Sends song verses to the receiver if a connection is established
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify({ text: passage, bibleFontSize: this.bibleFontSize }))
+    }
+  }
+
+  terminatePresentation() {
+    // Terminates the presentation onto the receiver (chrome instance on the secondary display)
+    if (this.presentationConnection) {
+      this.presentationConnection.terminate()
+    }
+    this.presentationConnection = null
+    this.isPresentationLive = false
+    this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
+  }
+
+  setBlackScreen() {
+    this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
+
+    // Makes the text on the second text disappear
+    if (this.presentationConnection) {
+      this.presentationConnection.send(JSON.stringify({ blackScreen: true }))
+    }
+  }
+
+  removePresentationItem() {
+    this.localStorageService.clear('currentDisplayedSong')
+    this.localStorageService.clear('currentDisplayedBiblePassage')
+    this.currentDisplayedVerse = null
+    this.currentDisplayedPassage = null
+  }
+
+  // Momentarily unused functionality for increasing/decreasing font size px by px (may reimplement in the future)
+  // increaseFontSize() {
+  //   this.manipulateFontSize('addition')
+  // }
+
+  // decreaseFontSize() {
+  //   this.manipulateFontSize('substract')
+  // }
+  // 
+  // manipulateFontSize(typeOfOperation: string) {
+  //   if (this.currentDisplayedSong) {
+  //     typeOfOperation === 'addition' ? this.songFontSize++ : this.songFontSize--
+  //     this.localStorageService.store('songFontSize', this.songFontSize)
+  //     this.songFontSizeInput.setValue(this.songFontSize)
+  //   } else {
+  //     typeOfOperation === 'addition' ? this.bibleFontSize++ : this.bibleFontSize--
+  //     this.localStorageService.store('bibleFontSize', this.bibleFontSize)
+  //     this.songFontSizeInput.setValue(this.bibleFontSize)
+  //   }
+
+  //   if (this.presentationConnection) {
+  //     if (this.currentDisplayedSong) {
+  //       this.presentationConnection.send(
+  //         JSON.stringify(
+  //           {
+  //             text: this.currentDisplayedVerse,
+  //             songFontSize: this.songFontSize
+  //           }
+  //         )
+  //       )
+  //     } else if (this.currentDisplayedBiblePassage) {
+  //       JSON.stringify(
+  //         {
+  //           text: this.currentDisplayedPassage,
+  //           bibleFontSize: this.bibleFontSize
+  //         }
+  //       )
+  //     }
+  //   }
+  // }
 }

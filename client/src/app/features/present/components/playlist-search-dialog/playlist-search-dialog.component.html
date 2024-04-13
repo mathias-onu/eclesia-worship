@@ -9,6 +9,9 @@
     </form>
     <p-button icon="pi pi-search" [rounded]="true" [text]="true" (click)="searchPlaylist()" [disabled]="syncLoading" data-testid="searchPlaylistsBtn"></p-button>
 </div>
+<div>
+    <p-dropdown styleClass="w-100" [options]="cities" optionLabel="name" [showClear]="true" placeholder="Select a City"></p-dropdown>
+</div>
 <div class="playlists-container" (scroll)="onScroll($event)">
     <p-accordion *ngIf="!loadingPlaylists && !syncLoading else loading" (onOpen)="displayPlaylistSongs($event.index)">
         <p-accordionTab *ngFor="let playlist of playlists; let i = index" header="{{ playlist.title }}">
@@ -19,7 +22,9 @@
                 </p>
             </div>
             <ng-template #loadingPlaylist>
-                <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+                <div>
+                    <i class="pi pi-spin pi-spinner" style="font-size: 2rem; margin-top: 20px;"></i>
+                </div>
             </ng-template>
             <div class="action-container">
                 <p-button label="Select playlist" (click)="selectPlaylist()" data-testid="selectPlaylistBtn"></p-button>
@@ -27,6 +32,8 @@
         </p-accordionTab>
     </p-accordion>   
     <ng-template #loading>
-        <p-progressSpinner styleClass="w-1rem h-1rem"></p-progressSpinner>
+        <div>
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem; margin-top: 20px;"></i>
+        </div>
     </ng-template>
 </div>

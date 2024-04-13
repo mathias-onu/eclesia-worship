@@ -22,11 +22,11 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    margin-top: 10px;
     padding: 5px;
 }
 
 .song {
-    margin-top: 10px;
     display: flex;
     align-items: center;
 }

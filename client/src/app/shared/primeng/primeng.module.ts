@@ -7,7 +7,6 @@ import { ToastModule } from 'primeng/toast';
 import { SplitterModule } from 'primeng/splitter';
 import { TabViewModule } from 'primeng/tabview';
 import { InputTextModule } from 'primeng/inputtext';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
@@ -25,7 +24,6 @@ import { PickListModule } from 'primeng/picklist';
     SplitterModule,
     TabViewModule,
     InputTextModule,
-    ProgressSpinnerModule,
     DynamicDialogModule,
     DividerModule,
     AccordionModule,
@@ -40,7 +38,6 @@ import { PickListModule } from 'primeng/picklist';
     SplitterModule,
     TabViewModule,
     InputTextModule,
-    ProgressSpinnerModule,
     DynamicDialogModule,
     DividerModule,
     AccordionModule,

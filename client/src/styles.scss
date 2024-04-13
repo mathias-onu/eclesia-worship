@@ -3,8 +3,7 @@
 @import "primeicons/primeicons.css";
 
 :root {
-    --surface-ground: #111827; 
-    // --surface-d: #111827 !important;
+  --surface-ground: #111827; 
 }
 
 html {
@@ -29,7 +28,7 @@ body {
 
 .cdk-drop-list li {
   border-radius: 10px;
-  padding: 0 0 5px 12px !important;
+  padding: 0 0 0px 10px;
 }
 
 .p-tabview .p-tabview-panels, .p-tabview .p-tabview-nav li .p-tabview-nav-link {
@@ -43,7 +42,7 @@ body {
 // Scroball styles
 /* width */
 ::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
     height: 3px;
   }
   
@@ -54,12 +53,12 @@ body {
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: rgb(187, 187, 187);
-    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    // border-radius: 10px;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(122, 122, 122);
+    background: #424b57;
     transition: .5s ease-in-out all;
   }

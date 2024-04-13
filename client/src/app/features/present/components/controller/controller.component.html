@@ -1,4 +1,4 @@
-<p-splitter [panelSizes]="[panel1Size, panel2Size]" [minSizes]="[20, 50]" [style]="{ height: '100vh', background: '#111827' }" (onResizeEnd)="splitterChange($event)">
+<p-splitter [panelSizes]="[panel1Size, panel2Size]" [style]="{ height: '100vh', background: '#111827' }" (onResizeEnd)="splitterChange($event)">
     <ng-template pTemplate>
         <p-splitter [minSizes]="[20, 20]" [style]="{ height: '96vh', background: '#111827' }" layout="vertical">
             <ng-template pTemplate>
@@ -10,6 +10,48 @@
         </p-splitter>
     </ng-template>
     <ng-template pTemplate>
-        
+        <div class="container">
+            <div class="presentation-buttons">
+                <!-- Song font size dropdown -->
+                <i class="pi pi-key" style="font-size: 1.2rem;"></i>
+                <p-dropdown [options]="fontSizeOptions" optionLabel="value" [formControl]="songFontSizeInput" placeholder="64px"></p-dropdown>   
+                <!-- Bible font size dropdown -->
+                <i class="pi pi-book" style="font-size: 1.2rem;"></i>
+                <p-dropdown [options]="bibleFontSizeOptions" optionLabel="value" [formControl]="bibleFontSizeInput" placeholder="41px" class="bible-dropdown"></p-dropdown>  
+                <!-- Delete presentation text -->
+                <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" (click)="removePresentationItem()" data-testid="removePresentationItemBtn" class="delete-btn"></p-button>
+                <!-- Set black screen -->
+                <p-button icon="pi pi-circle-fill" [rounded]="true" [outlined]="true" (click)="setBlackScreen()" data-testid="blackScreenBtn" class="black-screen-btn"></p-button>
+                <!-- Present -->
+                <p-button 
+                    icon="pi pi-video" 
+                    severity="warning"
+                    size="large"
+                    [rounded]="true" 
+                    (click)="setBlackScreen()" 
+                    (click)="isPresentationLive ? terminatePresentation() : startPresentation()"
+                    class="{{isPresentationLive ? 'ongoing-presentation-btn' : 'live-btn'}}"
+                    data-testid="presentBtn" 
+                ></p-button>
+            </div>
+            <div class="pre-presentation-container">
+                <!-- <div *ngIf="currentDisplayedSong">
+                    <mat-button-toggle-group name="currentDisplayedSong" class="toggle-container">
+                        <mat-button-toggle *ngFor="let verse of currentDisplayedSong!.verses; let i = index"
+                            (click)="displayVerse(verse)" class="verse-container" data-testid="displayVerseBtn">
+                            <p *ngFor="let line of verse!.lines">{{ line }}</p>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div *ngIf="currentDisplayedBiblePassage">
+                    <mat-button-toggle-group name="currentDisplayedBiblePassage" class="toggle-container">
+                        <mat-button-toggle *ngFor="let slide of currentDisplayedBiblePassage" class="slide"
+                            data-testid="displayPassageBtn">
+                            <p (click)="displayPassage(slide)">{{ slide.text }}</p>
+                        </mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div> -->
+            </div>
+        </div>
     </ng-template>
 </p-splitter>

@@ -21,6 +21,14 @@ export class PlaylistSearchDialogComponent {
   parsingPlaylist: boolean = false
   syncLoading: boolean = false
 
+  cities = [
+    { name: 'New York', code: 'NY' },
+    { name: 'Rome', code: 'RM' },
+    { name: 'London', code: 'LDN' },
+    { name: 'Istanbul', code: 'IST' },
+    { name: 'Paris', code: 'PRS' }
+  ];
+
   constructor(
     public dialogRef: DynamicDialogRef,
     private songsService: SongsService,
